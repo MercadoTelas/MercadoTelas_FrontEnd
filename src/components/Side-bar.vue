@@ -32,13 +32,13 @@
                 <div class="sidebar-title">Agregar nuevos artículos</div>
             </a>
         </div>
-        <div class="nav-item">
-            <a class="nav-link" href="#">
+        <div id="entrada" class="nav-item">
+            <router-link to='/entrada' class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/entradainventario.svg" alt="Entradas de inventario" class="sidebar-icon">
                 </div>
                 <div class="sidebar-title">Entradas de inventario</div>
-            </a>
+            </router-link>
         </div>
         <div class="nav-item">
             <a class="nav-link" href="#">
@@ -132,6 +132,10 @@
 
         .nav-item {
 
+            :hover {
+                background-color: #3066BE;
+            }
+
             height: auto;
             width: 130px;
 
@@ -139,10 +143,9 @@
 
                 .sidebar-icon-wrapper {
 
-
                     .sidebar-icon {
-                        margin-top: 10px;
-                        height: 40px;
+                        margin-top: 9.5px;
+                        height: 30px;
                     }
                 }
 
@@ -162,16 +165,6 @@
             background-color: #D72638;
         }
     }
-
-    .nav-item {
-
-        background-color: inherit;
-
-        :hover {
-            background-color: #3066BE;
-        }
-    }
-
 }
 </style>
 

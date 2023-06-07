@@ -3,6 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import App from './App.vue';
 import Home from './components/Home-component.vue';
+import Entrada from './components/Entrada-Inventario.vue';
+
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -13,6 +15,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/home', component: Home },
+        { path: '/entrada', component: Entrada },
     ]
 });
 
