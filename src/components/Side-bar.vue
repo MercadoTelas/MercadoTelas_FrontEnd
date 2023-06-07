@@ -24,6 +24,14 @@
                 <div class="sidebar-title">Ver articulos</div>
             </a>
         </div>
+        <div v-if="isDesktop" class="nav-item">
+            <a class="nav-link" href="#">
+                <div class="sidebar-icon-wrapper">
+                    <img src="../assets/nuevos.svg" alt="Agregar nuevos artículos" class="sidebar-icon">
+                </div>
+                <div class="sidebar-title">Agregar nuevos artículos</div>
+            </a>
+        </div>
         <div class="nav-item">
             <a class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
@@ -86,11 +94,8 @@
 
         .nav-item {
 
-            width: 100%;
-
-            :hover {
-                background-color: #3066BE;
-            }
+            width: 100px;
+            height: 90px;
 
             .nav-link {
 
@@ -99,13 +104,14 @@
                     margin-top: 15px;
 
                     .sidebar-icon {
-                        filter: invert(100%);
+                        margin-top: 5px;
                         height: 40px;
                         width: auto;
                     }
                 }
 
                 .sidebar-title {
+                    margin-top: 2.5px;
                     font-size: 10px;
                 }
             }
@@ -129,10 +135,6 @@
             height: auto;
             width: 130px;
 
-            :hover {
-                background-color: #3066BE;
-            }
-
             .nav-link {
 
                 .sidebar-icon-wrapper {
@@ -140,7 +142,6 @@
 
                     .sidebar-icon {
                         margin-top: 10px;
-                        filter: invert(100%);
                         height: 40px;
                     }
                 }
@@ -161,6 +162,16 @@
             background-color: #D72638;
         }
     }
+
+    .nav-item {
+
+        background-color: inherit;
+
+        :hover {
+            background-color: #3066BE;
+        }
+    }
+
 }
 </style>
 
