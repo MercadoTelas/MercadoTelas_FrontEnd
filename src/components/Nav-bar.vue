@@ -18,9 +18,7 @@
 
     .container {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding-top: 20px;
     }
 
     .logo-container {
@@ -37,14 +35,12 @@
 
     .logo-usuario-container {
 
-        margin-top: 10px;
-        margin-right: 10px;
+        width: 100px;
         margin-left: auto;
 
         #logousuario {
             width: 90px;
             height: 80px;
-            filter: invert(100);
         }
 
     }

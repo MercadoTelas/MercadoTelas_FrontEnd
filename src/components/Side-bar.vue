@@ -1,12 +1,12 @@
 <template>
     <div class="sidebar">
-        <div class="nav-item">
-            <a class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
+        <div class=" nav-item">
+            <router-link to='/home' class="nav-link">
+                <div class=" sidebar-icon-wrapper">
                     <img src="../assets/home.svg" class="sidebar-icon">
                 </div>
                 <div class="sidebar-title">Inicio</div>
-            </a>
+            </router-link>
         </div>
         <div class="nav-item">
             <a class="nav-link" href="#">
@@ -16,7 +16,7 @@
                 <div class="sidebar-title">Mi cuenta</div>
             </a>
         </div>
-        <div class="nav-item">
+        <div v-if="isDesktop" class="nav-item">
             <a class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/verarticulos.svg" alt="Ver articulos" class="sidebar-icon">
@@ -24,13 +24,21 @@
                 <div class="sidebar-title">Ver articulos</div>
             </a>
         </div>
-        <div class="nav-item">
+        <div v-if="isDesktop" class="nav-item">
             <a class="nav-link" href="#">
+                <div class="sidebar-icon-wrapper">
+                    <img src="../assets/nuevos.svg" alt="Agregar nuevos artículos" class="sidebar-icon">
+                </div>
+                <div class="sidebar-title">Agregar nuevos artículos</div>
+            </a>
+        </div>
+        <div id="entrada" class="nav-item">
+            <router-link to='/entrada' class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/entradainventario.svg" alt="Entradas de inventario" class="sidebar-icon">
                 </div>
                 <div class="sidebar-title">Entradas de inventario</div>
-            </a>
+            </router-link>
         </div>
         <div class="nav-item">
             <a class="nav-link" href="#">
@@ -40,7 +48,7 @@
                 <div class="sidebar-title">Salidas de Inventario</div>
             </a>
         </div>
-        <div class="nav-item">
+        <div v-if="isDesktop" class="nav-item">
             <a class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/gestionarusuarios.svg" alt="Gestionar usuarios" class="sidebar-icon">
@@ -48,7 +56,7 @@
                 <div class="sidebar-title">Gestionar usuarios</div>
             </a>
         </div>
-        <div class="nav-item">
+        <div v-if="isDesktop" class="nav-item">
             <a class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/registro.svg" alt="Registro de movimientos" class="sidebar-icon">
@@ -69,43 +77,93 @@
 
 <style lang="scss">
 .sidebar {
-    position: fixed;
-    height: 100vh;
-    color: white;
+
     background-color: #15386E;
+    color: white;
 
-    .nav-item {
+    //mobile version
+    @media (max-width: 700px) {
 
-        width: 87px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
 
-        .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: white;
-            transition: background-color 0.3s ease-in-out;
-            text-align: center;
+        .nav-item {
 
-            .sidebar-icon-wrapper {
+            width: 100px;
+            height: 90px;
 
-                margin-top: 10px;
+            .nav-link {
 
-                .sidebar-icon {
-                    filter: invert(100%);
-                    height: 42px;
+                .sidebar-icon-wrapper {
+
+                    margin-top: 15px;
+
+                    .sidebar-icon {
+                        margin-top: 5px;
+                        height: 40px;
+                        width: auto;
+                    }
+                }
+
+                .sidebar-title {
+                    margin-top: 2.5px;
+                    font-size: 10px;
                 }
             }
+        }
 
-            .sidebar-title {
-                font-size: 12px;
+    }
+
+    //desktop version
+    @media (min-width: 700px) {
+
+        position: fixed;
+        height: 100%;
+        width: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        .nav-item {
+
+            :hover {
+                background-color: #3066BE;
             }
 
+            height: auto;
+            width: 130px;
+
+            .nav-link {
+
+                .sidebar-icon-wrapper {
+
+                    .sidebar-icon {
+                        margin-top: 9.5px;
+                        height: 30px;
+                    }
+                }
+
+                .sidebar-title {
+                    margin-top: 10px;
+                    font-size: 12px;
+                }
+            }
         }
+
     }
 
     #exit-item {
-        margin-top: 10px;
-        background-color: #D72638;
+        background-color: #AE0214;
+
+        :hover {
+            background-color: #D72638;
+        }
     }
 }
 </style>
@@ -113,8 +171,29 @@
 <script>
 export default {
     data() {
-        return {};
+        return {
+            limit: 700,
+            screenWidth: 0,
+            screenHeight: 0,
+            isDesktop: false
+        };
     },
-    methods: {}
+    created() {
+        this.updateScreenSize();
+        window.addEventListener('resize', this.updateScreenSize);
+    },
+    unmounted() {
+        window.removeEventListener('resize', this.updateScreenSize);
+    },
+    methods: {
+        updateScreenSize() {
+            this.screenWidth = window.innerWidth;
+            this.screenHeight = window.innerHeight;
+            this.Desktop();
+        },
+        Desktop() {
+            this.isDesktop = this.screenWidth >= this.limit;
+        }
+    }
 };
 </script>
