@@ -2,9 +2,9 @@
   <div>
     <navbar></navbar>
     <sidebar></sidebar>
+    <router-view></router-view>
   </div>
 </template>
-
 
 <script>
 import sidebar from './components/Side-bar.vue';
@@ -14,7 +14,7 @@ export default {
   name: 'App',
   components: {
     sidebar,
-    navbar
+    navbar,
   }
 }
 </script>
