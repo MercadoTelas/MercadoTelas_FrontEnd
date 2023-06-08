@@ -8,7 +8,11 @@
       <div class="col-lg-9">
         <div class="table-container">
           <h1 class="filter-title text-primary">Filtros</h1>
-          <div class="filters-container row">
+          <h1 class="filter-title"></h1>
+          <br>
+          <div class="filters-container row"><br>
+            <br>
+            <br>
             <div class="col-md-2 mb-2">
               <label for="codigo">Código de Artículo:</label>
               <select id="codigo" class="form-control" v-model="filter.codigo">
@@ -79,7 +83,7 @@
                   <td>{{ product.outputUnits }}</td>
                   <td>
                     <div class="button-container">
-                      <button @click="editProduct(product.id)">Editar</button>
+                      <button @click="editArticle(product.id)">Editar</button>
                       <button @click="viewProductDetails(product.id)">Detalles</button>
                     </div>
                   </td>
@@ -144,13 +148,12 @@ export default {
     },
   },
   methods: {
-    editProduct(productId) {
-      // Lógica para editar el producto
-      console.log('Editar producto con ID:', productId);
-    },
-    viewProductDetails(productId) {
-      // Lógica para ver los detalles del producto
-      console.log('Ver detalles del producto con ID:', productId);
+    editArticle(articleId) {
+      // Lógica para editar el artículo
+      console.log('Editar artículo con ID:', articleId);
+
+      // Navegar a la vista de edición del artículo con el ID proporcionado
+      this.$router.push({ name: 'EditArticle', params: { id: articleId } });
     },
   },
 };
