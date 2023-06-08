@@ -17,12 +17,12 @@
             </a>
         </div>
         <div v-if="isDesktop" class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to='/inventario' class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/verarticulos.svg" alt="Ver articulos" class="sidebar-icon">
                 </div>
                 <div class="sidebar-title">Ver articulos</div>
-            </a>
+            </router-link>
         </div>
         <div v-if="isDesktop" class="nav-item">
             <a class="nav-link" href="#">

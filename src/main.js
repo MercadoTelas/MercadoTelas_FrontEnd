@@ -4,6 +4,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import Home from './components/Home-component.vue';
 import Entrada from './components/Entrada-Inventario.vue';
+import InventoryTable from './components/InventoryTable.vue';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -16,6 +17,7 @@ const router = createRouter({
     routes: [
         { path: '/home', component: Home },
         { path: '/entrada', component: Entrada },
+        { path: '/inventario', component: InventoryTable}
     ]
 });
 

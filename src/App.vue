@@ -9,14 +9,14 @@
 <script>
 import sidebar from './components/Side-bar.vue';
 import navbar from './components/Nav-bar.vue';
-import InventoryTable from './components/InventoryTable.vue';
 
 export default {
   name: 'App',
   components: {
     sidebar,
     navbar,
-  }
+  }, 
+  
 };
 </script>
 
