@@ -6,6 +6,8 @@ import Home from './components/Home-component.vue';
 import Entrada from './components/Entrada-Inventario.vue';
 import InventoryTable from './components/InventoryTable.vue';
 import EditArticle from './components/EditArticle.vue';
+import ViewArticle from './components/ViewArticle.vue';
+import AddArticle from './components/AddArticle.vue';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -19,8 +21,9 @@ const router = createRouter({
         { path: '/home', component: Home },
         { path: '/entrada', component: Entrada },
         { path: '/inventario', component: InventoryTable},
-        { path: '/edit/:id', name: 'EditArticle', component: EditArticle,
-          },
+        { path: '/addArticulo', component: AddArticle,},
+        { path: '/edit/:id', name: 'EditArticle', component: EditArticle,},
+        { path: '/view/:id', name: 'ViewArticle', component: ViewArticle,},
     ]
 });
 

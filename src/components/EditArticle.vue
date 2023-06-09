@@ -87,11 +87,11 @@
         console.log('Se han guardado los cambios');
       },
       cancelar() {
-        // Lógica para cancelar la edición
-        console.log('Se ha cancelado la edición');
+        this.$router.go(-1);
       },
     },
   };
+
   </script>
   
   <style>

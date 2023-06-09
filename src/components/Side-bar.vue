@@ -25,12 +25,12 @@
             </router-link>
         </div>
         <div v-if="isDesktop" class="nav-item">
-            <a class="nav-link" href="#">
+            <router-link to='/addArticulo' class="nav-link" href="#">
                 <div class="sidebar-icon-wrapper">
                     <img src="../assets/nuevos.svg" alt="Agregar nuevos artículos" class="sidebar-icon">
                 </div>
                 <div class="sidebar-title">Agregar nuevos artículos</div>
-            </a>
+            </router-link>
         </div>
         <div id="entrada" class="nav-item">
             <router-link to='/entrada' class="nav-link" href="#">
