@@ -31,69 +31,9 @@ import { container } from 'webpack';
             </a>
           </router-link>
         </div>
-<<<<<<< HEAD
-        <div v-if="isDesktop" class="nav-item">
-            <router-link to='/inventario' class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/verarticulos.svg" alt="Ver articulos" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Ver articulos</div>
-            </router-link>
-        </div>
-        <div v-if="isDesktop" class="nav-item">
-            <router-link to='/addArticulo' class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/nuevos.svg" alt="Agregar nuevos artículos" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Agregar nuevos artículos</div>
-            </router-link>
-        </div>
-        <div id="entrada" class="nav-item">
-            <router-link to='/entrada' class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/entradainventario.svg" alt="Entradas de inventario" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Entradas de inventario</div>
-            </router-link>
-        </div>
-        <div class="nav-item">
-            <a class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/salidainventario.svg" alt="Salidas de Inventario" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Salidas de Inventario</div>
-            </a>
-        </div>
-        <div v-if="isDesktop" class="nav-item">
-            <a class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/gestionarusuarios.svg" alt="Gestionar usuarios" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Gestionar usuarios</div>
-            </a>
-        </div>
-        <div v-if="isDesktop" class="nav-item">
-            <a class="nav-link" href="#">
-                <div class="sidebar-icon-wrapper">
-                    <img src="../assets/registro.svg" alt="Registro de movimientos" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Registro de movimientos</div>
-            </a>
-        </div>
-        <div id="exit-item" class="nav-item">
-            <a class="nav-link" href="#">
-                <div id="exit-wrapper" class="sidebar-icon-wrapper">
-                    <img id="exit" src="../assets/salir.svg" alt="Salir" class="sidebar-icon">
-                </div>
-                <div class="sidebar-title">Salir</div>
-            </a>
-        </div>
-    </div>
-=======
       </li>
     </ul>
   </div>
->>>>>>> 8d73f9d867053978b1fccdd9a69ebc3dca39bf14
 </template>
 
 <style lang="scss">
@@ -327,7 +267,7 @@ export default {
             text: "Agregar nuevos elementos",
             url: "nuevoElemento.html",
             title: "agregar nuevos elementos",
-            linkTo: "nuevosElementos",
+            linkTo: "addArticulo",
             bootstrapIcon: {
               svg: {
                 xmlns: "http://www.w3.org/2000/svg",
