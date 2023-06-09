@@ -12,59 +12,46 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label for="codigo">Código de Artículo:</label>
-                <select id="codigo" class="form-control" v-model="filter.codigo">
-                  <option value="">Todos</option>
-                  <option value="codigo1">Código 1</option>
-                  <option value="codigo2">Código 2</option>
-                  <!-- Agrega más opciones según tus necesidades -->
+                <input type="text" id="codigo" class="form-control" v-model="filter.id" placeholder="Código">
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="category">Categoría:</label>
+                <select id="category" class="form-control" v-model="filter.category" @change="resetSubcategory()">
+                  <option value="" disabled>Seleccionar categoría</option>
+                  <option v-for="category in categories" :value="category.name" :key="category.name">{{ category.name }}
+                  </option>
                 </select>
               </div>
             </div>
-
             <div class="col-md-2">
               <div class="form-group">
-                <label for="categoria">Categoría:</label>
-                <select id="categoria" class="form-control" v-model="filter.categoria">
-                  <option value="">Todas</option>
-                  <option value="categoria1">Categoría 1</option>
-                  <option value="categoria2">Categoría 2</option>
-                  <!-- Agrega más opciones según tus necesidades -->
+                <label for="subcategory">Subcategoría:</label>
+                <select id="subcategory" class="form-control" v-model="filter.subcategory">
+                  <option value="" disabled selected>Seleccionar subcategoría</option>
+                  <option v-for="subcategory in filteredSubcategories" :value="subcategory.name"
+                          :key="subcategory.name">
+                    {{ subcategory.name }}
+                  </option>
                 </select>
               </div>
             </div>
-
             <div class="col-md-2">
               <div class="form-group">
-                <label for="subcategoria">Subcategoría:</label>
-                <select id="subcategoria" class="form-control" v-model="filter.subcategoria">
-                  <option value="">Todas</option>
-                  <option value="subcategoria1">Subcategoría 1</option>
-                  <option value="subcategoria2">Subcategoría 2</option>
-                  <!-- Agrega más opciones según tus necesidades -->
+                <label for="design">Diseño:</label>
+                <select id="design" class="form-control" v-model="filter.design">
+                  <option value="" disabled selected>Seleccionar diseño</option>
+                  <option v-for="design in designs" :value="design.name" :key="design.name">{{ design.name }}</option>
                 </select>
               </div>
             </div>
-
             <div class="col-md-2">
               <div class="form-group">
-                <label for="diseno">Diseño:</label>
-                <select id="diseno" class="form-control" v-model="filter.diseno">
-                  <option value="">Todos</option>
-                  <option value="diseno1">Diseño 1</option>
-                  <option value="diseno2">Diseño 2</option>
-                  <!-- Agrega más opciones según tus necesidades -->
-                </select>
-              </div>
-            </div>
-
-            <div class="col-md-2">
-              <div class="form-group">
-                <label for="marca">Marca:</label>
-                <select id="marca" class="form-control" v-model="filter.marca">
-                  <option value="">Todas</option>
-                  <option value="marca1">Marca 1</option>
-                  <option value="marca2">Marca 2</option>
-                  <!-- Agrega más opciones según tus necesidades -->
+                <label for="brand">Marca:</label>
+                <select id="brand" class="form-control" v-model="filter.brand">
+                  <option value="" disabled>Seleccionar marca</option>
+                  <option v-for="brand in brands" :value="brand.name" :key="brand.name">{{ brand.name }}</option>
                 </select>
               </div>
             </div>
@@ -73,30 +60,28 @@
           <div class="table-responsive">
             <table class="table">
               <thead>
-                <tr>
-                  <th>Código</th>
-                  <th>Nombre</th>
-                  <th>Unidades de Entrada</th>
-                  <th>Unidades de Salida</th>
-                  <th>Acciones</th>
-                </tr>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Unidades de Entrada</th>
+                <th>Unidades de Salida</th>
+                <th>Acciones</th>
+              </tr>
               </thead>
               <tbody>
-                <tr v-for="product in filteredProducts" :key="product.id">
-                  <td>{{ product.code }}</td>
-                  <td>{{ product.name }}</td>
-                  <td>{{ product.inputUnits }}</td>
-                  <td>{{ product.outputUnits }}</td>
-                  <td>
-                    <div class="button-container">
-                      <div class="button-group">
-                        <button @click="editArticle(product.id)">Editar</button>
-                        <button @click="viewProductDetails(product.id)">Detalles</button>
-                      </div>
-                      <button @click="confirmDeleteArticle(product.id)">Eliminar</button>
-                    </div>
-                  </td>
-                </tr>
+              <tr v-for="item in filteredItems" :key="item.id">
+                <td>{{ item.item_id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
+                <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
+                <td>
+                  <div class="button-group">
+                    <button @click="editArticle(item.id)">Editar</button>
+                    <button @click="viewProductDetails(item.id)">Detalles</button>
+                    <button @click="confirmDeleteArticle(item.id)">Eliminar</button>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -107,64 +92,66 @@
 </template>
 
 <script>
+import axios from "axios";
 import Swal from 'sweetalert2';
+import {API_URL} from "@/config";
 
 export default {
   name: 'InventoryTable',
-  props: {
-    products: {
-      type: Array,
-      required: true,
-    },
-  },
   data() {
     return {
       filter: {
-        codigo: '',
-        categoria: '',
-        subcategoria: '',
-        diseno: '',
-        marca: '',
+        id: '',
+        category: '',
+        subcategory: '',
+        design: '',
+        brand: '',
       },
-      productsData: [
-        {
-          id: 1,
-          code: 'codigo1',
-          name: 'Producto 1',
-          inputUnits: 10,
-          outputUnits: 5,
-        },
-        {
-          id: 2,
-          code: 'codigo2',
-          name: 'Producto 2',
-          inputUnits: 15,
-          outputUnits: 8,
-        },
-        // Agrega más objetos de producto según tu estructura de datos
-      ],
+      items: [],
+      categories: [],
+      designs: [],
+      brands: [],
     };
   },
   computed: {
-    filteredProducts() {
-      return this.productsData.filter((product) => {
-        return (
-          product.code.includes(this.filter.codigo) &&
-          product.name.includes(this.filter.categoria) &&
-          product.name.includes(this.filter.subcategoria) &&
-          product.name.includes(this.filter.diseno) &&
-          product.name.includes(this.filter.marca)
-        );
-      });
+    filteredSubcategories() {
+      return this.categories.filter((category) => {
+        return category.name === this.filter.category
+      }).map((category) => {
+        return category.subcategories
+      }).flat()
     },
+    filteredItems() {
+      return this.items.filter((item) => {
+        return item.item_id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
+            (this.filter.category === '' || item.category === this.filter.category) &&
+            (this.filter.subcategory === '' || item.subcategory === this.filter.subcategory) &&
+            (this.filter.design === '' || item.design === this.filter.design) &&
+            (this.filter.brand === '' || item.brand === this.filter.brand)
+      })
+    }
+  },
+  mounted() {
+    //Gets the all elements from the API
+    axios.get(API_URL + '/inventory_items').then(response => {
+      this.items = response.data.inventory_items
+      this.categories = response.data.categories
+      this.designs = response.data.designs
+      this.brands = response.data.brands
+    }).catch(error => {
+      console.log(error)
+    });
   },
   methods: {
+    resetSubcategory() {
+      this.filter.subcategory = ''
+    },
     editArticle(articleId) {
       // Lógica para editar el artículo
       console.log('Editar artículo con ID:', articleId);
 
       // Navegar a la vista de edición del artículo con el ID proporcionado
-      this.$router.push({ name: 'EditArticle', params: { id: articleId } });
+      this.$router.push({name: 'EditArticle', params: {id: articleId}});
     },
     deleteArticle(articleId) {
       // Lógica para eliminar el artículo
@@ -174,9 +161,9 @@ export default {
     viewProductDetails(articleId) {
       // Lógica para ver los detalles del producto
       console.log('Ver detalles del producto con ID:', articleId);
-      this.$router.push({ name: 'ViewArticle', params: { id: articleId } });
+      this.$router.push({name: 'ViewArticle', params: {id: articleId}});
     },
-    
+
     confirmDeleteArticle(articleId) {
       Swal.fire({
         title: '¿Estás seguro?',
