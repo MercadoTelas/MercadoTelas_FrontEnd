@@ -267,7 +267,7 @@ export default {
             text: "Agregar nuevos elementos",
             url: "nuevoElemento.html",
             title: "agregar nuevos elementos",
-            linkTo: "addArticulo",
+            linkTo: "addCategoria",
             bootstrapIcon: {
               svg: {
                 xmlns: "http://www.w3.org/2000/svg",
