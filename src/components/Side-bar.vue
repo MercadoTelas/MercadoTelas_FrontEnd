@@ -148,11 +148,11 @@ export default {
         },
         {
           link: {
-            id: "inventario",
+            id: "inventory",
             text: "Ver artículos",
             url: "articulos.html",
             title: "articulos",
-            linkTo: "inventario",
+            linkTo: "inventory",
             bootstrapIcon: {
               svg: {
                 xmlns: "http://www.w3.org/2000/svg",
@@ -171,11 +171,11 @@ export default {
         },
         {
           link: {
-            id: "entrada",
+            id: "Entrada",
             text: "Entradas de Inventario",
             url: "entradas.html",
             title: "entradas de inventario",
-            linkTo: "entrada",
+            linkTo: "Entrada",
             bootstrapIcon: {
               svg: {
                 xmlns: "http://www.w3.org/2000/svg",
