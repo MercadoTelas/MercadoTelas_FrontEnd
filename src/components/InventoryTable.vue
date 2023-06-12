@@ -50,8 +50,17 @@
               <div class="form-group">
                 <label for="brand">Marca:</label>
                 <select id="brand" class="form-control" v-model="filter.brand">
-                  <option value="" disabled>Seleccionar marca</option>
+                  <option value="" selected disabled>Seleccionar marca</option>
                   <option v-for="brand in brands" :value="brand.name" :key="brand.name">{{ brand.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-group">
+                <label for="warehouse">Bodega:</label>
+                <select id="warehouse" class="form-control" v-model="filter.warehouse">
+                  <option value="" selected disabled>Seleccionar bodega</option>
+                  <option v-for="warehouse in warehouses" :value="warehouse.name" :key="warehouse.name">{{ warehouse.name }}</option>
                 </select>
               </div>
             </div>
@@ -65,6 +74,7 @@
                 <th>Nombre</th>
                 <th>Unidades de Entrada</th>
                 <th>Unidades de Salida</th>
+                <th>Bodega</th>
                 <th>Acciones</th>
               </tr>
               </thead>
@@ -74,6 +84,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
                 <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
+                <td>{{ item.warehouse }}</td>
                 <td>
                   <div class="button-group">
                     <button @click="editArticle(item.id)">Editar</button>
@@ -106,11 +117,13 @@ export default {
         subcategory: '',
         design: '',
         brand: '',
+        warehouse: '',
       },
       items: [],
       categories: [],
       designs: [],
       brands: [],
+      warehouses: [],
     };
   },
   computed: {
@@ -127,7 +140,8 @@ export default {
             (this.filter.category === '' || item.category === this.filter.category) &&
             (this.filter.subcategory === '' || item.subcategory === this.filter.subcategory) &&
             (this.filter.design === '' || item.design === this.filter.design) &&
-            (this.filter.brand === '' || item.brand === this.filter.brand)
+            (this.filter.brand === '' || item.brand === this.filter.brand) &&
+            (this.filter.warehouse === '' || item.warehouse === this.filter.warehouse)
       })
     }
   },
@@ -138,6 +152,7 @@ export default {
       this.categories = response.data.categories
       this.designs = response.data.designs
       this.brands = response.data.brands
+      this.warehouses = response.data.warehouses
     }).catch(error => {
       console.log(error)
     });

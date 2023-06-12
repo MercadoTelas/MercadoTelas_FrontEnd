@@ -17,7 +17,9 @@ import AddWareHouse from './components/AddWareHouse.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/custom-bootstrap.scss';
+
 
 // Create the router instance
 const router = createRouter({
