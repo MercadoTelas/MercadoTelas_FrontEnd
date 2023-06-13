@@ -1,5 +1,8 @@
 import { container } from 'webpack';
 <template>
+  <input type="checkbox" id="checkNew" />
+  <input type="checkbox" id="checkList" />
+
   <!--Sidebar Prinicipal-->
   <input type="checkbox" id="check" />
   <label for="check">
@@ -42,15 +45,15 @@ import { container } from 'webpack';
   <div id="sidebarOptions" class="sidebarOptions">
     <a
       v-for="(option, index) in adminElementsOptions"
-      :id="option.option"
+      :id="option.optionTitle"
       :key="index"
       :class="{ active: activePage == index }"
-      @click="openElementsSidebar()"
+      @click="openElementsSidebar(option.urlParam)"
       @click.prevent="activePage = index"
     >
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
-        {{ option.option }}
+        {{ option.optionTitle }}
       </span>
     </a>
   </div>
@@ -69,7 +72,7 @@ import { container } from 'webpack';
       :id="option.element"
       :key="index"
       :class="{ active: activePage == index }"
-      @click="performElementsAction()"
+      @click="performElementsAction(option.urlParam)"
       @click.prevent="activePage = index"
     >
       <span id="option">
@@ -86,6 +89,11 @@ import { container } from 'webpack';
   margin: 0;
   padding: 0;
   text-decoration: none;
+}
+
+#checkNew,
+#checkList {
+  display: none;
 }
 
 .sidebar,
@@ -257,7 +265,7 @@ label #cancelElements {
   #inventario,
   #usuarios,
   #movimientos,
-  #nuevosElementos {
+  #administrarElementos {
     display: none;
   }
 
@@ -345,7 +353,7 @@ export default {
         },
         {
           link: {
-            id: "inventory",
+            id: "inventario",
             text: "Ver artículos",
             title: "articulos",
             linkTo: "inventory",
@@ -356,10 +364,10 @@ export default {
         },
         {
           link: {
-            id: "Entrada",
+            id: "entrada",
             text: "Entradas de Inventario",
             title: "entradas de inventario",
-            linkTo: "Entrada",
+            linkTo: "entry",
             bootstrapIcon: {
               class: "bi bi-box-arrow-in-left",
             },
@@ -370,7 +378,7 @@ export default {
             id: "salida",
             text: "Salidas de Inventario",
             title: "salidas de inventario",
-            linkTo: "salida",
+            linkTo: "transfer",
             bootstrapIcon: {
               class: "bi bi-box-arrow-in-right",
             },
@@ -424,12 +432,14 @@ export default {
 
       adminElementsOptions: [
         {
-          option: "Agregar",
+          optionTitle: "Agregar",
           bootstrapIconClass: "bi bi-plus-square",
+          urlParam: "new",
         },
         {
-          option: "Editar",
-          bootstrapIconClass: "bi bi-pencil-fill",
+          optionTitle: "Listar",
+          bootstrapIconClass: "bi bi-list-check",
+          urlParam: "list",
         },
       ],
 
@@ -437,26 +447,32 @@ export default {
         {
           element: "Artículo",
           bootstrapIconClass: "bi bi-bag-fill",
+          urlParam: "items",
         },
         {
           element: "Categoría",
           bootstrapIconClass: "bi bi-bookmark-fill",
+          urlParam: "categories",
         },
         {
           element: "Subcategoría",
           bootstrapIconClass: "bi bi-bookmarks-fill",
+          urlParam: "subcategories",
         },
         {
           element: "Diseño",
           bootstrapIconClass: "bi bi-brush-fill",
+          urlParam: "designs",
         },
         {
           element: "Marca",
           bootstrapIconClass: "bi bi-tag-fill",
+          urlParam: "brands",
         },
         {
           element: "Bodega",
           bootstrapIconClass: "bi bi-buildings-fill",
+          urlParam: "warehouses",
         },
       ],
     };
@@ -484,10 +500,23 @@ export default {
         this.$router.push("/" + param);
       }
     },
-    openElementsSidebar() {
+    openElementsSidebar(actionToPerform) {
+      if (actionToPerform == "new") {
+        document.getElementById("checkNew").checked = true;
+        document.getElementById("checkList").checked = false;
+      } else if (actionToPerform == "list") {
+        document.getElementById("checkNew").checked = false;
+        document.getElementById("checkList").checked = true;
+      }
       document.getElementById("checkElements").checked = true;
     },
-    performElementsAction() {
+    performElementsAction(param) {
+      if (document.getElementById("checkNew").checked == true) {
+        this.$router.push("/" + param + "/new");
+      } else if (document.getElementById("checkList").checked == true) {
+        this.$router.push("/" + param + "/list");
+      }
+      document.getElementById("check").checked = false;
       document.getElementById("checkOptions").checked = false;
       document.getElementById("checkElements").checked = false;
     },

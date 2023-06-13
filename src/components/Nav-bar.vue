@@ -4,7 +4,7 @@
       <img id="logotelas" src="../assets/logo_telas.jpg" @click="NavigateToAnotherPage('home')"/>
     </div>
     <div class="logo-usuario-container">
-      <i id="logousuario" class="bi bi-person"></i>
+      <i id="logousuario" class="bi bi-person" @click="NavigateToAnotherPage('userProfile')"></i>
     </div>
   </nav>
 </template>

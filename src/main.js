@@ -3,7 +3,9 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import App from './App.vue';
 import Home from './components/Home-component.vue';
-import Entrada from './components/Entrada-Inventario.vue';
+import UserProfile from './components/UserProfile.vue';
+import Entry from './components/Inventory-Entry.vue';
+import Transfer from './components/Inventory-Transfer.vue';
 import InventoryTable from './components/InventoryTable.vue';
 import EditArticle from './components/EditArticle.vue';
 import ViewArticle from './components/ViewArticle.vue';
@@ -26,7 +28,9 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         { path: '/home', component: Home },
-        { path: '/entry', component: Entrada },
+        { path: '/userProfile', component: UserProfile },
+        { path: '/entry', component: Entry },
+        { path: '/transfer', component: Transfer },
         { path: '/inventory', component: InventoryTable},
         { path: '/items/new', component: AddArticle,},
         { path: '/categories/new', component: AddCategory,},
