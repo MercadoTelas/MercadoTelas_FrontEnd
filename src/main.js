@@ -50,6 +50,7 @@ const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
+app.use(store);
 
 const state = reactive({
     navbarTitle: 'Inicio'

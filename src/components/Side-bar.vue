@@ -534,7 +534,6 @@ export default {
       } else if (document.getElementById("checkList").checked == true) {
         this.$router.push("/" + param + "/list");
       }
-      document.getElementById("check").checked = false;
       document.getElementById("checkOptions").checked = false;
       document.getElementById("checkElements").checked = false;
     },
