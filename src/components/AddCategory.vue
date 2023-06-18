@@ -58,7 +58,10 @@ export default {
     cancel() {
       this.$router.go(-1);
     }
-  }
+  },
+  mounted() {
+    this.$state.navbarTitle = 'Agregar Nueva Categoría';
+  },
 };
 </script>
 
@@ -77,5 +80,4 @@ export default {
 .buttons-container button {
   margin-left: 10px;
 }
-
 </style>

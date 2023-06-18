@@ -136,6 +136,9 @@ export default {
     unmounted() {
         
     },
+    mounted() {
+      this.$state.navbarTitle = 'Salidas';
+    },
     methods: {
         transferArticle() { },
     },

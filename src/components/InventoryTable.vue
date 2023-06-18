@@ -146,6 +146,7 @@ export default {
     }
   },
   mounted() {
+    this.$state.navbarTitle = 'Inventario';
     //Gets the all elements from the API
     axios.get(API_URL + '/inventory_items').then(response => {
       this.items = response.data.inventory_items

@@ -34,6 +34,7 @@ export default {
     };
   },
   mounted() {
+    this.$state.navbarTitle = 'Agregar Nueva Subcategoría';
     axios.get(API_URL + '/categories').then(response => {
       this.categories = response.data;
     }).catch(error => {
@@ -73,7 +74,7 @@ export default {
     cancel() {
       this.$router.go(-1);
     }
-  }
+  }, 
 };
 </script>
 

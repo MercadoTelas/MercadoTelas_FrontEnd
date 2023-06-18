@@ -113,10 +113,15 @@ export default {
         };
     },
     created() {
-        
+
     },
     unmounted() {
-        
+
+    },
+    mounted() {
+        this.$state.navbarTitle = 'Entradas';
+    },
+    computed: {
     },
     methods: {
         addArticle() { },

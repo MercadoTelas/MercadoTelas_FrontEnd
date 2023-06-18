@@ -63,6 +63,7 @@
     },
     mounted() {
       this.fetchArticle();
+      this.$state.navbarTitle = 'Ver Artículo';
     },
     methods: {
       fetchArticle() {

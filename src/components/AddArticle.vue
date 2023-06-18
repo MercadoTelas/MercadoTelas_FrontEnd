@@ -111,6 +111,7 @@ export default {
     },
   },
   mounted() {
+    this.$state.navbarTitle = 'Agregar Nuevo Artículo';
     axios.get(`${API_URL}/new_item`)
         .then(response => {
           this.categories = response.data.categories;

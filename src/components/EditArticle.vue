@@ -90,6 +90,9 @@
         this.$router.go(-1);
       },
     },
+    mounted() {
+      this.$state.navbarTitle = 'Editar Artículo';
+    },
   };
 
   </script>

@@ -389,7 +389,7 @@ export default {
             id: "usuarios",
             text: "Registrar usuarios",
             title: "registrar usuarios",
-            linkTo: "usuarios",
+            linkTo: "userRegister",
             bootstrapIcon: {
               class: "bi bi-people-fill",
             },

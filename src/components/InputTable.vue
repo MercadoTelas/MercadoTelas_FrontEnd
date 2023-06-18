@@ -35,7 +35,10 @@
         type: Array,
         required: true
       }
-    }
+    }, 
+    mounted() {
+      this.$state.navbarTitle = 'Tabla de entradas';
+    },
   };
   </script>
   

@@ -53,7 +53,10 @@
       cancel() {
         this.$router.go(-1);
       }
-    }
+    }, 
+    mounted() {
+      this.$state.navbarTitle = 'Agregar Nuevo Diseño';
+    },
   };
   </script>
   
