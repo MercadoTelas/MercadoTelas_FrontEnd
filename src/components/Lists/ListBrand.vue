@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { API_URL } from "@/config";
 
@@ -44,7 +45,7 @@ export default {
   data() {
     return {
       brands: [
-      { name: 'Adidas' },
+        { name: 'Adidas' },
         { name: 'Tommy Hilfiger' },
         { name: 'Nike' },
       ],
@@ -67,9 +68,30 @@ export default {
       // Lógica para ver los detalles de una marca
       // ...
     },
-    deleteBrand(/*brand*/) {
+    deleteBrand(brand) {
       // Lógica para eliminar una marca
-      // ...
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Se eliminará la marca ${brand.name}. Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Lógica para eliminar la marca aquí
+          // ...
+
+          Swal.fire({
+            title: 'Eliminada',
+            text: 'La marca ha sido eliminada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      });
     },
   },
   mounted() {

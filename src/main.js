@@ -24,6 +24,7 @@ import ListBrand from './components/Lists/ListBrand.vue';
 import ListDesign from './components/Lists/ListDesign.vue';
 import ListWareHouse from './components/Lists/ListWarehouse.vue';
 import ListArticle from './components/Lists/ListArticle.vue';
+import ListUser from './components/Lists/ListUsers.vue';
 
 //--Articulos relacionadas--
 import ViewArticle from './components/ViewArticle.vue';
@@ -65,6 +66,7 @@ const router = createRouter({
         { path: '/brands/list', component: ListBrand,},
         { path: '/designs/list', component: ListDesign,},
         { path: '/warehouses/list', component: ListWareHouse,},
+        { path: '/users/list', component: ListUser,},
         { path: '/userRegister', component: RegisterUser,},
         //{ path: '/login', component: Login,},
         //{ path: '/sendEmail', component: SendEmail,},

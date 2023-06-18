@@ -480,6 +480,11 @@ export default {
           bootstrapIconClass: "bi bi-buildings-fill",
           urlParam: "warehouses",
         },
+        {
+          element: "Usuarios",
+          bootstrapIconClass: "bi bi-person-circle",
+          urlParam: "users",
+        },
       ],
     };
   },

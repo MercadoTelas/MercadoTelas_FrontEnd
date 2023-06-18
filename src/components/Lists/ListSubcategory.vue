@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { API_URL } from "@/config";
 
@@ -81,9 +82,30 @@ export default {
       // Lógica para ver los detalles de una subcategoría
       // ...
     },
-    deleteSubcategory(/*subcategory*/) {
+    deleteSubcategory(subcategory) {
       // Lógica para eliminar una subcategoría
-      // ...
+      Swal.fire({
+      title: '¿Estás seguro?',
+      text: `Se eliminará la subcategoría ${subcategory.name}. Esta acción no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Lógica para eliminar la subcategoría aquí
+        // ...
+
+        Swal.fire({
+          title: 'Eliminada',
+          text: 'La subcategoría ha sido eliminada correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
     },
     getCategoryName(categoryId) {
       const category = this.categories.find(c => c.id === categoryId);

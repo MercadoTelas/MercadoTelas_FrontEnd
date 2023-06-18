@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2';
 import axios from "axios";
 import { API_URL } from "@/config";
 
@@ -44,7 +45,7 @@ export default {
   data() {
     return {
       designs: [
-      { name: 'Estampado' },
+        { name: 'Estampado' },
         { name: 'Liso' },
         { name: 'Arrugado' },
       ],
@@ -67,9 +68,31 @@ export default {
       // Lógica para ver los detalles de un diseño
       // ...
     },
-    deleteDesign(/*design*/) {
+    deleteDesign(design) {
       // Lógica para eliminar un diseño
-      // ...
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Se eliminará el diseño ${design.name}. Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Lógica para eliminar el diseño aquí
+          // ...
+
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'El diseño ha sido eliminado correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      });
+
     },
   },
   mounted() {

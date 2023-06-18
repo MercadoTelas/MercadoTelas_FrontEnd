@@ -38,6 +38,7 @@
 <script>
 import axios from "axios";
 import { API_URL } from "@/config";
+import Swal from 'sweetalert2';
 
 export default {
   name: 'CategoryList',
@@ -67,9 +68,30 @@ export default {
       // Lógica para ver los detalles de una categoría
       // ...
     },
-    deleteCategory(/*category*/) {
+    deleteCategory(category) {
       // Lógica para eliminar una categoría
-      // ...
+      Swal.fire({
+        title: '¿Estás seguro?',
+        text: `Se eliminará la categoría ${category.name}. Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Lógica para eliminar la categoría aquí
+          // ...
+
+          Swal.fire({
+            title: 'Eliminado',
+            text: 'La categoría ha sido eliminada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      });
     },
   },
   mounted() {
