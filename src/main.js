@@ -7,19 +7,38 @@ import Home from './components/Home-component.vue';
 import UserProfile from './components/UserProfile.vue';
 import Entry from './components/Inventory-Entry.vue';
 import Transfer from './components/Inventory-Transfer.vue';
-import InventoryTable from './components/InventoryTable.vue';
-import EditArticle from './components/EditArticle.vue';
+import InventoryTable from './components/Lists/InventoryTableCopy.vue';
+import RegisterUser from './components/RegisterUser.vue';
+
+//--Editar--
+//import EditCategory from './components/Edits/EditCategory.vue';
+//import EditSubcategory from './components/Edits/EditSubcategory.vue';
+//import EditBrand from './components/Edits/EditBrand.vue';
+//import EditDesign from './components/Edits/EditDesign.vue';
+//import EditWareHouse from './components/Edits/EditWareHouse.vue';
+
+//--Enlistar--
+import ListCategory from './components/Lists/ListCategory.vue';
+import ListSubcategory from './components/Lists/ListSubcategory.vue';
+import ListBrand from './components/Lists/ListBrand.vue';
+import ListDesign from './components/Lists/ListDesign.vue';
+import ListWareHouse from './components/Lists/ListWarehouse.vue';
+import ListArticle from './components/Lists/ListArticle.vue';
+
+//--Articulos relacionadas--
 import ViewArticle from './components/ViewArticle.vue';
-import AddArticle from './components/AddArticle.vue';
-import AddCategory from './components/AddCategory.vue';
-import AddBrand from './components/AddBrand.vue';
-import AddSubcategory from './components/AddSubcategory.vue';
-import AddDesign from './components/AddDesign.vue';
-import AddWareHouse from './components/AddWareHouse.vue';
-//import RegisterUser from './components/RegisterUser.vue';
-//import LoginUser from './components/LoginUser.vue';
-//import SendEMail from './components/SendEail.vue';
-import ResetPassword from './components/ResetPassword.vue';
+import AddArticle from './components/Adds/AddArticle.vue';
+import AddCategory from './components/Adds/AddCategory.vue';
+import AddBrand from './components/Adds/AddBrand.vue';
+import AddSubcategory from './components/Adds/AddSubcategory.vue';
+import AddDesign from './components/Adds/AddDesign.vue';
+import AddWareHouse from './components/Adds/AddWareHouse.vue';
+import EditArticle from './components/Edits/EditArticle.vue';
+
+//--Login--
+//import LoginUser from './components/Login/LoginUser.vue';
+//import SendEmail from './components/Login/SendEail.vue';
+//import ResetPassword from './components/Login/ResetPassword.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -40,9 +59,15 @@ const router = createRouter({
         { path: '/brands/new', component: AddBrand,},
         { path: '/designs/new', component: AddDesign,},
         { path: '/warehouses/new', component: AddWareHouse,},
-        { path: '/userRegister', component: ResetPassword,},
+        { path: '/items/list', component: ListArticle,},
+        { path: '/categories/list', component: ListCategory,},
+        { path: '/subcategories/list', component: ListSubcategory,},
+        { path: '/brands/list', component: ListBrand,},
+        { path: '/designs/list', component: ListDesign,},
+        { path: '/warehouses/list', component: ListWareHouse,},
+        { path: '/userRegister', component: RegisterUser,},
         //{ path: '/login', component: Login,},
-        //{ path: '/sendEmail', component: SendEMail,},
+        //{ path: '/sendEmail', component: SendEmail,},
         { path: '/edit/:id', name: 'EditArticle', component: EditArticle,},
         { path: '/view/:id', name: 'ViewArticle', component: ViewArticle,},
     ]

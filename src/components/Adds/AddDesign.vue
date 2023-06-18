@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-      <h2 class="text-center mt-3">Agregar Nuevo Diseño</h2>
       <form @submit.prevent="onCreateDesign">
         <div class="form-group mt-4">
           <label for="designName">Ingrese el nombre del diseño:</label>

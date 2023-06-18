@@ -1,6 +1,5 @@
 <template>
     <div class="register-user container">
-      <h2 class="header">Registrar Usuario</h2>
   
       <form @submit.prevent="registerUser">
         <div class="form-group">

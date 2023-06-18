@@ -1,6 +1,5 @@
 <template>
     <div class="form-title col-sm-12 mx-auto">
-        <h2>Salida de inventario</h2>
     </div>
     <form class="form container col-sm-8">
         <div class="row">
@@ -137,7 +136,7 @@ export default {
         
     },
     mounted() {
-      this.$state.navbarTitle = 'Salidas';
+      this.$state.navbarTitle = 'Salidas de inventario';
     },
     methods: {
         transferArticle() { },

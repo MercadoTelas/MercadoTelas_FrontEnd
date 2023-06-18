@@ -1,6 +1,5 @@
 <template>
   <div class="add-item container">
-    <h2 class="header">Agregar Nuevo Artículo</h2>
 
     <form @submit.prevent="onCreateItem">
       <div class="row">

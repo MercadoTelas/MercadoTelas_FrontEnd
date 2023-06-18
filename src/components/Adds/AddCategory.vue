@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h2 class="text-center mt-3">Agregar Nueva Categoría</h2>
     <form @submit.prevent="onCategoryCreate">
       <div class="form-group mt-4">
         <label for="categoryName">Ingrese el nombre de la categoría:</label>

@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <h2 class="text-center mt-3">Agregar Nueva Subcategoría</h2>
     <form @submit.prevent="onCreateSubcategory">
       <div class="form-group mt-4">
         <label for="subCategoryName">Ingrese el nombre de la subcategoría:</label>

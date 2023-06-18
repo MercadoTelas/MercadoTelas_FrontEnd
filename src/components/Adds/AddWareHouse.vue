@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-      <h2 class="text-center mt-3">Agregar Nueva Bodega</h2>
       <form @submit.prevent="onCreateWarehouse">
         <div class="form-group mt-4">
           <label for="warehouseName">Ingrese el nombre de la bodega:</label>

@@ -1,6 +1,5 @@
 <template>
     <div class="container">
-      <h2 class="text-center mt-3">Agregar Nueva Marca</h2>
       <form @submit.prevent="onBrandCreate"></form>
       <div class="form-group mt-4">
         <label for="brandName">Ingrese el nombre de la marca:</label>
