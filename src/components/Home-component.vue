@@ -1,12 +1,18 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-2">
-        <sidebar></sidebar>
-      </div>
+      <input
+        type="checkbox"
+        id="check"
+        v-model="checked"
+        @change="handleCheckboxChange"
+      />
+      <div id="spaceDiv" class="col-lg-2"></div>
       <div class="col-lg-10">
         <div class="movement-table">
-          <h1 class="header text-primary">Lista de los últimos movimientos realizados en el inventario</h1>
+          <h1 class="header text-primary">
+            Lista de los últimos movimientos realizados en el inventario
+          </h1>
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
@@ -34,8 +40,9 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
-  name: 'MovementTable',
+  name: "MovementTable",
   data() {
     return {
       sortedMovements: [],
@@ -47,20 +54,51 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   mounted() {
     // Llama a la función de actualización del título del navbar
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = 'Inicio';
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     sortMovements() {
-      return [...this.movementsData].sort((a, b) => new Date(b.date) - new Date(a.date));
+      return [...this.movementsData].sort(
+        (a, b) => new Date(b.date) - new Date(a.date)
+      );
     },
   },
 };
 </script>
 
 <style scoped>
+#spaceDiv {
+  display: none;
+}
+
+#check:checked ~ #spaceDiv {
+  display: block;
+}
+
+#check:checked ~ .container-fluid div {
+  padding-left: 10px;
+}
+
+.container-fluid div {
+  justify-content: center;
+  align-items: center;
+}
+
 .movement-table {
   margin: 15px;
 }

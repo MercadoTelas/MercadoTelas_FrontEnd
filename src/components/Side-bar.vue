@@ -4,7 +4,12 @@ import { container } from 'webpack';
   <input type="checkbox" id="checkList" />
 
   <!--Sidebar Prinicipal-->
-  <input type="checkbox" id="check" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <label for="check">
     <i class="fas fa-bars" id="btn">
       <i class="bi bi-list"></i>
@@ -331,6 +336,7 @@ label #cancelElements {
 </style>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -477,6 +483,14 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   created() {
     this.updateScreenSize();
     window.addEventListener("resize", this.updateScreenSize);
@@ -485,6 +499,10 @@ export default {
     window.removeEventListener("resize", this.updateScreenSize);
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     updateScreenSize() {
       this.screenWidth = window.innerWidth;
       this.screenHeight = window.innerHeight;

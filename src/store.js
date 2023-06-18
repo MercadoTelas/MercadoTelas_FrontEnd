@@ -1,17 +1,14 @@
-// store.js
+import { createStore } from 'vuex';
 
-import Vue from 'vue';
-import Vuex from 'vuex';
-
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
-  state: {
-    navbarTitle: '',
+const store = createStore({
+  state() {
+    return {
+      checkboxValue: false,
+    };
   },
   mutations: {
-    updateNavbarTitle(state, newTitle) {
-      state.navbarTitle = newTitle;
+    toggleCheckboxValue(state) {
+      state.checkboxValue = !state.checkboxValue;
     },
   },
 });

@@ -1,6 +1,7 @@
 import { createApp, reactive } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
+import store from './store';
 import App from './App.vue';
 import Home from './components/Home-component.vue';
 import UserProfile from './components/UserProfile.vue';
