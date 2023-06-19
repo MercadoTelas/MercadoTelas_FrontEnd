@@ -37,6 +37,8 @@
       </div>
     </div>
   </div>
+  <router-view></router-view>
+  <router-link to="/home/barsGraphic">Ir a BarsGraphic</router-link>
 </template>
 
 <script>

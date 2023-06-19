@@ -9,6 +9,8 @@ import Entry from './components/Inventory-Entry.vue';
 import Transfer from './components/Inventory-Transfer.vue';
 import InventoryTable from './components/Lists/InventoryTableCopy.vue';
 import RegisterUser from './components/RegisterUser.vue';
+import BarsGraphic from './components/BarsGraphic.vue';
+
 
 //--Editar--
 //import EditCategory from './components/Edits/EditCategory.vue';
@@ -49,7 +51,16 @@ import './styles/custom-bootstrap.scss';
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/home', component: Home },
+        {
+            path: '/home',
+            component: Home,
+            children: [
+              {
+                path: 'barsGraphic',
+                component: BarsGraphic
+              },
+            ]
+          },
         { path: '/userProfile', component: UserProfile },
         { path: '/entry', component: Entry },
         { path: '/transfer', component: Transfer },
