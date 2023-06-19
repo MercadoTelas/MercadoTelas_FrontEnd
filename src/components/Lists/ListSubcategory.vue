@@ -66,12 +66,22 @@ export default {
       if (this.searchQuery === '') {
         return this.subcategories;
       } else {
-        const parentCategoryIds = this.categories
-          .filter(category => category.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
-          .map(category => category.id);
-        return this.subcategories.filter(subcategory => parentCategoryIds.includes(subcategory.parentCategoryId));
+        const filteredSubcategories = new Set();
+        const lowercaseQuery = this.searchQuery.toLowerCase();
+        
+        this.subcategories.forEach(subcategory => {
+          const subcategoryName = subcategory.name.toLowerCase();
+          const parentCategory = this.categories.find(category => category.id === subcategory.parentCategoryId);
+          const parentCategoryName = parentCategory ? parentCategory.name.toLowerCase() : '';
+
+          if (subcategoryName.includes(lowercaseQuery) || parentCategoryName.includes(lowercaseQuery)) {
+            filteredSubcategories.add(subcategory);
+          }
+        });
+
+        return Array.from(filteredSubcategories);
       }
-    }
+    },
   },
   methods: {
     addSubcategory() {
@@ -85,32 +95,32 @@ export default {
     deleteSubcategory(subcategory) {
       // Lógica para eliminar una subcategoría
       Swal.fire({
-      title: '¿Estás seguro?',
-      text: `Se eliminará la subcategoría ${subcategory.name}. Esta acción no se puede deshacer.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Lógica para eliminar la subcategoría aquí
-        // ...
+        title: '¿Estás seguro?',
+        text: `Se eliminará la subcategoría ${subcategory.name}. Esta acción no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Lógica para eliminar la subcategoría aquí
+          // ...
 
-        Swal.fire({
-          title: 'Eliminada',
-          text: 'La subcategoría ha sido eliminada correctamente.',
-          icon: 'success',
-          confirmButtonText: 'Aceptar'
-        });
-      }
-    });
+          Swal.fire({
+            title: 'Eliminada',
+            text: 'La subcategoría ha sido eliminada correctamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      });
     },
     getCategoryName(categoryId) {
       const category = this.categories.find(c => c.id === categoryId);
       return category ? category.name : '';
-    }
+    },
   },
   mounted() {
     this.$state.navbarTitle = 'Lista de Subcategorías';

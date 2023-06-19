@@ -72,7 +72,7 @@ export default {
           name: 'Artículo 1',
           code: 'A001',
           conversion_factor: '2',
-          size: 'M',
+          size: 'Medium',
           minimal_stock: '10',
           status: 'Activo',
           subcategory_id: 'Subcategoría 1',
@@ -86,9 +86,9 @@ export default {
           name: 'Artículo 2',
           code: 'A002',
           conversion_factor: '1.5',
-          size: 'L',
+          size: 'Large',
           minimal_stock: '5',
-          status: 'Activo',
+          status: 'Inactivo',
           subcategory_id: 'Subcategoría 2',
           category_id: 'Categoría 2',
           brand_id: 'Marca 2',
@@ -96,7 +96,6 @@ export default {
           storing_format_units_name: 'Unidades de Entrada',
           transferring_format_units_name: 'Unidades de Salida',
         },
-        // Más datos de prueba de los artículos
       ],
       searchQuery: '',
     };
