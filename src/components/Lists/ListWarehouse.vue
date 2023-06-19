@@ -18,14 +18,12 @@
             <thead>
               <tr>
                 <th>Nombre de Bodega</th>
-                <th>Dirección</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="warehouse in filteredWarehouses" :key="warehouse.name">
                 <td>{{ warehouse.name }}</td>
-                <td>{{ warehouse.address }}</td>
                 <td>
                   <button @click="viewWarehouse(warehouse)" class="btn btn-primary">Ver bodega</button>
                   <button @click="deleteWarehouse(warehouse)" class="btn btn-danger">Eliminar</button>
@@ -59,8 +57,7 @@ export default {
     filteredWarehouses() {
       return this.warehouses.filter((warehouse) => {
         return (
-          warehouse.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          warehouse.address.toLowerCase().includes(this.searchQuery.toLowerCase())
+          warehouse.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       });
     }
