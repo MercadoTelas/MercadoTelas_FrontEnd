@@ -4,12 +4,7 @@ import { container } from 'webpack';
   <input type="checkbox" id="checkList" />
 
   <!--Sidebar Prinicipal-->
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <label for="check">
     <i class="fas fa-bars" id="btn">
       <i class="bi bi-list"></i>
@@ -19,19 +14,10 @@ import { container } from 'webpack';
     </i>
   </label>
   <div class="sidebar">
-    <a
-      v-for="(page, index) in pages"
-      :id="page.link.id"
-      :key="index"
-      :class="{ active: activePage == index }"
-      :href="`./${page.link.linkTo}`"
-      :title="`Ir a la página de ${page.link.title}`"
-      @click="action(page.link.linkTo)"
-      @click.prevent="activePage = index"
-    >
-      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"
-        ><span>{{ page.link.text }}</span></i
-      >
+    <a v-for="(page, index) in pages" :id="page.link.id" :key="index" :class="{ active: activePage == index }"
+      :href="`./${page.link.linkTo}`" :title="`Ir a la página de ${page.link.title}`" @click="action(page.link.linkTo)"
+      @click.prevent="activePage = index">
+      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"><span>{{ page.link.text }}</span></i>
       <span id="desktopText">
         <i id="desktopIcon" :class="page.link.bootstrapIcon.class"></i>
         {{ page.link.text }}
@@ -48,14 +34,9 @@ import { container } from 'webpack';
   </label>
 
   <div id="sidebarOptions" class="sidebarOptions">
-    <a
-      v-for="(option, index) in adminElementsOptions"
-      :id="option.optionTitle"
-      :key="index"
-      :class="{ active: activePage == index }"
-      @click="openElementsSidebar(option.urlParam)"
-      @click.prevent="activePage = index"
-    >
+    <a v-for="(option, index) in adminElementsOptions" :id="option.optionTitle" :key="index"
+      :class="{ active: activePage == index }" @click="openElementsSidebar(option.urlParam)"
+      @click.prevent="activePage = index">
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
         {{ option.optionTitle }}
@@ -72,14 +53,9 @@ import { container } from 'webpack';
   </label>
 
   <div id="sidebarElements" class="sidebarElements">
-    <a
-      v-for="(option, index) in adminElementsList"
-      :id="option.element"
-      :key="index"
-      :class="{ active: activePage == index }"
-      @click="performElementsAction(option.urlParam)"
-      @click.prevent="activePage = index"
-    >
+    <a v-for="(option, index) in adminElementsList" :id="option.element" :key="index"
+      :class="{ active: activePage == index }" @click="performElementsAction(option.urlParam)"
+      @click.prevent="activePage = index">
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
         {{ option.element }}
@@ -90,6 +66,7 @@ import { container } from 'webpack';
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Montserrat:600|Open+Sans:600&display=swap");
+
 * {
   margin: 0;
   padding: 0;
@@ -221,38 +198,38 @@ label #cancelElements {
   visibility: hidden;
 }
 
-#check:checked ~ .sidebar {
+#check:checked~.sidebar {
   left: 0;
 }
 
-#checkOptions:checked ~ .sidebarOptions {
+#checkOptions:checked~.sidebarOptions {
   left: 0;
 }
 
-#checkElements:checked ~ .sidebarElements {
+#checkElements:checked~.sidebarElements {
   left: 0;
 }
 
-#check:checked ~ label #btn {
+#check:checked~label #btn {
   margin-left: 245px;
   opacity: 0;
   visibility: hidden;
 }
 
 //Boton de cancelar activado
-#check:checked ~ label #cancel {
+#check:checked~label #cancel {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
 }
 
-#checkOptions:checked ~ label #cancelOptions {
+#checkOptions:checked~label #cancelOptions {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
 }
 
-#checkElements:checked ~ label #cancelElements {
+#checkElements:checked~label #cancelElements {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
@@ -278,6 +255,7 @@ label #cancelElements {
     width: 100vh;
     background: inherit;
   }
+
   .sidebar a:hover span {
     opacity: 1;
     visibility: visible;
@@ -337,6 +315,9 @@ label #cancelElements {
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import Swal from 'sweetalert2';
+
+
 export default {
   data() {
     return {
@@ -428,11 +409,11 @@ export default {
             id: "exit-item",
             text: "Cerrar sesión",
             title: "Salir",
-            linkTo: "inicioSesion",
+            linkTo: "login",
             bootstrapIcon: {
               class: "bi bi-door-closed-fill",
             },
-          },
+          }
         },
       ],
 
@@ -504,6 +485,24 @@ export default {
     window.removeEventListener("resize", this.updateScreenSize);
   },
   methods: {
+    methods: {
+      logout() {
+            Swal.fire({
+                icon: 'question',
+                title: 'Cerrar sesión',
+                text: '¿Estás seguro de que deseas cerrar sesión?',
+                showCancelButton: true,
+                confirmButtonText: 'Sí',
+                cancelButtonText: 'No',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Aquí puedes realizar las acciones necesarias para cerrar la sesión
+                    this.$store.commit('setLoggedIn', false);
+                    this.$router.push('/login');
+                }
+            });
+        }
+    },
     ...mapMutations(["toggleCheckboxValue"]),
     handleCheckboxChange() {
       this.toggleCheckboxValue();

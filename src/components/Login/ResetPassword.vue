@@ -4,12 +4,12 @@
       <form @submit.prevent="resetPassword">
         <div class="form-group">
           <label for="new-password" class="label">Nueva Contraseña:</label>
-          <input type="password" id="new-password" class="form-control input" v-model="newPassword">
+          <input type="password" id="new-password" class="form-control input" v-model="newPassword" required>
         </div>
   
         <div class="form-group">
           <label for="confirm-password" class="label">Confirmar Contraseña:</label>
-          <input type="password" id="confirm-password" class="form-control input" v-model="confirmPassword">
+          <input type="password" id="confirm-password" class="form-control input" v-model="confirmPassword" required>
         </div>
   
         <div class="form-buttons">
