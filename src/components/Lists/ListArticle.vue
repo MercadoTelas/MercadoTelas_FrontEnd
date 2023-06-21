@@ -1,122 +1,83 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col-md-12">
-        <div class="mb-3">
+      <div class="col-md-12 mb-3 me-1 d-flex align-items-center">
+        <div class="col-md-10 me-2">
           <label for="search" class="form-label">Buscar artículo:</label>
-          <input type="text" id="search" class="form-control" v-model="searchQuery"
-            placeholder="Buscar por cualquier campo">
+          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por cualquier característica">
         </div>
-        <div class="row">
-          <div class="col-md-12">
-            <button @click="addArticle" class="btn btn-success">Agregar artículo</button>
-          </div>
+        <div class="col-md-2 ms-2 align-self-center">
+          <br>
+          <button @click="addArticle" class="btn btn-success">Agregar artículo</button>
         </div>
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Código</th>
-                <th>Factor de Conversión</th>
-                <th>Tamaño</th>
-                <th>Inventario Mínimo</th>
-                <th>Estado</th>
-                <th>Subcategoría</th>
-                <th>Categoría</th>
-                <th>Marca</th>
-                <th>Diseño</th>
-                <th>Unidades de Entrada</th>
-                <th>Unidades de Salida</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="article in filteredArticles" :key="article.code">
-                <td>{{ article.name }}</td>
-                <td>{{ article.code }}</td>
-                <td>{{ article.conversion_factor }}</td>
-                <td>{{ article.size }}</td>
-                <td>{{ article.minimal_stock }}</td>
-                <td>{{ article.status }}</td>
-                <td>{{ article.subcategory_id }}</td>
-                <td>{{ article.category_id }}</td>
-                <td>{{ article.brand_id }}</td>
-                <td>{{ article.design_id }}</td>
-                <td>{{ article.storing_format_units_name }}</td>
-                <td>{{ article.transferring_format_units_name }}</td>
-                <td>
-                  <button @click="viewArticle(article)" class="btn btn-primary">Ver artículo</button>
-                  <button @click="deleteArticle(article)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="table-responsive col-md-12">
+        <table class="table table-hover table-responsive table-striped">
+          <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Subcategoría</th>
+            <th>Inventario Mínimo</th>
+            <th>Estado</th>
+            <th>Marca</th>
+            <th>Diseño</th>
+            <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="item in filteredArticles" :key="item.id">
+            <td>{{ item.id }}</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category_name }}</td>
+            <td>{{ item.subcategory_name }}</td>
+            <td>{{ item.minimal_stock }} {{ item.storing_format_units_name }}</td>
+            <td>{{ item.status = 'active' ? 'Activo' : 'Inactivo' }}</td>
+            <td>{{ item.brand_id != null ? item.brand_name : 'No posee' }}</td>
+            <td>{{ item.design_id != null ? item.design_name : 'No posee' }}</td>
+            <td>
+              <button @click="viewArticle(item)" class="btn btn-primary">Ver artículo</button>
+              <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
-  
+
 <script>
 import Swal from 'sweetalert2';
 import axios from "axios";
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 
 export default {
   name: 'ArticleList',
   data() {
     return {
-      articles: [
-        {
-          name: 'Artículo 1',
-          code: 'A001',
-          conversion_factor: '2',
-          size: 'Medium',
-          minimal_stock: '10',
-          status: 'Activo',
-          subcategory_id: 'Subcategoría 1',
-          category_id: 'Categoría 1',
-          brand_id: 'Marca 1',
-          design_id: 'Diseño 1',
-          storing_format_units_name: 'Unidades de Entrada',
-          transferring_format_units_name: 'Unidades de Salida',
-        },
-        {
-          name: 'Artículo 2',
-          code: 'A002',
-          conversion_factor: '1.5',
-          size: 'Large',
-          minimal_stock: '5',
-          status: 'Inactivo',
-          subcategory_id: 'Subcategoría 2',
-          category_id: 'Categoría 2',
-          brand_id: 'Marca 2',
-          design_id: 'Diseño 2',
-          storing_format_units_name: 'Unidades de Entrada',
-          transferring_format_units_name: 'Unidades de Salida',
-        },
-      ],
+      items: [],
       searchQuery: '',
     };
   },
   computed: {
     filteredArticles() {
-      return this.articles.filter((article) => {
+      return this.items.filter((item) => {
+        console.log(this.searchQuery)
         const search = this.searchQuery.toLowerCase();
         return (
-          article.name.toLowerCase().includes(search) ||
-          article.code.toLowerCase().includes(search) ||
-          article.conversion_factor.toLowerCase().includes(search) ||
-          article.size.toLowerCase().includes(search) ||
-          article.minimal_stock.toLowerCase().includes(search) ||
-          article.status.toLowerCase().includes(search) ||
-          article.subcategory_id.toLowerCase().includes(search) ||
-          article.category_id.toLowerCase().includes(search) ||
-          article.brand_id.toLowerCase().includes(search) ||
-          article.design_id.toLowerCase().includes(search) ||
-          article.storing_format_units_name.toLowerCase().includes(search) ||
-          article.transferring_format_units_name.toLowerCase().includes(search)
+            item.name.toLowerCase().includes(search) ||
+            item.id.toLowerCase().includes(search) ||
+            item.conversion_factor.toLowerCase().includes(search) ||
+            item.minimal_stock.toLowerCase().includes(search) ||
+            item.status.toLowerCase().includes(search) ||
+            item.subcategory_name.toLowerCase().includes(search) ||
+            item.category_name.toLowerCase().includes(search) ||
+            (item.brand_name != null && item.brand_name.toLowerCase().includes(search)) ||
+            (item.design_name != null && item.design_name.toLowerCase().includes(search))
         );
       });
     }
@@ -159,15 +120,16 @@ export default {
   mounted() {
     this.$state.navbarTitle = 'Lista de Artículos';
     // Obtener todos los artículos desde la API
-    axios.get(API_URL + '/articles').then(response => {
-      this.articles = response.data;
+    axios.get(API_URL + '/items').then(response => {
+      console.log(response.data);
+      this.items = response.data.items;
     }).catch(error => {
       console.log(error);
     });
   },
 };
 </script>
-  
+
 <style>
 .container {
   padding-top: 20px;
