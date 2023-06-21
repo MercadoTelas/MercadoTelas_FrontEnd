@@ -17,28 +17,28 @@
         <table class="table table-hover table-responsive table-striped">
           <thead>
           <tr>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Subcategoría</th>
-            <th>Inventario Mínimo</th>
-            <th>Estado</th>
-            <th>Marca</th>
-            <th>Diseño</th>
-            <th>Acciones</th>
+            <th class="text-center">Código</th>
+            <th class="text-center">Nombre</th>
+            <th class="text-center">Categoría</th>
+            <th class="text-center">Subcategoría</th>
+            <th class="text-center">Inventario Mínimo</th>
+            <th class="text-center">Estado</th>
+            <th class="text-center">Marca</th>
+            <th class="text-center">Diseño</th>
+            <th class="text-center">Acciones</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="item in filteredArticles" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td>{{ item.name }}</td>
-            <td>{{ item.category_name }}</td>
-            <td>{{ item.subcategory_name }}</td>
-            <td>{{ item.minimal_stock }} {{ item.storing_format_units_name }}</td>
-            <td>{{ item.status = 'active' ? 'Activo' : 'Inactivo' }}</td>
-            <td>{{ item.brand_id != null ? item.brand_name : 'No posee' }}</td>
-            <td>{{ item.design_id != null ? item.design_name : 'No posee' }}</td>
-            <td>
+            <td class="text-center">{{ item.id }}</td>
+            <td class="text-center">{{ item.name }}</td>
+            <td class="text-center">{{ item.category_name }}</td>
+            <td class="text-center">{{ item.subcategory_name }}</td>
+            <td class="text-center">{{ item.minimal_stock }} {{ item.storing_format_units_name }}</td>
+            <td class="text-center">{{ item.status === 'active' ? 'Activo' : 'Inactivo' }}</td>
+            <td class="text-center">{{ item.brand_id !== null ? item.brand_name : 'No posee' }}</td>
+            <td class="text-center">{{ item.design_id !== null ? item.design_name : 'No posee' }}</td>
+            <td class="text-center">
               <button @click="viewArticle(item)" class="btn btn-primary">Ver artículo</button>
               <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
             </td>
@@ -66,7 +66,6 @@ export default {
   computed: {
     filteredArticles() {
       return this.items.filter((item) => {
-        console.log(this.searchQuery)
         const search = this.searchQuery.toLowerCase();
         return (
             item.name.toLowerCase().includes(search) ||

@@ -12,21 +12,21 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped table-responsive">
             <thead>
-              <tr>
-                <th>Nombre de Categoría</th>
-                <th>Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Categoría</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="category in filteredCategories" :key="category.name">
-                <td>{{ category.name }}</td>
-                <td>
-                  <button @click="viewCategory(category)" class="btn btn-primary">Ver categoría</button>
-                  <button @click="deleteCategory(category)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
+            <tr v-for="category in filteredCategories" :key="category.name">
+              <td class="text-center">{{ category.name }}</td>
+              <td class="text-center">
+                <button @click="viewCategory(category)" class="btn btn-primary">Ver categoría</button>
+                <button @click="deleteCategory(category)" class="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>

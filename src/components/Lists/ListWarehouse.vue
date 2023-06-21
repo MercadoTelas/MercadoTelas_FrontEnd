@@ -14,21 +14,21 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped table-responsive">
             <thead>
-              <tr>
-                <th>Nombre de Bodega</th>
-                <th>Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Bodega</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="warehouse in filteredWarehouses" :key="warehouse.name">
-                <td>{{ warehouse.name }}</td>
-                <td>
-                  <button @click="viewWarehouse(warehouse)" class="btn btn-primary">Ver bodega</button>
-                  <button @click="deleteWarehouse(warehouse)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
+            <tr v-for="warehouse in filteredWarehouses" :key="warehouse.name">
+              <td class="text-center">{{ warehouse.name }}</td>
+              <td class="text-center">
+                <button @click="viewWarehouse(warehouse)" class="btn btn-primary">Ver bodega</button>
+                <button @click="deleteWarehouse(warehouse)" class="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -46,10 +46,7 @@ export default {
   name: 'WarehouseList',
   data() {
     return {
-      warehouses: [
-        { name: 'Bodega 1' },
-        { name: 'Bodega 2' },
-        { name: 'Bodega 3' },],
+      warehouses: [],
       searchQuery: '',
     };
   },
