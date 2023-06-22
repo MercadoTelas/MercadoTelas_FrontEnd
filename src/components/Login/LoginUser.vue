@@ -32,7 +32,7 @@
 
                 <div class="col">
                     <!-- Simple link -->
-                    <a href="#!">¿Olvidaste tu contraseña?</a>
+                    <a href="" @click="forgotPass">¿Olvidaste tu contraseña?</a>
                 </div>
             </div>
 
@@ -68,6 +68,9 @@ import Swal from 'sweetalert2';
 
 export default {
     methods: {
+        forgotPass() {
+            this.$router.push('/sendEmail');
+        },
         login() {
             // Obtener los valores de correo electrónico y contraseña
             const email = document.getElementById('form2Example1').value;
@@ -89,7 +92,6 @@ export default {
             } else {
                 // Las credenciales son inválidas, muestra un mensaje de error o realiza alguna acción apropiada
                 console.log('Credenciales inválidas');
-                this.$store.commit('setLoggedIn', false);
                 Swal.fire({
                     icon: 'error',
                     title: 'Error de inicio de sesión',

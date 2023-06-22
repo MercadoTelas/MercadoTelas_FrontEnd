@@ -40,7 +40,7 @@ import EditArticle from './components/Edits/EditArticle.vue';
 //--Login--
 import LoginUser from './components/Login/LoginUser.vue';
 import RegisterUser from './components/Login/RegisterUser.vue';
-//import SendEmail from './components/Login/SendEail.vue';
+import SendEmail from './components/Login/SendEmail.vue';
 //import ResetPassword from './components/Login/ResetPassword.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -56,6 +56,10 @@ const router = createRouter({
       redirect: '/login',
     },
     {
+      path: '/',
+      component: '/login',
+    },
+    {
       path: '/login',
       component: LoginUser,
     },
@@ -66,35 +70,37 @@ const router = createRouter({
     {
       path: '/home',
       component: Home,
+      meta: { requiresAuth: true },
       children: [
         {
           path: 'barsGraphic',
-          component: BarsGraphic
+          component: BarsGraphic,
+          meta: { requiresAuth: true },
         },
       ]
     },
-    { path: '/userProfile', component: UserProfile },
-    { path: '/entry', component: Entry },
-    { path: '/transfer', component: Transfer },
-    { path: '/inventory', component: InventoryTable },
-    { path: '/items/new', component: AddArticle, },
-    { path: '/categories/new', component: AddCategory, },
-    { path: '/subcategories/new', component: AddSubcategory, },
-    { path: '/brands/new', component: AddBrand, },
-    { path: '/designs/new', component: AddDesign, },
-    { path: '/warehouses/new', component: AddWareHouse, },
-    { path: '/items/list', component: ListArticle, },
-    { path: '/categories/list', component: ListCategory, },
-    { path: '/subcategories/list', component: ListSubcategory, },
-    { path: '/brands/list', component: ListBrand, },
-    { path: '/designs/list', component: ListDesign, },
-    { path: '/warehouses/list', component: ListWareHouse, },
-    { path: '/users/list', component: ListUser, },
-    { path: '/userRegister', component: RegisterUser, },
+    { path: '/userProfile', component: UserProfile, meta: { requiresAuth: true },},
+    { path: '/entry', component: Entry, meta: { requiresAuth: true }},
+    { path: '/transfer', component: Transfer, meta: { requiresAuth: true }},
+    { path: '/inventory', component: InventoryTable, meta: { requiresAuth: true }, },
+    { path: '/items/new', component: AddArticle, meta: { requiresAuth: true },},
+    { path: '/categories/new', component: AddCategory, meta: { requiresAuth: true },},
+    { path: '/subcategories/new', component: AddSubcategory, meta: { requiresAuth: true },},
+    { path: '/brands/new', component: AddBrand, meta: { requiresAuth: true },},
+    { path: '/designs/new', component: AddDesign, meta: { requiresAuth: true },},
+    { path: '/warehouses/new', component: AddWareHouse, meta: { requiresAuth: true },},
+    { path: '/items/list', component: ListArticle, meta: { requiresAuth: true },},
+    { path: '/categories/list', component: ListCategory, meta: { requiresAuth: true },},
+    { path: '/subcategories/list', component: ListSubcategory, meta: { requiresAuth: true },},
+    { path: '/brands/list', component: ListBrand, meta: { requiresAuth: true },},
+    { path: '/designs/list', component: ListDesign, meta: { requiresAuth: true },},
+    { path: '/warehouses/list', component: ListWareHouse, meta: { requiresAuth: true },},
+    { path: '/users/list', component: ListUser, meta: { requiresAuth: true },},
+    { path: '/userRegister', component: RegisterUser, meta: { requiresAuth: true },},
     //{ path: '/login', component: Login,},
-    //{ path: '/sendEmail', component: SendEmail,},
-    { path: '/edit/:id', name: 'EditArticle', component: EditArticle, },
-    { path: '/view/:id', name: 'ViewArticle', component: ViewArticle, },
+    { path: '/sendEmail', component: SendEmail},
+    { path: '/edit/:id', name: 'EditArticle', component: EditArticle, meta: { requiresAuth: true },},
+    { path: '/view/:id', name: 'ViewArticle', component: ViewArticle, meta: { requiresAuth: true },},
   ]
 });
 
@@ -103,9 +109,11 @@ app.use(store);
 app.use(router);
 
 // Agregar un guardia de navegación para verificar la autenticación en las rutas con requiresAuth: true
-router.beforeEach((to, from, next) => {
+router.beforeResolve((to, from, next) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  if (requiresAuth && !store.state.isLoggedIn) {
+  console.log(store.state.isLoggedIn);
+
+  if (!store.state.isLoggedIn && requiresAuth) {
     next('/login');
   } else {
     next();

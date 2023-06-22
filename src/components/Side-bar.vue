@@ -497,7 +497,7 @@ export default {
             }).then((result) => {
                 if (result.isConfirmed) {
                     // Aquí puedes realizar las acciones necesarias para cerrar la sesión
-                    this.$store.commit('setLoggedIn', false);
+                    this.$store.commit('setLoggedIn', true);
                     this.$router.push('/login');
                 }
             });

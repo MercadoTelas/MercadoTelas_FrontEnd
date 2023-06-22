@@ -4,7 +4,7 @@ const store = createStore({
   state() {
     return {
       checkboxValue: false,
-      isLoggedIn: false,
+      isLoggedIn: localStorage.getItem('isLoggedIn') === 'true',
     };
   },
   mutations: {
@@ -13,6 +13,7 @@ const store = createStore({
     },
     setLoggedIn(state, value) {
       state.isLoggedIn = value;
+      localStorage.setItem('isLoggedIn', value.toString());
     },
   },
 });

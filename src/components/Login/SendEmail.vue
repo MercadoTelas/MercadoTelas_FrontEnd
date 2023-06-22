@@ -1,66 +1,48 @@
 <template>
-    <div class="password-reset-form container">
-  
-      <form @submit.prevent="sendEmail">
-        <div class="form-group">
-          <label for="email" class="label">Ingrese su correo electrónico:</label>
-          <input type="text" id="email" class="form-control input" v-model="correo">
+  <div class="password-reset-form">
+    <div class="card text-center" style="width: 500px; height: 400px;">
+      <div class="card-header h5 text-white bg-primary">Restablecimiento de Contraseña</div>
+      <div class="card-body px-5">
+        <p class="card-text py-3">
+          Ingrese su dirección de correo electrónico y le enviaremos un correo electrónico con las instrucciones para restablecer su contraseña.
+        </p>
+        <div class="form-outline">
+          <input type="email" id="typeEmail" class="form-control my-3" v-model="email" />
+          <label class="form-label" for="typeEmail">Correo electrónico</label>
         </div>
-  
-        <p class="warning">Se le enviará a su correo electrónico un enlace para restaurar su contraseña.</p>
-  
-        <div class="form-buttons">
-          <button class="btn btn-primary btn-send" type="submit">Enviar Correo</button>
+        <a href="#" class="btn btn-primary w-100" @click="resetPassword">Restablecer contraseña</a>
+        <div class="d-flex justify-content-between mt-4">
+          <a class="" href="" @click="goToLogin">Iniciar sesión</a>
+          <a class="" href="#">Registrarse</a>
         </div>
-      </form>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        correo: '',
-      };
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      email: '',
+    };
+  },
+  methods: {
+    resetPassword() {
+      // Lógica para restablecer la contraseña
     },
-    methods: {
-      sendEmail() {
-        // Lógica para enviar el correo electrónico
-      },
-    },
-    mounted() {
-      this.$state.navbarTitle = 'Restablecer Contraseña';
+    goToLogin() {
+      this.$router.push('/login');
     }
-  };
-  </script>
-  
-  <style scoped>
-  .container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .header {
-    text-align: left;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .warning {
-    color: black;
-  }
-  
-  .form-buttons {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 15px;
-  }
-  
-  .btn-send {
-    display: inline-block;
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style>
+.password-reset-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+</style>

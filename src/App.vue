@@ -34,7 +34,7 @@ export default {
   computed: {
     isLoggedIn() {
       return this.$store.state.isLoggedIn;
-    }
+    },
   },
 
   methods: {
@@ -42,9 +42,6 @@ export default {
 };
 
 //Validación login
-
-
-
 
 </script>
 
