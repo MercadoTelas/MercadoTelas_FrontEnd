@@ -12,21 +12,21 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped table-responsive">
             <thead>
-              <tr>
-                <th>Nombre de Diseño</th>
-                <th>Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Diseño</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="design in filteredDesigns" :key="design.name">
-                <td>{{ design.name }}</td>
-                <td>
-                  <button @click="viewDesign(design)" class="btn btn-primary">Ver diseño</button>
-                  <button @click="deleteDesign(design)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
+            <tr v-for="design in filteredDesigns" :key="design.name">
+              <td class="text-center">{{ design.name }}</td>
+              <td class="text-center">
+                <button @click="viewDesign(design)" class="btn btn-primary">Ver diseño</button>
+                <button @click="deleteDesign(design)" class="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>

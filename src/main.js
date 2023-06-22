@@ -8,7 +8,6 @@ import UserProfile from './components/UserProfile.vue';
 import Entry from './components/Inventory-Entry.vue';
 import Transfer from './components/Inventory-Transfer.vue';
 import InventoryTable from './components/Lists/InventoryTableCopy.vue';
-import RegisterUser from './components/RegisterUser.vue';
 import BarsGraphic from './components/BarsGraphic.vue';
 
 
@@ -39,7 +38,8 @@ import AddWareHouse from './components/Adds/AddWareHouse.vue';
 import EditArticle from './components/Edits/EditArticle.vue';
 
 //--Login--
-//import LoginUser from './components/Login/LoginUser.vue';
+import LoginUser from './components/Login/LoginUser.vue';
+import RegisterUser from './components/Login/RegisterUser.vue';
 //import SendEmail from './components/Login/SendEail.vue';
 //import ResetPassword from './components/Login/ResetPassword.vue';
 
@@ -49,49 +49,71 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/custom-bootstrap.scss';
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
+  history: createWebHistory(),
+  routes: [
+    {
+      path: '',
+      redirect: '/login',
+    },
+    {
+      path: '/login',
+      component: LoginUser,
+    },
+    {
+      component: App,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/home',
+      component: Home,
+      children: [
         {
-            path: '/home',
-            component: Home,
-            children: [
-              {
-                path: 'barsGraphic',
-                component: BarsGraphic
-              },
-            ]
-          },
-        { path: '/userProfile', component: UserProfile },
-        { path: '/entry', component: Entry },
-        { path: '/transfer', component: Transfer },
-        { path: '/inventory', component: InventoryTable},
-        { path: '/items/new', component: AddArticle,},
-        { path: '/categories/new', component: AddCategory,},
-        { path: '/subcategories/new', component: AddSubcategory,},
-        { path: '/brands/new', component: AddBrand,},
-        { path: '/designs/new', component: AddDesign,},
-        { path: '/warehouses/new', component: AddWareHouse,},
-        { path: '/items/list', component: ListArticle,},
-        { path: '/categories/list', component: ListCategory,},
-        { path: '/subcategories/list', component: ListSubcategory,},
-        { path: '/brands/list', component: ListBrand,},
-        { path: '/designs/list', component: ListDesign,},
-        { path: '/warehouses/list', component: ListWareHouse,},
-        { path: '/users/list', component: ListUser,},
-        { path: '/userRegister', component: RegisterUser,},
-        //{ path: '/login', component: Login,},
-        //{ path: '/sendEmail', component: SendEmail,},
-        { path: '/edit/:id', name: 'EditArticle', component: EditArticle,},
-        { path: '/view/:id', name: 'ViewArticle', component: ViewArticle,},
-    ]
+          path: 'barsGraphic',
+          component: BarsGraphic
+        },
+      ]
+    },
+    { path: '/userProfile', component: UserProfile },
+    { path: '/entry', component: Entry },
+    { path: '/transfer', component: Transfer },
+    { path: '/inventory', component: InventoryTable },
+    { path: '/items/new', component: AddArticle, },
+    { path: '/categories/new', component: AddCategory, },
+    { path: '/subcategories/new', component: AddSubcategory, },
+    { path: '/brands/new', component: AddBrand, },
+    { path: '/designs/new', component: AddDesign, },
+    { path: '/warehouses/new', component: AddWareHouse, },
+    { path: '/items/list', component: ListArticle, },
+    { path: '/categories/list', component: ListCategory, },
+    { path: '/subcategories/list', component: ListSubcategory, },
+    { path: '/brands/list', component: ListBrand, },
+    { path: '/designs/list', component: ListDesign, },
+    { path: '/warehouses/list', component: ListWareHouse, },
+    { path: '/users/list', component: ListUser, },
+    { path: '/userRegister', component: RegisterUser, },
+    //{ path: '/login', component: Login,},
+    //{ path: '/sendEmail', component: SendEmail,},
+    { path: '/items/edit/:id', name: 'EditArticle', component: EditArticle, props: true, },
+    { path: '/view/:id', name: 'ViewArticle', component: ViewArticle, },
+  ]
 });
 
 const app = createApp(App);
-app.use(router);
 app.use(store);
+app.use(router);
+
+// Agregar un guardia de navegación para verificar la autenticación en las rutas con requiresAuth: true
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
+  if (requiresAuth && !store.state.isLoggedIn) {
+    next('/login');
+  } else {
+    next();
+  }
+});
 
 const state = reactive({
-    navbarTitle: 'Inicio'
+  navbarTitle: 'Inicio'
 });
 
 app.config.globalProperties.$state = state;
