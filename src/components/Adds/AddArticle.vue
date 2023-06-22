@@ -25,12 +25,12 @@
           </div>
 
           <div class="form-group">
-            <label for="storing_format_units_name">Nombre de unidades de entrada:</label>
+            <label for="storing_format_units_name">Nombre de unidades de almacenamiento:</label>
             <input type="text" id="storing_format_units_name" class="form-control" v-model="storing_format_units_name">
           </div>
 
           <div class="form-group">
-            <label for="transferring_format_units_name">Nombre de unidades de salida:</label>
+            <label for="transferring_format_units_name">Nombre de unidades de venta:</label>
             <input type="text" id="transferring_format_units_name" class="form-control"
                    v-model="transferring_format_units_name">
           </div>

@@ -93,7 +93,7 @@ const router = createRouter({
     { path: '/userRegister', component: RegisterUser, },
     //{ path: '/login', component: Login,},
     //{ path: '/sendEmail', component: SendEmail,},
-    { path: '/edit/:id', name: 'EditArticle', component: EditArticle, },
+    { path: '/items/edit/:id', name: 'EditArticle', component: EditArticle, props: true, },
     { path: '/view/:id', name: 'ViewArticle', component: ViewArticle, },
   ]
 });

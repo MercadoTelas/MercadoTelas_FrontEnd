@@ -39,7 +39,8 @@
             <td class="text-center">{{ item.brand_id !== null ? item.brand_name : 'No posee' }}</td>
             <td class="text-center">{{ item.design_id !== null ? item.design_name : 'No posee' }}</td>
             <td class="text-center">
-              <button @click="viewArticle(item)" class="btn btn-primary">Ver artículo</button>
+              <button @click="viewItem(item)" class="btn btn-primary">Ver artículo</button>
+              <button @click="editItem(item)" class="btn btn-secondary">Editar artículo</button>
               <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
             </td>
           </tr>
@@ -82,11 +83,17 @@ export default {
     }
   },
   methods: {
+
     addArticle() {
       // Lógica para agregar un nuevo artículo
       // ...
     },
-    viewArticle(/*article*/) {
+    editItem(item) {
+      this.$router.push({name: 'EditArticle', params: {id: item.id}});
+      // Lógica para editar un artículo
+      // ...
+    },
+    viewItem(/*article*/) {
       // Lógica para ver los detalles de un artículo
       // ...
     },
