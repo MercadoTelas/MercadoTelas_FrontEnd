@@ -44,10 +44,6 @@ export default {
 };
 
 //Validación login
-<<<<<<< HEAD
-
-=======
->>>>>>> 2e4759bb01b00650cbddad14001b60989f1637b6
 </script>
 
 <style>
