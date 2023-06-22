@@ -127,13 +127,13 @@ export default {
 }
 
 #check:checked ~ #spaceDiv {
-  height: 100vh;
+  height: auto;
   width: 345px;
   display: block;
 }
 
 #check:checked ~ #contentDiv {
-  height: 100vh;
+  height: auto;
   display: block;
 }
 

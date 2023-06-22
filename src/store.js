@@ -1,6 +1,5 @@
 import { createStore } from "vuex";
 
-
 const store = createStore({
   state() {
     return {
@@ -11,6 +10,10 @@ const store = createStore({
   mutations: {
     toggleCheckboxValue(state) {
       state.checkboxValue = !state.checkboxValue;
+    },
+    setCheck(state, value) {
+      state.checkboxValue = value;
+      sessionStorage.setItem("checkboxValue", value.toString());
     },
     setLoggedIn(state, value) {
       state.isLoggedIn = value;

@@ -101,6 +101,7 @@ export default {
     },
     mounted() {
         console.log('logged false');
+        this.$store.commit('setCheck', false);
         this.$store.commit('setLoggedIn', false);
     },
 };

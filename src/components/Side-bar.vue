@@ -1,7 +1,12 @@
 import { container } from 'webpack';
 <template>
   <!--Sidebar Prinicipal-->
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <label for="check">
     <i class="fas fa-bars" id="btn">
       <i class="bi bi-list"></i>
@@ -11,10 +16,19 @@ import { container } from 'webpack';
     </i>
   </label>
   <div class="sidebar">
-    <a v-for="(page, index) in pages" :id="page.link.id" :key="index" :class="{ active: activePage == index }"
-      :href="`./${page.link.linkTo}`" :title="`Ir a la página de ${page.link.title}`" @click="action(page.link.linkTo)"
-      @click.prevent="activePage = index">
-      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"><span>{{ page.link.text }}</span></i>
+    <a
+      v-for="(page, index) in pages"
+      :id="page.link.id"
+      :key="index"
+      :class="{ active: activePage == index }"
+      :href="`./${page.link.linkTo}`"
+      :title="`Ir a la página de ${page.link.title}`"
+      @click="action(page.link.linkTo)"
+      @click.prevent="activePage = index"
+    >
+      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"
+        ><span>{{ page.link.text }}</span></i
+      >
       <span id="desktopText">
         <i id="desktopIcon" :class="page.link.bootstrapIcon.class"></i>
         {{ page.link.text }}
@@ -31,9 +45,14 @@ import { container } from 'webpack';
   </label>
 
   <div id="sidebarElements" class="sidebarElements">
-    <a v-for="(option, index) in adminElementsList" :id="option.element" :key="index"
-      :class="{ active: activePage == index }" @click="performElementsAction(option.urlParam)"
-      @click.prevent="activePage = index">
+    <a
+      v-for="(option, index) in adminElementsList"
+      :id="option.element"
+      :key="index"
+      :class="{ active: activePage == index }"
+      @click="performElementsAction(option.urlParam)"
+      @click.prevent="activePage = index"
+    >
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
         {{ option.element }}
@@ -169,7 +188,7 @@ label #cancelElements {
   visibility: hidden;
 }
 
-#check:checked~.sidebar {
+#check:checked ~ .sidebar {
   left: 0;
 }
 
@@ -177,19 +196,18 @@ label #cancelElements {
   left: 0;
 }
 
-#check:checked~label #btn {
+#check:checked ~ label #btn {
   margin-left: 245px;
   opacity: 0;
   visibility: hidden;
 }
 
 //Boton de cancelar activado
-#check:checked~label #cancel {
+#check:checked ~ label #cancel {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
 }
-
 
 #checkElements:checked ~ label #cancelElements {
   margin-left: 350px;
@@ -277,8 +295,7 @@ label #cancelElements {
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import Swal from 'sweetalert2';
-
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -375,7 +392,7 @@ export default {
             bootstrapIcon: {
               class: "bi bi-door-closed-fill",
             },
-          }
+          },
         },
       ],
 
@@ -436,21 +453,21 @@ export default {
   methods: {
     methods: {
       logout() {
-            Swal.fire({
-                icon: 'question',
-                title: 'Cerrar sesión',
-                text: '¿Estás seguro de que deseas cerrar sesión?',
-                showCancelButton: true,
-                confirmButtonText: 'Sí',
-                cancelButtonText: 'No',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Aquí puedes realizar las acciones necesarias para cerrar la sesión
-                    this.$store.commit('setLoggedIn', false);
-                    this.$router.push('/login');
-                }
-            });
-        }
+        Swal.fire({
+          icon: "question",
+          title: "Cerrar sesión",
+          text: "¿Estás seguro de que deseas cerrar sesión?",
+          showCancelButton: true,
+          confirmButtonText: "Sí",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Aquí puedes realizar las acciones necesarias para cerrar la sesión
+            this.$store.commit("setLoggedIn", false);
+            this.$router.push("/login");
+          }
+        });
+      },
     },
     ...mapMutations(["toggleCheckboxValue"]),
     handleCheckboxChange() {
@@ -472,7 +489,7 @@ export default {
       }
     },
     performElementsAction(param) {
-        this.$router.push("/" + param + "/list");
+      this.$router.push("/" + param + "/list");
       document.getElementById("checkElements").checked = false;
     },
   },
