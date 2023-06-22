@@ -7,8 +7,8 @@
         v-model="checked"
         @change="handleCheckboxChange"
       />
-      <div id="spaceDiv" class="col-lg-2"></div>
-      <div class="col-lg-10">
+      <div id="spaceDiv" class="col-lg-3"></div>
+      <div id="contentDiv" class="col-lg-9">
         <div class="movement-table">
           <h1 class="header text-primary">
             Lista de los últimos movimientos realizados en el inventario
@@ -34,11 +34,11 @@
             </table>
           </div>
         </div>
+        <router-view></router-view>
+        <router-link to="/home/barsGraphic">Ir a BarsGraphic</router-link>
       </div>
     </div>
   </div>
-  <router-view></router-view>
-  <router-link to="/home/barsGraphic">Ir a BarsGraphic</router-link>
 </template>
 
 <script>
@@ -49,12 +49,33 @@ export default {
     return {
       sortedMovements: [],
       movementsData: [
-        { id: 1, date: '2023-06-01', description: '5 entradas de tela Brush Azul', warehouse: 'Bodega 1', responsible: 'Andres Mendez' },
-        { id: 2, date: '2023-06-02', description: '5 salidas de tela Brush Negra', warehouse: 'Bodega 2', responsible: 'Jane Alfaro' },
-        { id: 3, date: '2023-06-03', description: '3 entradas de rollos de hilo Blanco', warehouse: 'Bodega 3', responsible: 'Silvia Castro' },
+        {
+          id: 1,
+          date: "2023-06-01",
+          description: "5 entradas de tela Brush Azul",
+          warehouse: "Bodega 1",
+          responsible: "Andres Mendez",
+        },
+        {
+          id: 2,
+          date: "2023-06-02",
+          description: "5 salidas de tela Brush Negra",
+          warehouse: "Bodega 2",
+          responsible: "Jane Alfaro",
+        },
+        {
+          id: 3,
+          date: "2023-06-03",
+          description: "3 entradas de rollos de hilo Blanco",
+          warehouse: "Bodega 3",
+          responsible: "Silvia Castro",
+        },
         // Agrega más objetos de movimiento según tu estructura de datos
       ],
     };
+  },
+  created() {
+    this.isFirstDisplay = true;
   },
   computed: {
     ...mapState(["checkboxValue"]),
@@ -67,7 +88,7 @@ export default {
   mounted() {
     // Llama a la función de actualización del título del navbar
     this.sortedMovements = this.sortMovements();
-    this.$state.navbarTitle = 'Inicio';
+    this.$state.navbarTitle = "Inicio";
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -89,11 +110,14 @@ export default {
 }
 
 #check:checked ~ #spaceDiv {
+  height: auto;
+  width: 345px;
   display: block;
 }
 
-#check:checked ~ .container-fluid div {
-  padding-left: 10px;
+#check:checked ~ #contentDiv {
+  height: auto;
+  display: block;
 }
 
 .container-fluid div {

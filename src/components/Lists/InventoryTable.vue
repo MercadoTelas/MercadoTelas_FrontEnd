@@ -1,14 +1,19 @@
 <template>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-2 col-md-12">
-        <Side-bar></Side-bar>
-      </div>
+      <input
+        type="checkbox"
+        id="check"
+        v-model="checked"
+        @change="handleCheckboxChange"
+      />
 
-      <div class="col-lg-10 col-md-12">
+      <div id="spaceDiv" class="col-lg-3"></div>
+
+      <div class="col-lg-9">
         <div class="table-container">
           <h1 class="filter-title text-primary">Filtros</h1>
-          <div class="filters-container row">
+          <div id="flitersContainer" class="filters-container row">
             <div class="col-md-2">
               <div class="form-group">
                 <label for="codigo">Código de Artículo:</label>
@@ -106,6 +111,7 @@
 import axios from "axios";
 import Swal from 'sweetalert2';
 import {API_URL} from "@/config";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: 'InventoryTable',
@@ -127,6 +133,12 @@ export default {
     };
   },
   computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
     filteredSubcategories() {
       return this.categories.filter((category) => {
         return category.name === this.filter.category
@@ -159,6 +171,10 @@ export default {
     });
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     resetSubcategory() {
       this.filter.subcategory = ''
     },
@@ -201,6 +217,24 @@ export default {
 </script>
 
 <style>
+
+#spaceDiv {
+  display: none;
+}
+
+#check:checked ~ #spaceDiv {
+  display: block;
+}
+
+#check:checked ~ .container-fluid div {
+  padding-left: 10px;
+}
+
+.container-fluid div {
+  justify-content: center;
+  align-items: center;
+}
+
 .table-container {
   margin-top: 20px;
 }
@@ -285,9 +319,5 @@ export default {
 
 .text-primary {
   color: #007bff;
-}
-
-.container-fluid {
-  padding: 20px;
 }
 </style>

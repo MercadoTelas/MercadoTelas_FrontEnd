@@ -1,20 +1,18 @@
 <template>
-
   <div v-if="isLoggedIn">
     <navbar></navbar>
     <sidebar></sidebar>
   </div>
-  <router-view></router-view>
+  <router-view @vue:mounted="checkLoggedIn()"></router-view>
 </template>
 
 <script>
-import sidebar from './components/Side-bar.vue';
-import navbar from './components/Nav-bar.vue';
-import { useStore } from 'vuex';
+import sidebar from "./components/Side-bar.vue";
+import navbar from "./components/Nav-bar.vue";
+import { useStore } from "vuex";
 
 export default {
-
-  name: 'App',
+  name: "App",
   components: {
     sidebar,
     navbar,
@@ -22,11 +20,10 @@ export default {
 
   data() {
     return {
-      username: '',
-      password: '',
+      username: "",
+      password: "",
     };
   },
-
   mounted() {
     const store = useStore();
     console.log(store.state.isLoggedIn); // Ejemplo de uso de la variable store
@@ -38,11 +35,19 @@ export default {
   },
 
   methods: {
+    checkLoggedIn() {
+      if (this.$store.state.isLoggedIn == false) {
+        this.$router.push('/login');
+      }
+    }
   },
 };
 
 //Validación login
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2e4759bb01b00650cbddad14001b60989f1637b6
 </script>
 
 <style>
