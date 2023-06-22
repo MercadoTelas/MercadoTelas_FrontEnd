@@ -81,11 +81,11 @@ export default {
                     title: '¡Inicio de sesión exitoso!',
                     text: 'Bienvenido',
                     showConfirmButton: false,
-                    timer: 2000
+                    timer: 1500
                 });
 
                 this.$store.commit('setLoggedIn', true);
-                this.$router.push('/app');
+                this.$router.push('/home');
             } else {
                 // Las credenciales son inválidas, muestra un mensaje de error o realiza alguna acción apropiada
                 console.log('Credenciales inválidas');
@@ -93,7 +93,7 @@ export default {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error de inicio de sesión',
-                    text: 'Credenciales inválidas'
+                    text: 'Credenciales inválidas',
                 });
             }
           //this.$store.commit('setLoggedIn', true);

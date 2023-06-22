@@ -1,10 +1,11 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
+
 
 const store = createStore({
   state() {
     return {
-      checkboxValue: false,
-      isLoggedIn: false,
+      checkboxValue: sessionStorage.getItem("checkboxValue") === "true",
+      isLoggedIn: sessionStorage.getItem("isLoggedIn") === "true",
     };
   },
   mutations: {
@@ -13,6 +14,7 @@ const store = createStore({
     },
     setLoggedIn(state, value) {
       state.isLoggedIn = value;
+      sessionStorage.setItem("isLoggedIn", value.toString());
     },
   },
 });
