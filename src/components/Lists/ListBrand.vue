@@ -12,21 +12,21 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped table-responsive">
             <thead>
-              <tr>
-                <th>Nombre de Marca</th>
-                <th>Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Marca</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="brand in filteredBrands" :key="brand.name">
-                <td>{{ brand.name }}</td>
-                <td>
-                  <button @click="viewBrand(brand)" class="btn btn-primary">Ver marca</button>
-                  <button @click="deleteBrand(brand)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
+            <tr v-for="brand in filteredBrands" :key="brand.name">
+              <td class="text-center">{{ brand.name }}</td>
+              <td class="text-center">
+                <button @click="viewBrand(brand)" class="btn btn-primary">Ver marca</button>
+                <button @click="deleteBrand(brand)" class="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>

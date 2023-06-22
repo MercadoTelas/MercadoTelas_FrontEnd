@@ -282,7 +282,7 @@ label #cancelElements {
 
   .sidebar {
     position: fixed;
-    width: 70;
+    width: 70px;
     left: -70px;
     top: 110px;
 

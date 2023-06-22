@@ -14,23 +14,23 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped table-responsive">
             <thead>
-              <tr>
-                <th>Nombre de Subcategoría</th>
-                <th>Categoría asociada</th>
-                <th>Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Subcategoría</th>
+              <th class="text-center">Categoría asociada</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr v-for="subcategory in filteredSubcategories" :key="subcategory.name">
-                <td>{{ subcategory.name }}</td>
-                <td>{{ getCategoryName(subcategory.parentCategoryId) }}</td>
-                <td>
-                  <button @click="viewSubcategory(subcategory)" class="btn btn-primary">Ver subcategoría</button>
-                  <button @click="deleteSubcategory(subcategory)" class="btn btn-danger">Eliminar</button>
-                </td>
-              </tr>
+            <tr v-for="subcategory in filteredSubcategories" :key="subcategory.id">
+              <td class="text-center">{{ subcategory.name }}</td>
+              <td class="text-center">{{ subcategory.category.name }}</td>
+              <td class="text-center">
+                <button @click="viewSubcategory(subcategory)" class="btn btn-primary">Ver subcategoría</button>
+                <button @click="deleteSubcategory(subcategory)" class="btn btn-danger">Eliminar</button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -49,38 +49,16 @@ export default {
   data() {
     return {
       subcategories: [
-          { name: 'Subcategory 1', parentCategoryId: 1 },
-          { name: 'Subcategory 2', parentCategoryId: 2 },
-          { name: 'Subcategory 3', parentCategoryId: 1 },
-        ],
-        categories: [
-          { id: 1, name: 'Category 1' },
-          { id: 2, name: 'Category 2' },
-          { id: 3, name: 'Category 3' },
         ],
         searchQuery: '',
     };
   },
   computed: {
     filteredSubcategories() {
-      if (this.searchQuery === '') {
-        return this.subcategories;
-      } else {
-        const filteredSubcategories = new Set();
-        const lowercaseQuery = this.searchQuery.toLowerCase();
-        
-        this.subcategories.forEach(subcategory => {
-          const subcategoryName = subcategory.name.toLowerCase();
-          const parentCategory = this.categories.find(category => category.id === subcategory.parentCategoryId);
-          const parentCategoryName = parentCategory ? parentCategory.name.toLowerCase() : '';
-
-          if (subcategoryName.includes(lowercaseQuery) || parentCategoryName.includes(lowercaseQuery)) {
-            filteredSubcategories.add(subcategory);
-          }
-        });
-
-        return Array.from(filteredSubcategories);
-      }
+      return this.subcategories.filter((subcategory) => {
+        return subcategory.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          subcategory.category.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     },
   },
   methods: {
@@ -117,23 +95,12 @@ export default {
         }
       });
     },
-    getCategoryName(categoryId) {
-      const category = this.categories.find(c => c.id === categoryId);
-      return category ? category.name : '';
-    },
   },
   mounted() {
     this.$state.navbarTitle = 'Lista de Subcategorías';
     // Obtener todas las subcategorías desde la API
     axios.get(API_URL + '/subcategories').then(response => {
       this.subcategories = response.data;
-    }).catch(error => {
-      console.log(error);
-    });
-
-    // Obtener todas las categorías desde la API
-    axios.get(API_URL + '/categories').then(response => {
-      this.categories = response.data;
     }).catch(error => {
       console.log(error);
     });

@@ -97,9 +97,9 @@ const router = createRouter({
     { path: '/warehouses/list', component: ListWareHouse, meta: { requiresAuth: true },},
     { path: '/users/list', component: ListUser, meta: { requiresAuth: true },},
     { path: '/userRegister', component: RegisterUser, meta: { requiresAuth: true },},
-    //{ path: '/login', component: Login,},
-    { path: '/sendEmail', component: SendEmail},
-    { path: '/edit/:id', name: 'EditArticle', component: EditArticle, meta: { requiresAuth: true },},
+    { path: '/login', component: Login,},
+    //{ path: '/sendEmail', component: SendEmail,},
+    { path: '/items/edit/:id', name: 'EditArticle', component: EditArticle, props: true, meta: { requiresAuth: true },},
     { path: '/view/:id', name: 'ViewArticle', component: ViewArticle, meta: { requiresAuth: true },},
   ]
 });

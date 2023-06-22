@@ -98,6 +98,7 @@ export default {
                     text: 'Credenciales inválidas'
                 });
             }
+          //this.$store.commit('setLoggedIn', true);
         }
     },
     mounted() {
