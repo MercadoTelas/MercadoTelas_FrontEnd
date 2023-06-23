@@ -23,7 +23,7 @@
             <tr v-for="brand in filteredBrands" :key="brand.name">
               <td class="text-center">{{ brand.name }}</td>
               <td class="text-center">
-                <button @click="viewBrand(brand)" class="btn btn-primary">Ver marca</button>
+                <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }" class="btn btn-secondary">Editar</router-link>
                 <button @click="deleteBrand(brand)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>
@@ -45,9 +45,9 @@ export default {
   data() {
     return {
       brands: [
-        { name: 'Adidas' },
-        { name: 'Tommy Hilfiger' },
-        { name: 'Nike' },
+        { name: 'Adidas', id: 1 },
+        { name: 'Tommy Hilfiger', id: 2 },
+        { name: 'Nike', id: 3 },
       ],
       searchQuery: '',
     };
@@ -61,12 +61,8 @@ export default {
   },
   methods: {
     addBrand() {
-      // Lógica para agregar una nueva marca
-      // ...
-    },
-    viewBrand(/*brand*/) {
-      // Lógica para ver los detalles de una marca
-      // ...
+      // Redirigir a la página de agregar marca
+      this.$router.push({ name: 'AddBrand' });
     },
     deleteBrand(brand) {
       // Lógica para eliminar una marca

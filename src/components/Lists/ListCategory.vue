@@ -23,7 +23,7 @@
             <tr v-for="category in filteredCategories" :key="category.name">
               <td class="text-center">{{ category.name }}</td>
               <td class="text-center">
-                <button @click="viewCategory(category)" class="btn btn-primary">Ver categoría</button>
+                <button @click="editCategory(category)" class="btn btn-primary">Editar categoría</button>
                 <button @click="deleteCategory(category)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>
@@ -44,11 +44,7 @@ export default {
   name: 'CategoryList',
   data() {
     return {
-      categories: [
-        { name: 'Category 1' },
-        { name: 'Category 2' },
-        { name: 'Category 3' },
-      ],
+      categories: [],
       searchQuery: '',
     };
   },
@@ -61,12 +57,12 @@ export default {
   },
   methods: {
     addCategory() {
-      // Lógica para agregar una nueva categoría
-      // ...
+      // Redirigir a la vista de agregar categoría
+      this.$router.push({ name: 'AddCategory' });
     },
-    viewCategory(/*category*/) {
-      // Lógica para ver los detalles de una categoría
-      // ...
+    editCategory(category) {
+      // Redirigir a la vista de editar categoría
+      this.$router.push({ name: 'EditCategory', params: { id: category.id } });
     },
     deleteCategory(category) {
       // Lógica para eliminar una categoría
@@ -83,6 +79,7 @@ export default {
         if (result.isConfirmed) {
           // Lógica para eliminar la categoría aquí
           // ...
+          this.categories = this.categories.filter((c) => c.id !== category.id);
 
           Swal.fire({
             title: 'Eliminado',

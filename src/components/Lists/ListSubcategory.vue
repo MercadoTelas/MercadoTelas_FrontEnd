@@ -3,8 +3,8 @@
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
-          <label for="search" class="form-label">Buscar categoría:</label>
-          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre">
+          <label for="search" class="form-label">Buscar subcategoría:</label>
+          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre o categoría">
         </div>
 
         <div class="row">
@@ -27,7 +27,7 @@
               <td class="text-center">{{ subcategory.name }}</td>
               <td class="text-center">{{ subcategory.category.name }}</td>
               <td class="text-center">
-                <button @click="viewSubcategory(subcategory)" class="btn btn-primary">Ver subcategoría</button>
+                <button @click="editSubcategory(subcategory)" class="btn btn-secondary">Editar subcategoría</button>
                 <button @click="deleteSubcategory(subcategory)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>
@@ -48,27 +48,28 @@ export default {
   name: 'SubcategoryList',
   data() {
     return {
-      subcategories: [
-        ],
-        searchQuery: '',
+      subcategories: [],
+      searchQuery: '',
     };
   },
   computed: {
     filteredSubcategories() {
       return this.subcategories.filter((subcategory) => {
-        return subcategory.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-          subcategory.category.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        return (
+            subcategory.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            subcategory.category.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
       });
     },
   },
   methods: {
     addSubcategory() {
-      // Lógica para agregar una nueva subcategoría
-      // ...
+      // Redirigir a la vista de agregar subcategoría
+      this.$router.push({ name: 'AddSubcategory' });
     },
-    viewSubcategory(/*subcategory*/) {
-      // Lógica para ver los detalles de una subcategoría
-      // ...
+    editSubcategory(subcategory) {
+      // Redirigir a la vista de editar subcategoría
+      this.$router.push({ name: 'EditSubcategory', params: { id: subcategory.id } });
     },
     deleteSubcategory(subcategory) {
       // Lógica para eliminar una subcategoría
@@ -85,6 +86,7 @@ export default {
         if (result.isConfirmed) {
           // Lógica para eliminar la subcategoría aquí
           // ...
+          this.subcategories = this.subcategories.filter((s) => s.id !== subcategory.id);
 
           Swal.fire({
             title: 'Eliminada',
@@ -99,11 +101,14 @@ export default {
   mounted() {
     this.$state.navbarTitle = 'Lista de Subcategorías';
     // Obtener todas las subcategorías desde la API
-    axios.get(API_URL + '/subcategories').then(response => {
-      this.subcategories = response.data;
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+        .get(API_URL + '/subcategories')
+        .then((response) => {
+          this.subcategories = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
 };
 </script>

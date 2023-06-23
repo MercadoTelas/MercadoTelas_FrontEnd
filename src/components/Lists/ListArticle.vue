@@ -39,8 +39,8 @@
             <td class="text-center">{{ item.brand_id !== null ? item.brand_name : 'No posee' }}</td>
             <td class="text-center">{{ item.design_id !== null ? item.design_name : 'No posee' }}</td>
             <td class="text-center">
-              <button @click="viewItem(item)" class="btn btn-primary">Ver artículo</button>
-              <button @click="editItem(item)" class="btn btn-secondary">Editar artículo</button>
+              <router-link :to="{ name: 'ViewArticle', params: { id: item.id } }" class="btn btn-primary">Ver detalles</router-link>
+              <router-link :to="{ name: 'EditArticle', params: { id: item.id } }" class="btn btn-secondary">Editar</router-link>
               <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
             </td>
           </tr>
@@ -85,13 +85,8 @@ export default {
   methods: {
 
     addArticle() {
-      // Lógica para agregar un nuevo artículo
-      // ...
-    },
-    editItem(item) {
-      this.$router.push({name: 'EditArticle', params: {id: item.id}});
-      // Lógica para editar un artículo
-      // ...
+      // Redireccionar a la vista de agregar artículo
+      this.$router.push({name: 'AddArticle'});
     },
     viewItem(/*article*/) {
       // Lógica para ver los detalles de un artículo

@@ -10,14 +10,14 @@
 
             <!-- Email input -->
             <div class="form-outline mb-4">
-                <input type="email" id="form2Example1" class="form-control" required />
-                <label class="form-label" for="form2Example1">Correo electrónico</label>
+                <input type="email" id="email" class="form-control" required />
+                <label class="form-label" for="email">Correo electrónico</label>
             </div>
 
             <!-- Password input -->
             <div class="form-outline mb-4">
-                <input type="password" id="form2Example2" class="form-control" required />
-                <label class="form-label" for="form2Example2">Contraseña</label>
+                <input type="password" id="password" class="form-control" required />
+                <label class="form-label" for="password">Contraseña</label>
             </div>
 
             <!-- 2 column grid layout for inline styling -->
@@ -25,8 +25,8 @@
                 <div class="col d-flex justify-content-center">
                     <!-- Checkbox -->
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
-                        <label class="form-check-label" for="form2Example31">Recordarme</label>
+                        <input class="form-check-input" type="checkbox" value="" id="remind_me" checked />
+                        <label class="form-check-label" for="remind_me">Recordarme</label>
                     </div>
                 </div>
 
@@ -73,9 +73,10 @@ export default {
         },
         login() {
             // Obtener los valores de correo electrónico y contraseña
-            const email = document.getElementById('form2Example1').value;
-            const password = document.getElementById('form2Example2').value;
-
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            console.log(email);
+            console.log(password)
             // Aquí puedes realizar la verificación de las credenciales
             if (email === 'admin@gmail.com' && password === 'admin') {
                 // Las credenciales son válidas

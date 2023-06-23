@@ -12,9 +12,9 @@
           <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
         </select>
       </div>
-      <div class="buttons-container mb-3 mr-3">
-        <button class="btn btn-primary mr-2" type="submit">Guardar</button>
-        <button class="btn btn-danger" @click="cancel">Cancelar</button>
+      <div class="d-flex justify-content-end">
+        <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        <router-link to="/subcategories" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
   </div>
@@ -70,9 +70,6 @@ export default {
         console.log(errors);
       });
     },
-    cancel() {
-      this.$router.go(-1);
-    }
   }, 
 };
 </script>

@@ -56,23 +56,23 @@
           </div>
           <div class="form-group">
             <label for="design">Diseño:</label>
-            <select id="design" class="form-control">
+            <select id="design" class="form-control" v-model="design_id">
               <option value="" selected disabled>Seleccionar diseño</option>
-              <option v-for="design in designs" :value="design.name" :key="design.id">{{ design.name }}</option>
+              <option v-for="design in designs" :value="design.id" :key="design.id">{{ design.name }}</option>
             </select>
           </div>
           <div class="form-group">
             <label for="brand">Marca:</label>
-            <select id="brand" class="form-control">
+            <select id="brand" class="form-control" v-model="brand_id">
               <option value="" selected disabled>Seleccionar marca</option>
-              <option v-for="brand in brands" :value="brand.name" :key="brand.id">{{ brand.name }}</option>
+              <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{ brand.name }}</option>
             </select>
           </div>
         </div>
       </div>
-      <div class="button-container">
+      <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit">Guardar cambios</button>
-        <button class="btn btn-danger" @click="cancel">Cancelar</button>
+        <router-link to="/items" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
   </div>
@@ -82,6 +82,7 @@
 import axios from "axios";
 import {API_URL} from "@/config";
 import Swal from "sweetalert2";
+import ListArticle from "../Lists/ListArticle.vue";
 
 export default {
   name: 'EditItem',
@@ -113,6 +114,9 @@ export default {
     };
   },
   computed: {
+    ListArticle() {
+      return ListArticle
+    },
     filteredSubcategories() {
       if (!this.filter.category) {
         return this.subcategories;
@@ -178,7 +182,6 @@ export default {
         design_id: this.design_id,
         brand_id: this.brand_id
       }
-      console.log(item);
       axios.patch(`${API_URL}/items/${this.id}`, item)
           .then(response => {
             Swal.fire({
@@ -197,6 +200,7 @@ export default {
             });
             console.log(error);
           });
+      this.$router.push({name: 'Items'})
     }
   }
 };

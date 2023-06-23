@@ -5,9 +5,9 @@
           <label for="designName">Ingrese el nombre del diseño:</label>
           <input type="text" class="form-control" id="design" v-model="name">
         </div>
-        <div class="buttons-container mb-3 mr-3">
-          <button class="btn btn-primary mr-2" type="submit">Guardar</button>
-          <button class="btn btn-danger" @click="cancel">Cancelar</button>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          <router-link to="/designs" class="btn btn-danger">Cancelar</router-link>
         </div>
       </form>
     </div>
@@ -30,28 +30,27 @@
             name: this.name
           }
         };
+        const errors = [];
         axios.post(API_URL + '/designs', design).then(response => {
-          if(response.status === 200){
-            Swal.fire({
-              title: 'Diseño creado exitosamente',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1500
-            });
-            this.$router.push('/designs');
-          } else {
-            Swal.fire({
-              title: 'Error al crear el diseño',
-              icon: 'error',
-              showConfirmButton: false,
-              timer: 1500
-            });
-          }
+          Swal.fire({
+            title: 'Diseño creado exitosamente',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          console.log(response);
+          this.$router.go(-1);
+        }).catch(error => {
+          Swal.fire({
+            title: 'Error al crear el diseño',
+            icon: 'error',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          errors.push(error.messages);
+          console.log(error);
         });
       },
-      cancel() {
-        this.$router.go(-1);
-      }
     }, 
     mounted() {
       this.$state.navbarTitle = 'Agregar Nuevo Diseño';
