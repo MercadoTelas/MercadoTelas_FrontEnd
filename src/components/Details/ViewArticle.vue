@@ -4,98 +4,86 @@
         <div class="row justify-content-center">
           <div class="col-md-6">
             <div class="article-image">
-              <img :src="article && article.image" alt="Article Image" class="img-fluid" />
+              <img :src="item && item.image" alt="Article Image" class="img-fluid" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="article-details">
               <div class="field">
                 <label>Código:</label>
-                <span>{{ article && article.code }}</span>
+                <span>{{ item && item.id }}</span>
               </div>
               <div class="field">
                 <label>Nombre:</label>
-                <span>{{ article && article.name }}</span>
+                <span>{{ item && item.name }}</span>
               </div>
               <div class="field">
                 <label>Categoría:</label>
-                <span>{{ article && article.category }}</span>
+                <span>{{ item && item.category.name }}</span>
               </div>
               <div class="field">
                 <label>Subcategoría:</label>
-                <span>{{ article && article.subcategory }}</span>
+                <span>{{ item && item.subcategory.name }}</span>
               </div>
               <div class="field">
                 <label>Diseño:</label>
-                <span>{{ article && article.design }}</span>
+                <span>{{ item?.design?.name || 'No posee' }}</span>
               </div>
               <div class="field">
                 <label>Marca:</label>
-                <span>{{ article && article.brand }}</span>
+                <span>{{ item?.brand?.name || 'No posee' }}</span>
               </div>
               <div class="field">
-                <label>Bodega:</label>
-                <span>{{ article && article.warehouse }}</span>
+                <label>Nombre de unidades de almacenamiento:</label>
+                <span>{{ item && item.storing_format_units_name }}</span>
               </div>
               <div class="field">
-                <label>Unidades en formato de entrada:</label>
-                <span>{{ article && article.inputUnits }}</span>
+                <label>Nombre de unidades de venta:</label>
+                <span>{{ item && item.transferring_format_units_name }}</span>
               </div>
-              <div class="field">
-                <label>Unidades en formato de salida:</label>
-                <span>{{ article && article.outputUnits }}</span>
+              <div class="d-flex justify-content-end">
+                <router-link to="/items" class="btn btn-danger">Volver</router-link>
               </div>
-              <button class="btn btn-primary" @click="cancelar">Regresar</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </template>
-  
-  <script>
-  export default {
-    name: 'ArticleView',
-    data() {
-      return {
-        article: null,
-      };
-    },
-    mounted() {
-      this.fetchArticle();
-      this.$state.navbarTitle = 'Ver Artículo';
-    },
-    methods: {
-      fetchArticle() {
-        const articleId = this.$route.params.id;
-  
-        setTimeout(() => {
-          this.article = {
-            id: articleId,
-            code: 'ART001',
-            name: 'Example Product',
-            category: 'Electronics',
-            subcategory: 'Smartphones',
-            design: 'Design 1',
-            brand: 'Brand X',
-            warehouse: 'Warehouse A',
-            inputUnits: 100,
-            outputUnits: 50,
-            image: 'https://picsum.photos/400/300',
-          };
-        }, 500);
-      },
-      goBack() {
-        // Lógica para regresar a la página anterior
-      },
-      cancelar() {
-        this.$router.go(-1);
-      },
-    },
-  };
-  </script>
-  
-  <style>
+
+<script>
+import axios from "axios";
+import {API_URL} from "@/config";
+export default {
+  name: 'ArticleView',
+  data() {
+    return {
+      item: '',
+    };
+  },
+  mounted() {
+    this.fetchArticle();
+    this.$state.navbarTitle = 'Ver Artículo';
+  },
+  methods: {
+    fetchArticle() {
+      const itemId = this.$route.params.id;
+
+      // Hacer la solicitud GET a la API para obtener los datos del artículo según su ID
+      axios.get(`${API_URL}/items/${itemId}`)
+          .then(response => {
+            this.item = response.data;
+          })
+          .catch(error => {
+            console.log(error);
+          });
+    }
+  },
+};
+</script>
+
+
+<style>
   .article-view {
     display: flex;
     justify-content: center;

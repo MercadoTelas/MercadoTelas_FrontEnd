@@ -75,7 +75,6 @@
                 <th>Unidades de Entrada</th>
                 <th>Unidades de Salida</th>
                 <th>Bodega</th>
-                <th>Acciones</th>
               </tr>
               </thead>
               <tbody>
@@ -85,13 +84,6 @@
                 <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
                 <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
                 <td>{{ item.warehouse }}</td>
-                <td>
-                  <div class="button-group">
-                    <button @click="editArticle(item.id)">Editar</button>
-                    <button @click="viewProductDetails(item.id)">Detalles</button>
-                    <button @click="confirmDeleteArticle(item.id)">Eliminar</button>
-                  </div>
-                </td>
               </tr>
               </tbody>
             </table>
@@ -104,7 +96,6 @@
 
 <script>
 import axios from "axios";
-import Swal from 'sweetalert2';
 import {API_URL} from "@/config";
 
 export default {
@@ -149,7 +140,7 @@ export default {
     this.$state.navbarTitle = 'Inventario';
     //Gets the all elements from the API
     axios.get(API_URL + '/inventory_items').then(response => {
-      this.items = response.data.inventory_items
+      this.items = response.data.items
       this.categories = response.data.categories
       this.designs = response.data.designs
       this.brands = response.data.brands
@@ -161,40 +152,6 @@ export default {
   methods: {
     resetSubcategory() {
       this.filter.subcategory = ''
-    },
-    editArticle(articleId) {
-      // Lógica para editar el artículo
-      console.log('Editar artículo con ID:', articleId);
-
-      // Navegar a la vista de edición del artículo con el ID proporcionado
-      this.$router.push({name: 'EditArticle', params: {id: articleId}});
-    },
-    deleteArticle(articleId) {
-      // Lógica para eliminar el artículo
-      console.log('Eliminar artículo con ID:', articleId);
-    },
-
-    viewProductDetails(articleId) {
-      // Lógica para ver los detalles del producto
-      console.log('Ver detalles del producto con ID:', articleId);
-      this.$router.push({name: 'ViewArticle', params: {id: articleId}});
-    },
-
-    confirmDeleteArticle(articleId) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Esta acción no se puede deshacer',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.deleteArticle(articleId);
-          Swal.fire('¡Eliminado!', 'El artículo ha sido eliminado.', 'success');
-        }
-      });
     },
   },
 };
