@@ -23,7 +23,7 @@
             <tr v-for="design in filteredDesigns" :key="design.name">
               <td class="text-center">{{ design.name }}</td>
               <td class="text-center">
-                <button @click="viewDesign(design)" class="btn btn-primary">Ver diseño</button>
+                <button @click="editDesign(design)" class="btn btn-secondary">Editar</button>
                 <button @click="deleteDesign(design)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>
@@ -44,11 +44,7 @@ export default {
   name: 'DesignList',
   data() {
     return {
-      designs: [
-        { name: 'Estampado' },
-        { name: 'Liso' },
-        { name: 'Arrugado' },
-      ],
+      designs: [],
       searchQuery: '',
     };
   },
@@ -61,12 +57,12 @@ export default {
   },
   methods: {
     addDesign() {
-      // Lógica para agregar un nuevo diseño
-      // ...
+      // Redirigir a la vista "Agregar Diseño"
+      this.$router.push({name: 'AddDesign'});
     },
-    viewDesign(/*design*/) {
-      // Lógica para ver los detalles de un diseño
-      // ...
+    editDesign(design) {
+      // Redirigir a la vista "Editar Diseño" con el ID del diseño
+      this.$router.push({name: 'EditDesign', params:{id: design.id}});
     },
     deleteDesign(design) {
       // Lógica para eliminar un diseño
@@ -92,13 +88,12 @@ export default {
           });
         }
       });
-
     },
   },
   mounted() {
     this.$state.navbarTitle = 'Lista de Diseños';
     // Obtener todos los diseños desde la API
-    axios.get(API_URL + '/designs').then(response => {
+    axios.get(`${API_URL}/designs`).then(response => {
       this.designs = response.data;
     }).catch(error => {
       console.log(error);

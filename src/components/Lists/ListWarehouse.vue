@@ -25,7 +25,7 @@
             <tr v-for="warehouse in filteredWarehouses" :key="warehouse.name">
               <td class="text-center">{{ warehouse.name }}</td>
               <td class="text-center">
-                <button @click="viewWarehouse(warehouse)" class="btn btn-primary">Ver bodega</button>
+                <router-link :to="{ name: 'EditWarehouse', params: { id: warehouse.id } }" class="btn btn-secondary">Editar</router-link>
                 <button @click="deleteWarehouse(warehouse)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>
@@ -53,20 +53,14 @@ export default {
   computed: {
     filteredWarehouses() {
       return this.warehouses.filter((warehouse) => {
-        return (
-          warehouse.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
+        return warehouse.name.toLowerCase().includes(this.searchQuery.toLowerCase());
       });
     }
   },
   methods: {
     addWarehouse() {
-      // Lógica para agregar una nueva bodega
-      // ...
-    },
-    viewWarehouse(/*warehouse*/) {
-      // Lógica para ver los detalles de una bodega
-      // ...
+      // Redirigir a la vista de agregar bodega
+      this.$router.push({ name: 'AddWarehouse' });
     },
     deleteWarehouse(warehouse) {
       // Lógica para eliminar una bodega
@@ -97,11 +91,14 @@ export default {
   mounted() {
     this.$state.navbarTitle = 'Lista de Bodegas';
     // Obtener todas las bodegas desde la API
-    axios.get(API_URL + '/warehouses').then(response => {
-      this.warehouses = response.data;
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+        .get(`${API_URL}/warehouses`)
+        .then((response) => {
+          this.warehouses = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
 };
 </script>

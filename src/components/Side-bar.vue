@@ -489,7 +489,7 @@ export default {
       }
     },
     performElementsAction(param) {
-      this.$router.push("/" + param + "/list");
+      this.$router.push("/" + param);
       document.getElementById("checkElements").checked = false;
     },
   },

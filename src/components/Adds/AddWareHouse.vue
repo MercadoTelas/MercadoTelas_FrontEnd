@@ -5,9 +5,9 @@
           <label for="warehouseName">Ingrese el nombre de la bodega:</label>
           <input type="text" class="form-control" id="warehouse" name="warehouse" v-model="name">
         </div>
-        <div class="buttons-container mb-3 mr-3">
-          <button class="btn btn-primary mr-2" type="submit">Guardar</button>
-          <button class="btn btn-danger" @click="cancel">Cancelar</button>
+        <div class="d-flex justify-content-end">
+          <button class="btn btn-primary" type="submit">Guardar cambios</button>
+          <router-link to="/warehouses" class="btn btn-danger">Cancelar</router-link>
         </div>
       </form>
     </div>
@@ -49,9 +49,6 @@
           console.log(error.response.data);
         });
       },
-      cancel() {
-        this.$router.go(-1);
-      }
     }, 
     mounted() {
       this.$state.navbarTitle = 'Agregar Nueva Bodega';

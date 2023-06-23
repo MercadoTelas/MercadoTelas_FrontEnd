@@ -56,16 +56,16 @@
           </div>
           <div class="form-group">
             <label for="design">Diseño:</label>
-            <select id="design" class="form-control">
+            <select id="design" class="form-control" v-model="design_id">
               <option value="" selected disabled>Seleccionar diseño</option>
-              <option v-for="design in designs" :value="design.name" :key="design.id">{{ design.name }}</option>
+              <option v-for="design in designs" :value="design.id" :key="design.id">{{ design.name }}</option>
             </select>
           </div>
           <div class="form-group">
             <label for="brand">Marca:</label>
-            <select id="brand" class="form-control">
+            <select id="brand" class="form-control" v-model="brand_id">
               <option value="" selected disabled>Seleccionar marca</option>
-              <option v-for="brand in brands" :value="brand.name" :key="brand.id">{{ brand.name }}</option>
+              <option v-for="brand in brands" :value="brand.id" :key="brand.id">{{ brand.name }}</option>
             </select>
           </div>
         </div>
@@ -116,6 +116,7 @@ export default {
           this.categories = response.data.categories;
           this.designs = response.data.designs;
           this.brands = response.data.brands;
+          console.log(response);
         })
         .catch(error => {
           console.log(error);
