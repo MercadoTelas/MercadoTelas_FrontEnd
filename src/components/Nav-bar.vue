@@ -1,36 +1,50 @@
 <template>
-  <nav class="navbar navbar-expand-lg">
-    <div class="logo-container">
-      <img id="logotelas" src="../assets/logo_telas.jpg" @click="NavigateToAnotherPage('home')" />
-    </div>
-
-    <div class="bodega-select-container">
-      <button class="bodega-select-button" @click="toggleBodegaDropdown">
-        {{ selectedBodega ? selectedBodega : 'Seleccionar Bodega' }}
-      </button>
-      <div class="bodega-dropdown" :class="{ 'show': showBodegaDropdown }">
-        <ul>
-          <li @click="selectBodega('Bodega 1')">Bodega 1</li>
-          <li @click="selectBodega('Bodega 2')">Bodega 2</li>
-          <li @click="selectBodega('Bodega 3')">Bodega 3</li>
-        </ul>
+  <div class="nav-wrapper" style="height:110px;">
+    <nav class="navbar navbar-expand-lg" :class="{ 'sticky': isSticky }">
+      <div class="logo-container">
+        <img
+          id="logotelas"
+          src="../assets/logo_telas.jpg"
+          @click="NavigateToAnotherPage('home')"
+        />
       </div>
-    </div>
-    <h1 class="navbar-title">{{ $state.navbarTitle }}</h1>
-    <div class="logo-usuario-container">
-      <i id="logousuario" class="bi bi-person" @click="NavigateToAnotherPage('userProfile')"></i>
-    </div>
-  </nav>
+
+      <div class="bodega-select-container">
+        <button class="bodega-select-button" @click="toggleBodegaDropdown">
+          {{ selectedBodega ? selectedBodega : "Seleccionar Bodega" }}
+        </button>
+        <div class="bodega-dropdown" :class="{ show: showBodegaDropdown }">
+          <ul>
+            <li @click="selectBodega('Bodega 1')">Bodega 1</li>
+            <li @click="selectBodega('Bodega 2')">Bodega 2</li>
+            <li @click="selectBodega('Bodega 3')">Bodega 3</li>
+          </ul>
+        </div>
+      </div>
+      <h1 class="navbar-title">{{ $state.navbarTitle }}</h1>
+      <div class="logo-usuario-container">
+        <i
+          id="logousuario"
+          class="bi bi-person"
+          @click="NavigateToAnotherPage('userProfile')"
+        ></i>
+      </div>
+    </nav>
+  </div>
 </template>
 
 <style lang="scss">
+.navbar.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
 .navbar {
   background-color: #15386e;
   color: white;
   height: 110px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
 
   .logo-container {
     margin-right: 20px;
@@ -114,11 +128,17 @@
 export default {
   data() {
     return {
+      isSticky: false,
       showBodegaDropdown: false,
-      selectedBodega: null
+      selectedBodega: null,
     };
   },
-
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   methods: {
     NavigateToAnotherPage(page) {
       this.$router.push("/" + page);
@@ -132,8 +152,11 @@ export default {
     },
     updateNavbarTitle(newTitle) {
       // Utilizamos la mutación del store para actualizar el título del navbar
-      this.$store.commit('updateNavbarTitle', newTitle);
+      this.$store.commit("updateNavbarTitle", newTitle);
     },
+    handleScroll() {
+      this.isSticky = window.scrollY > 0;
+    }
   },
 };
 </script>

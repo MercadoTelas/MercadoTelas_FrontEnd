@@ -3,7 +3,7 @@
     <navbar></navbar>
     <sidebar></sidebar>
   </div>
-  <router-view @vue:mounted="checkLoggedIn()"></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -35,11 +35,6 @@ export default {
   },
 
   methods: {
-    checkLoggedIn() {
-      if (this.$store.state.isLoggedIn == false) {
-        this.$router.push('/login');
-      }
-    }
   },
 };
 

@@ -50,6 +50,7 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import './styles/custom-bootstrap.scss';
 
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -115,6 +116,7 @@ const router = createRouter({
 const app = createApp(App);
 app.use(store);
 app.use(router);
+
 
 // Agregar un guardia de navegación para verificar la autenticación en las rutas con requiresAuth: true
 router.beforeResolve((to, from, next) => {

@@ -105,6 +105,7 @@ export default {
 </script>
 
 <style scoped>
+
 #spaceDiv {
   display: none;
 }

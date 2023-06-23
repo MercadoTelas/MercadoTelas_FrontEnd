@@ -70,6 +70,11 @@ import { container } from 'webpack';
   text-decoration: none;
 }
 
+.sticky {
+  position: fixed;
+  top: 0;
+}
+
 .sidebar,
 .sidebarElements {
   position: fixed;
@@ -166,7 +171,7 @@ a:active {
 label #btn,
 label #cancel,
 label #cancelElements {
-  position: absolute;
+  position: fixed;
   cursor: pointer;
   color: white;
   border-radius: 5px;
@@ -296,6 +301,7 @@ label #cancelElements {
 <script>
 import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
+
 
 export default {
   data() {
