@@ -5,11 +5,13 @@ import store from './store';
 import App from './App.vue';
 import Home from './components/Home-component.vue';
 import UserProfile from './components/UserProfile.vue';
-import Entry from './components/Inventory-Entry.vue';
-import Transfer from './components/Inventory-Transfer.vue';
 import InventoryTable from './components/Lists/InventoryTableCopy.vue';
 import BarsGraphic from './components/BarsGraphic.vue';
 
+//--Vistas transaccionales--
+import Entry from './components/Transactional/Inventory-Entry.vue';
+import Transfer from './components/Transactional/Inventory-Transfer.vue';
+import Output from './components/Transactional/Inventory-Output.vue'
 
 //--Editar--
 //import EditCategory from './components/Edits/EditCategory.vue';
@@ -82,6 +84,7 @@ const router = createRouter({
     { path: '/userProfile', component: UserProfile, meta: { requiresAuth: true },},
     { path: '/entry', component: Entry, meta: { requiresAuth: true }},
     { path: '/transfer', component: Transfer, meta: { requiresAuth: true }},
+    { path: '/output', component: Output, meta: { requiresAuth: true }},
     { path: '/inventory', component: InventoryTable, meta: { requiresAuth: true }, },
     { path: '/items/new', component: AddArticle, meta: { requiresAuth: true },},
     { path: '/categories/new', component: AddCategory, meta: { requiresAuth: true },},

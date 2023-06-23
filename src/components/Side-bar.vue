@@ -344,6 +344,17 @@ export default {
             id: "salida",
             text: "Salidas de Inventario",
             title: "salidas de inventario",
+            linkTo: "output",
+            bootstrapIcon: {
+              class: "bi bi-trash2",
+            },
+          },
+        },
+        {
+          link: {
+            id: "transferencia",
+            text: "Transferencias de Inventario",
+            title: "Transferencias de inventario",
             linkTo: "transfer",
             bootstrapIcon: {
               class: "bi bi-box-arrow-in-right",
