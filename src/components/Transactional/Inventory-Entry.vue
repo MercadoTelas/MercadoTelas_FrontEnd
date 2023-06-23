@@ -41,7 +41,7 @@
           <div class="row">
             <div class="col-sm-12 text-center">
               <div class="form-group">
-                <button @click.prevent="addArticle" class="submit">Agregar artículo</button>
+                <button @click.prevent="addArticle" type="submit" class="btn btn-primary">Agregar artículo</button>
               </div>
             </div>
           </div>
