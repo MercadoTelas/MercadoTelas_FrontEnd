@@ -2,7 +2,7 @@
   <div class="form-container">
     <form class="form container" @submit.prevent="saveTransaction">
       <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
           <div class="form-group">
             <label for="itemID" class="form-label">
               <div class="blue-box">
@@ -21,8 +21,15 @@
             <input v-model="amount" type="number" class="form-control" id="entryAmount"
                    placeholder="Digite la cantidad a ingresar...">
           </div>
+          <div class="form-group">
+            <label for="bodegaFuente" class="form-label">Seleccione la bodega de destino</label>
+            <select v-model="recieverWarehouse" class="form-select" id="bodegaFuente" :disabled="isSelectDisabled">
+              <option value="" selected disabled>Seleccione la bodega</option>
+              <option  v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse">{{ warehouse.name }}</option>
+            </select>
+          </div>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-5">
           <div class="row">
             <div class="col-sm-12 text-center">
               <div class="form-group">
@@ -50,11 +57,11 @@
           <td>{{ item.name }}</td>
           <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
           <td>
-            <input v-model="item.conversion_factor" type="number" class="form-control">
+            <input v-model="item.conversion_factor" type="number" class="form-control"> {{ item.transferring_unit_format_name }} por {{ item.storing_unit_format_name }}
           </td>
           <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
           <td>
-            <button @click="removeItem(index)" class="btn btn-danger">Eliminar</button>
+            <button @click.prevent="removeItem(index)" class="btn btn-danger">Eliminar</button>
           </td>
         </tr>
         </tbody>
@@ -83,15 +90,31 @@ export default {
       itemID: '',
       amount: 0,
       inventory_item: [],
+      warehouses: [],
+      recieverWarehouse: '',
       tableData: [],
       inventory: {
         id: '',
         inventory_items: [],
+        warehouse_id: '',
       }
     };
   },
+  computed: {
+    isSelectDisabled() {
+      return this.tableData.length > 0;
+    }
+  },
   mounted() {
     this.$state.navbarTitle = 'Entradas de inventario';
+    // Obtener las bodegas
+    axios.get(`${API_URL}/warehouses`)
+      .then(response => {
+        this.warehouses = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   watch: {
     tableData: {
@@ -148,10 +171,10 @@ export default {
           category: item.category,
           conversion_factor: item.conversion_factor,
           storing_unit_format_name: item.storing_unit_format_name,
-          transferring_unit_format_name: item.transferring_unit_format_name,
-          warehouse: item.warehouse
+          transferring_unit_format_name: item.transferring_unit_format_name
         };
         this.inventory.inventory_items.push(inventoryItem);
+        this.inventory.warehouse_id = this.recieverWarehouse.id;
       }
       console.log(this.inventory);
       axios.post(`${API_URL}/inventories/insert_items`, this.inventory)
@@ -172,14 +195,29 @@ export default {
             });
             console.log(error);
           });
-    }
-    ,
+    },
     insertItem() {
       if (this.itemID === '') {
         Swal.fire({
           icon: 'error',
           title: 'Error',
           text: 'Debe ingresar el código del artículo',
+        });
+        return;
+      }
+      if (this.amount <= 0) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Debe ingresar una cantidad válida',
+        });
+        return;
+      }
+      if (this.recieverWarehouse === '') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Debe seleccionar una bodega',
         });
         return;
       }
@@ -203,28 +241,11 @@ export default {
             });
             console.log(error);
           });
-    }
-    ,
+    },
     removeItem(index) {
       // Elimina el artículo de la tabla según el índice proporcionado
       this.tableData.splice(index, 1);
-    }
-    ,
-
-    realizarTransaccion() {
-      // Realiza la transacción de los datos en la tabla enviando la información a la API
-      axios.post('/api/transacciones', this.tableData)
-          .then(response => {
-            // Procesa la respuesta de la transacción exitosa
-            console.log(response.data);
-            // Reinicia los datos de la tabla o realiza alguna acción adicional
-            this.tableData = [];
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    }
-    ,
+    },
   },
 };
 </script>
@@ -305,4 +326,3 @@ export default {
   }
 }
 </style>
-  
