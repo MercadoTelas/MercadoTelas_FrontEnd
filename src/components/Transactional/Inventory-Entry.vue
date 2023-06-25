@@ -1,77 +1,129 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="form-container">
-    <form class="form container" @submit.prevent="saveTransaction">
+    <form
+      id="generalContainer"
+      class="form container"
+      @submit.prevent="saveTransaction"
+    >
       <div class="row">
-        <div class="col-md-7">
-          <div class="form-group">
+        <div class="col-md-7" style="width: 255px">
+          <div id="form-group">
             <label for="itemID" class="form-label">
               <div class="blue-box">
                 <div class="label-text">Código del artículo</div>
               </div>
             </label>
-            <input v-model="itemID" type="text" class="form-control" id="itemID"
-                   placeholder="Ingrese el código del artículo...">
+            <input
+              v-model="itemID"
+              type="text"
+              class="form-control"
+              id="itemID"
+              placeholder="Ingrese el código del artículo..."
+            />
           </div>
-          <div class="form-group">
+          <div id="form-group">
             <label for="entryAmount" class="form-label">
               <div class="blue-box">
                 <div class="label-text">Cantidad a ingresar</div>
               </div>
             </label>
-            <input v-model="amount" type="number" class="form-control" id="entryAmount"
-                   placeholder="Digite la cantidad a ingresar...">
+            <input
+              v-model="amount"
+              type="number"
+              class="form-control"
+              id="entryAmount"
+              placeholder="Digite la cantidad a ingresar..."
+            />
           </div>
-          <div class="form-group">
-            <label for="bodegaFuente" class="form-label">Seleccione la bodega de destino</label>
-            <select v-model="recieverWarehouse" class="form-select" id="bodegaFuente" :disabled="isSelectDisabled">
+          <div id="form-group">
+            <label for="bodegaFuente" class="form-label"
+              >Seleccione la bodega de destino</label
+            >
+            <select
+              v-model="recieverWarehouse"
+              class="form-select"
+              id="bodegaFuente"
+              :disabled="isSelectDisabled"
+            >
               <option value="" selected disabled>Seleccione la bodega</option>
-              <option  v-for="warehouse in warehouses" :key="warehouse.id" :value="warehouse">{{ warehouse.name }}</option>
+              <option
+                v-for="warehouse in warehouses"
+                :key="warehouse.id"
+                :value="warehouse"
+              >
+                {{ warehouse.name }}
+              </option>
             </select>
           </div>
         </div>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
           <div class="row">
             <div class="col-sm-12 text-center">
-              <div class="form-group">
-                <button class="btn btn-primary" @click.prevent="insertItem">Agregar artículo</button>
+              <div id="form-group">
+                <button class="btn btn-primary" @click.prevent="insertItem">
+                  Agregar artículo
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <table class="table table-responsive">
+      <table class="table table-responsive" style="margin-top: 30px; margin-bottom: 30px;">
         <thead>
-        <tr>
-          <th>Código</th>
-          <th>Nombre artículo</th>
-          <th>Cantidad en unidades de almacenamiento</th>
-          <th>Factor de Conversión</th>
-          <th>Cantidad en unidades de venta</th>
-          <th></th>
-        </tr>
+          <tr id="tableContent">
+            <th>Código</th>
+            <th>Nombre artículo</th>
+            <th>Cantidad en unidades de almacenamiento</th>
+            <th>Factor de Conversión</th>
+            <th>Cantidad en unidades de venta</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, index) in tableData" :key="index">
-          <td>{{ item.item_id }}</td>
-          <td>{{ item.name }}</td>
-          <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
-          <td>
-            <input v-model="item.conversion_factor" type="number" class="form-control"> {{ item.transferring_unit_format_name }} por {{ item.storing_unit_format_name }}
-          </td>
-          <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
-          <td>
-            <button @click.prevent="removeItem(index)" class="btn btn-danger">Eliminar</button>
-          </td>
-        </tr>
+          <tr v-for="(item, index) in tableData" :key="index">
+            <td>{{ item.item_id }}</td>
+            <td>{{ item.name }}</td>
+            <td>
+              {{ item.storing_format_units }}
+              {{ item.storing_unit_format_name }}
+            </td>
+            <td>
+              <input
+                v-model="item.conversion_factor"
+                type="number"
+                class="form-control"
+              />
+              {{ item.transferring_unit_format_name }} por
+              {{ item.storing_unit_format_name }}
+            </td>
+            <td>
+              {{ item.transferring_format_units }}
+              {{ item.transferring_unit_format_name }}
+            </td>
+            <td>
+              <button @click.prevent="removeItem(index)" class="btn btn-danger">
+                Eliminar
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
 
       <div class="row">
         <div class="col-sm-12 text-center">
-          <div class="form-group">
-            <button type="submit" class="btn btn-primary">Realizar transacción</button>
-            <button @click.prevent="cancel" class="btn btn-secondary">Cancelar</button>
+          <div id="form-group">
+            <button type="submit" class="btn btn-primary">
+              Realizar transacción
+            </button>
+            <button @click.prevent="cancel" class="btn btn-secondary">
+              Cancelar
+            </button>
           </div>
         </div>
       </div>
@@ -80,39 +132,47 @@
 </template>
 <script>
 import axios from "axios";
-import {API_URL} from "@/config";
+import { API_URL } from "@/config";
 import Swal from "sweetalert2";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "EntradaInventario",
   data() {
     return {
-      itemID: '',
+      itemID: "",
       amount: 0,
       inventory_item: [],
       warehouses: [],
-      recieverWarehouse: '',
+      recieverWarehouse: "",
       tableData: [],
       inventory: {
-        id: '',
+        id: "",
         inventory_items: [],
-        warehouse_id: '',
-      }
+        warehouse_id: "",
+      },
     };
   },
   computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
     isSelectDisabled() {
       return this.tableData.length > 0;
-    }
+    },
   },
   mounted() {
-    this.$state.navbarTitle = 'Entradas de inventario';
+    this.$state.navbarTitle = "Entradas de inventario";
     // Obtener las bodegas
-    axios.get(`${API_URL}/warehouses`)
-      .then(response => {
+    axios
+      .get(`${API_URL}/warehouses`)
+      .then((response) => {
         this.warehouses = response.data;
       })
-      .catch(error => {
+      .catch((error) => {
         console.log(error);
       });
   },
@@ -121,13 +181,18 @@ export default {
       deep: true,
       handler(newTableData) {
         // Recalcular los valores de transferring_format_units para cada elemento en tableData
-        newTableData.forEach(item => {
-          item.transferring_format_units = item.storing_format_units * item.conversion_factor;
+        newTableData.forEach((item) => {
+          item.transferring_format_units =
+            item.storing_format_units * item.conversion_factor;
         });
-      }
-    }
+      },
+    },
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     cancel() {
       Swal.fire({
         title: "¿Estás seguro?",
@@ -142,16 +207,20 @@ export default {
         if (result.isConfirmed) {
           // Reinicia los datos de la tabla o realiza alguna acción adicional
           this.tableData = [];
-          Swal.fire("Cancelado", "La transacción ha sido cancelada.", "success");
+          Swal.fire(
+            "Cancelado",
+            "La transacción ha sido cancelada.",
+            "success"
+          );
         }
       });
     },
     saveTransaction() {
       if (this.tableData.length === 0) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Debe agregar al menos un artículo',
+          icon: "error",
+          title: "Error",
+          text: "Debe agregar al menos un artículo",
         });
         return;
       }
@@ -171,76 +240,79 @@ export default {
           category: item.category,
           conversion_factor: item.conversion_factor,
           storing_unit_format_name: item.storing_unit_format_name,
-          transferring_unit_format_name: item.transferring_unit_format_name
+          transferring_unit_format_name: item.transferring_unit_format_name,
         };
         this.inventory.inventory_items.push(inventoryItem);
         this.inventory.warehouse_id = this.recieverWarehouse.id;
       }
       console.log(this.inventory);
-      axios.post(`${API_URL}/inventories/insert_items`, this.inventory)
-          .then(response => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Transacción realizada',
-              text: 'La transacción se ha realizado con éxito',
-            });
-            console.log(response);
-            this.tableData = [];
-          })
-          .catch(error => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se pudo realizar la transacción',
-            });
-            console.log(error);
+      axios
+        .post(`${API_URL}/inventories/insert_items`, this.inventory)
+        .then((response) => {
+          Swal.fire({
+            icon: "success",
+            title: "Transacción realizada",
+            text: "La transacción se ha realizado con éxito",
           });
+          console.log(response);
+          this.tableData = [];
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se pudo realizar la transacción",
+          });
+          console.log(error);
+        });
     },
     insertItem() {
-      if (this.itemID === '') {
+      if (this.itemID === "") {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Debe ingresar el código del artículo',
+          icon: "error",
+          title: "Error",
+          text: "Debe ingresar el código del artículo",
         });
         return;
       }
       if (this.amount <= 0) {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Debe ingresar una cantidad válida',
+          icon: "error",
+          title: "Error",
+          text: "Debe ingresar una cantidad válida",
         });
         return;
       }
-      if (this.recieverWarehouse === '') {
+      if (this.recieverWarehouse === "") {
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Debe seleccionar una bodega',
+          icon: "error",
+          title: "Error",
+          text: "Debe seleccionar una bodega",
         });
         return;
       }
       // Realiza la llamada a la API para obtener los datos del artículo
-      axios.get(`${API_URL}/inventory_items/${this.itemID}`)
-          .then(response => {
-            // Procesa la respuesta de la API
-            this.inventory_item = response.data;
-            // Calcula la cantidad de unidades de almacenamiento
-            this.inventory_item.storing_format_units = this.amount;
-            // Calcula la cantidad de unidades de venta
-            this.inventory_item.transferring_format_units = this.amount * this.inventory_item.conversion_factor;
-            // Agrega el nuevo artículo a la tabla
-            this.tableData.push(this.inventory_item);
-          })
-          .catch(error => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'No se encontró el artículo',
-            });
-            console.log(error);
+      axios
+        .get(`${API_URL}/inventory_items/${this.itemID}`)
+        .then((response) => {
+          // Procesa la respuesta de la API
+          this.inventory_item = response.data;
+          // Calcula la cantidad de unidades de almacenamiento
+          this.inventory_item.storing_format_units = this.amount;
+          // Calcula la cantidad de unidades de venta
+          this.inventory_item.transferring_format_units =
+            this.amount * this.inventory_item.conversion_factor;
+          // Agrega el nuevo artículo a la tabla
+          this.tableData.push(this.inventory_item);
+        })
+        .catch((error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No se encontró el artículo",
           });
+          console.log(error);
+        });
     },
     removeItem(index) {
       // Elimina el artículo de la tabla según el índice proporcionado
@@ -251,20 +323,32 @@ export default {
 </script>
 
 <style lang="scss">
+
+#check:checked ~ .form-container {
+  margin-left: 345px;
+}
+
 .table-responsive {
   overflow-x: auto;
 }
 
+#tableContent th {
+  text-align: center;
+}
+
 .form-container {
-  margin-top: 40px;
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .form-title {
-  color: #15386E;
+  margin-top: 20px;
   margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 .form {
@@ -272,7 +356,6 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  max-width: 600px;
 
   .form-column {
     display: flex;
@@ -280,11 +363,12 @@ export default {
     margin-bottom: 10px;
     flex: 1;
 
-    .form-group {
+    #form-group {
       margin-bottom: 10px;
+      display: inline-flex;
 
       .form-label {
-        color: #15386E;
+        color: #15386e;
         font-size: 20px;
       }
 
@@ -301,7 +385,7 @@ export default {
 
   .resumen {
     margin-top: 10px;
-    color: #E26D5A;
+    color: #e26d5a;
     font-size: 17px;
     text-align: center;
 
@@ -310,18 +394,18 @@ export default {
     }
   }
 
-  .form-group.text-center {
+  #form-group.text-center {
     margin-top: 10px;
     text-align: center;
 
     .submit {
-      background-color: #3066BE;
+      background-color: #3066be;
       color: white;
       height: 40px;
       width: 200px;
       text-align: center;
       border-radius: 10px;
-      border: #3066BE;
+      border: #3066be;
     }
   }
 }

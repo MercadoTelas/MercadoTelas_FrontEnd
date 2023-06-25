@@ -1,77 +1,76 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <div class="row">
-      <input
-        type="checkbox"
-        id="check"
-        v-model="checked"
-        @change="handleCheckboxChange"
-      />
-      <div id="spaceDiv" class="col-lg-3"></div>
-      <div id="contentDiv" class="col-md-6 mt-5">
-        <div class="container mt-6">
-          <div class="text-center">
-            <h3>Hola de nuevo, {{ name + " " + lastName }}</h3>
-          </div>
+      <div id="contentDiv" class="col-md-6 mt-8">
+        <div class="d-flex justify-content-center" style="width: 600px">
+          <h3 style="width: fit-content; margin: 0 auto">
+            Hola de nuevo, {{ name + " " + lastName }}
+          </h3>
         </div>
-        <fieldset>
-          <legend style="padding-left: 100px; padding-top: 50px;">Información de la cuenta</legend>
-          <form>
-            <div class="form-group mt-5">
-              <label for="email" class="form-label">Correo electrónico</label>
-              <input
-                v-model="email"
-                type="text"
-                class="form-control"
-                id="email"
-                disabled
-                style="width: 400px"
-              />
-            </div>
-          </form>
-        </fieldset>
-        <fieldset>
-          <legend style="padding-left: 100px">Cambio de contraseña</legend>
-          <form>
-            <div class="form-group mt-5">
-              <label for="newPassword" class="form-label"
-                >Nueva contraseña</label
-              >
-              <input
-                v-model="newPassword"
-                type="password"
-                class="form-control"
-                id="newPassword"
-                style="width: 400px"
-              />
-            </div>
-            <div class="form-group mt-3">
-              <label for="passwordConfirmation" class="form-label"
-                >Confirme su nueva contraseña</label
-              >
-              <input
-                v-model="passwordConfirm"
-                type="password"
-                class="form-control"
-                id="passwordConfirmation"
-                style="width: 400px"
-              />
-            </div>
 
-            <div class="d-flex justify-content-center align-items-center mt-3">
-              <button
-                id="cambioPassword"
-                type="button"
-                class="form-button"
-                data-bs-toggle="tooltip"
-                data-bs-placement="top"
-                @click.prevent="cambiarPassword"
-              >
-                Confirmar cambio de contraseña
-              </button>
-            </div>
-          </form>
-        </fieldset>
+        <legend
+          style="margin-top: 50px; padding-left: 100px; width: fit-content"
+        >
+          Información de la cuenta
+        </legend>
+
+        <div class="form-group mb-8">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input
+            v-model="email"
+            type="text"
+            class="form-control"
+            id="email"
+            disabled
+            style="width: 400px"
+          />
+        </div>
+
+        <legend style="padding-left: 100px; width: fit-content">
+          Cambio de contraseña
+        </legend>
+        <div class="form-group mt-5">
+          <label for="newPassword" class="form-label">Nueva contraseña</label>
+          <input
+            v-model="newPassword"
+            type="password"
+            class="form-control"
+            id="newPassword"
+            style="width: 400px"
+          />
+        </div>
+        <div class="form-group mt-3">
+          <label for="passwordConfirmation" class="form-label"
+            >Confirme su nueva contraseña</label
+          >
+          <input
+            v-model="passwordConfirm"
+            type="password"
+            class="form-control"
+            id="passwordConfirmation"
+            style="width: 400px"
+          />
+        </div>
+        <div class="d-flex justify-content-center" style="width: 600px">
+          <button
+            id="cambioPassword"
+            type="button"
+            class="form-button"
+            style="margin-top: 30px"
+            data-bs-toggle="tooltip"
+            data-bs-placement="top"
+            @click.prevent="cambiarPassword"
+          >
+            Confirmar cambio de contraseña
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -122,24 +121,21 @@ export default {
 </script>
 
 <style lang="scss">
-#spaceDiv {
-  display: none;
+#check:checked ~ .container .row #contentDiv {
+  margin-left: 345px;
 }
 
-#check:checked ~ #spaceDiv {
-  height: auto;
-  width: 345px;
-  display: block;
-}
-
-#check:checked ~ #contentDiv {
-  height: auto;
-  display: block;
-}
-
-.container div {
+.container .row {
   justify-content: center;
   align-items: center;
+}
+
+.form-group {
+  width: fit-content;
+}
+
+.container .row .div h3 {
+  text-align: center;
 }
 
 .form-button {

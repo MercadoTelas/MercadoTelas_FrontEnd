@@ -1,13 +1,14 @@
 <template>
-  <div class="container-fluid">
-    <div class="row">
-      <input
+  <input
         type="checkbox"
         id="check"
         v-model="checked"
         @change="handleCheckboxChange"
       />
-      <div id="spaceDiv" class="col-lg-3"></div>
+
+  <div class="container-fluid">
+    <div class="row">
+      
       <div id="contentDiv" class="col-lg-9">
         <div class="movement-table">
           <h1 class="header text-primary">
@@ -74,9 +75,6 @@ export default {
       ],
     };
   },
-  created() {
-    this.isFirstDisplay = true;
-  },
   computed: {
     ...mapState(["checkboxValue"]),
     checked: {
@@ -106,14 +104,8 @@ export default {
 
 <style scoped>
 
-#spaceDiv {
-  display: none;
-}
-
-#check:checked ~ #spaceDiv {
-  height: auto;
-  width: 345px;
-  display: block;
+#check:checked ~ .container-fluid {
+  padding-left: 345px;
 }
 
 #check:checked ~ #contentDiv {
