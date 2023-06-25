@@ -27,6 +27,8 @@
               placeholder="Ingrese el código del artículo..."
             />
           </div>
+        </div>
+        <div class="col-md-7" style="width: 255px">
           <div id="form-group">
             <label for="entryAmount" class="form-label">
               <div class="blue-box">
@@ -41,6 +43,8 @@
               placeholder="Digite la cantidad a retirar..."
             />
           </div>
+        </div>
+        <div class="col-md-7" style="width: 255px">
           <div id="form-group">
             <label for="bodegaFuente" class="form-label"
               >Seleccione la bodega de origen</label
@@ -62,6 +66,7 @@
             </select>
           </div>
         </div>
+
         <div class="col-sm-4">
           <div class="row">
             <div class="col-sm-12 text-center">
@@ -342,6 +347,10 @@ export default {
 </script>
 
 <style lang="scss">
+#form-group {
+  margin-bottom: 20px;
+}
+
 #check:checked ~ .form-container {
   margin-left: 345px;
 }

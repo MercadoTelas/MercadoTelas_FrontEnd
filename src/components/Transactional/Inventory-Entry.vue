@@ -27,6 +27,8 @@
               placeholder="Ingrese el código del artículo..."
             />
           </div>
+        </div>
+        <div class="col-md-7" style="width: 255px">
           <div id="form-group">
             <label for="entryAmount" class="form-label">
               <div class="blue-box">
@@ -41,6 +43,8 @@
               placeholder="Digite la cantidad a ingresar..."
             />
           </div>
+        </div>
+        <div class="col-md-7" style="width: 255px">
           <div id="form-group">
             <label for="bodegaFuente" class="form-label"
               >Seleccione la bodega de destino</label
@@ -75,7 +79,10 @@
         </div>
       </div>
 
-      <table class="table table-responsive" style="margin-top: 30px; margin-bottom: 30px;">
+      <table
+        class="table table-responsive"
+        style="margin-top: 30px; margin-bottom: 30px"
+      >
         <thead>
           <tr id="tableContent">
             <th>Código</th>
@@ -323,6 +330,9 @@ export default {
 </script>
 
 <style lang="scss">
+#form-group {
+  margin-bottom: 20px;
+}
 
 #check:checked ~ .form-container {
   margin-left: 345px;

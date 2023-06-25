@@ -41,7 +41,8 @@
               placeholder="Digite la cantidad a retirar..."
             />
           </div>
-
+        </div>
+        <div class="col-md-7" style="width: 320px">
           <div id="form-group">
             <label for="bodegaFuente" class="form-label"
               >Seleccione la bodega de origen</label
@@ -87,6 +88,7 @@
             </select>
           </div>
         </div>
+
         <div class="col-sm-4">
           <div class="row">
             <div class="col-sm-12 text-center">
@@ -394,6 +396,10 @@ export default {
 </script>
 
 <style>
+#form-group {
+  margin-bottom: 20px;
+}
+
 #check:checked ~ .form-container {
   margin-left: 345px;
 }
