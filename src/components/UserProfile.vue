@@ -16,9 +16,7 @@
             </h3>
           </div>
 
-          <legend
-              style="margin-top: 50px; padding-left: 100px; width: fit-content"
-          >
+          <legend style="margin-top: 50px; padding-left: 100px; width: fit-content">
             Información de la cuenta
           </legend>
 
@@ -86,10 +84,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 
 export default {
   name: "Perfil-Component",
@@ -122,7 +120,7 @@ export default {
     changePassword() {
       if (this.new_password === this.new_password_confirmation) {
         const config = {
-          headers: { Authorization: `${this.token}` }
+          headers: {Authorization: `${this.token}`}
         };
         let data = {
           email: this.user.email,
