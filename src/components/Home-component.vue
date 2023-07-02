@@ -117,11 +117,6 @@ export default {
   padding-left: 345px;
 }
 
-#check:checked ~ #contentDiv {
-  height: auto;
-  display: block;
-}
-
 .container-fluid div {
   justify-content: center;
   align-items: center;

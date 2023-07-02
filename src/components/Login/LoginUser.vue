@@ -41,7 +41,7 @@
 
       <!-- Register buttons -->
       <div class="text-center">
-        <p>¿No tienes una cuenta? <a href="#!">Registrarse</a></p>
+        <p>¿No tienes una cuenta? <a href="#">Registrarse</a></p>
         <p>O inicia sesión con:</p>
         <button type="button" class="btn btn-link btn-floating mx-1">
           <i class="bi bi-facebook"></i>
@@ -149,15 +149,6 @@ export default {
 
 .logo-container {
   margin-right: 20px;
-
-  #logotelas {
-    width: 130px;
-    height: 80px;
-  }
-
-  #logotelas:hover {
-    cursor: pointer;
-  }
 }
 
 .logo {

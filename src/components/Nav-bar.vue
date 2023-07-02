@@ -5,8 +5,8 @@
         <img
           id="logotelas"
           src="../assets/logo_telas.jpg"
-          @click="NavigateToAnotherPage('home')"
-        />
+          @click="new NavigateToAnotherPage('home')"
+         alt="logo"/>
       </div>
 
       <div class="warehouse-select-container">
@@ -26,7 +26,7 @@
         <i
           id="logousuario"
           class="bi bi-person"
-          @click="NavigateToAnotherPage('userProfile')"
+          @click="new NavigateToAnotherPage('userProfile')"
         ></i>
       </div>
     </nav>

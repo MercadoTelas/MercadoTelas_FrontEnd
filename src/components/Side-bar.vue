@@ -20,7 +20,7 @@ import { container } from 'webpack';
         v-for="(page, index) in pages"
         :id="page.link.id"
         :key="index"
-        :class="{ active: activePage == index }"
+        :class="{ active: activePage === index }"
         :href="`./${page.link.linkTo}`"
         :title="`Ir a la página de ${page.link.title}`"
         @click="manageClick(page.link.id, page.link.linkTo)"
@@ -285,7 +285,7 @@ export default {
       this.isDesktop = this.screenWidth >= this.limit;
     },
     action(param) {
-      if (param == "adminElementos") {
+      if (param === "adminElementos") {
         document.getElementById("checkElements").checked = true;
       } else {
         this.$router.push("/" + param);
