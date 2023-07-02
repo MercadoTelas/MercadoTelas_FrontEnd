@@ -5,7 +5,7 @@
         <img
           id="logotelas"
           src="../assets/logo_telas.jpg"
-          @click="new NavigateToAnotherPage('home')"
+          @click="NavigateToAnotherPage('home')"
          alt="logo"/>
       </div>
 
@@ -26,7 +26,7 @@
         <i
           id="logousuario"
           class="bi bi-person"
-          @click="new NavigateToAnotherPage('userProfile')"
+          @click="NavigateToAnotherPage('userProfile')"
         ></i>
       </div>
     </nav>
