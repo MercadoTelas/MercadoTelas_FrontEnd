@@ -2,10 +2,10 @@ import { container } from 'webpack';
 <template>
   <!--Sidebar Prinicipal-->
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
   <label for="check">
     <i class="fas fa-bars" id="btn">
@@ -17,17 +17,17 @@ import { container } from 'webpack';
   </label>
   <div class="sidebar">
     <a
-      v-for="(page, index) in pages"
-      :id="page.link.id"
-      :key="index"
-      :class="{ active: activePage == index }"
-      :href="`./${page.link.linkTo}`"
-      :title="`Ir a la página de ${page.link.title}`"
-      @click="action(page.link.linkTo)"
-      @click.prevent="activePage = index"
+        v-for="(page, index) in pages"
+        :id="page.link.id"
+        :key="index"
+        :class="{ active: activePage == index }"
+        :href="`./${page.link.linkTo}`"
+        :title="`Ir a la página de ${page.link.title}`"
+        @click="manageClick(page.link.id, page.link.linkTo)"
+        @click.prevent="activePage = index"
     >
       <i id="mobileIcon" :class="page.link.bootstrapIcon.class"
-        ><span>{{ page.link.text }}</span></i
+      ><span>{{ page.link.text }}</span></i
       >
       <span id="desktopText">
         <i id="desktopIcon" :class="page.link.bootstrapIcon.class"></i>
@@ -37,7 +37,7 @@ import { container } from 'webpack';
   </div>
 
   <!--Sidebar Elementos-->
-  <input type="checkbox" id="checkElements" />
+  <input type="checkbox" id="checkElements"/>
   <label for="checkElements">
     <i class="fas fa-times" id="cancelElements">
       <i class="bi bi-arrow-return-left"></i>
@@ -46,12 +46,12 @@ import { container } from 'webpack';
 
   <div id="sidebarElements" class="sidebarElements">
     <a
-      v-for="(option, index) in adminElementsList"
-      :id="option.element"
-      :key="index"
-      :class="{ active: activePage == index }"
-      @click="performElementsAction(option.urlParam)"
-      @click.prevent="activePage = index"
+        v-for="(option, index) in adminElementsList"
+        :id="option.element"
+        :key="index"
+        :class="{ active: activePage === index }"
+        @click="performElementsAction(option.urlParam)"
+        @click.prevent="activePage = index"
     >
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
@@ -60,6 +60,244 @@ import { container } from 'webpack';
     </a>
   </div>
 </template>
+
+<script>
+import {mapState, mapMutations} from "vuex";
+import Swal from "sweetalert2";
+import axios from "axios";
+import {API_URL} from "@/config";
+
+
+export default {
+  data() {
+    return {
+      token : "",
+      limit: 700,
+      screenWidth: 0,
+      screenHeight: 0,
+      isDesktop: false,
+      activePage: 0,
+      pages: [
+        {
+          link: {
+            id: "home",
+            text: "Inicio",
+            title: "inicio",
+            linkTo: "home",
+            bootstrapIcon: {
+              class: "bi bi-house-fill",
+            },
+          },
+        },
+        {
+          link: {
+            id: "inventario",
+            text: "Ver artículos",
+            title: "articulos",
+            linkTo: "inventory",
+            bootstrapIcon: {
+              class: "bi bi-box-seam",
+            },
+          },
+        },
+        {
+          link: {
+            id: "entrada",
+            text: "Entradas de Inventario",
+            title: "entradas de inventario",
+            linkTo: "entry",
+            bootstrapIcon: {
+              class: "bi bi-box-arrow-in-left",
+            },
+          },
+        },
+        {
+          link: {
+            id: "salida",
+            text: "Salidas de Inventario",
+            title: "salidas de inventario",
+            linkTo: "output",
+            bootstrapIcon: {
+              class: "bi bi-trash2",
+            },
+          },
+        },
+        {
+          link: {
+            id: "transferencia",
+            text: "Transferencias de Inventario",
+            title: "Transferencias de inventario",
+            linkTo: "transfer",
+            bootstrapIcon: {
+              class: "bi bi-box-arrow-in-right",
+            },
+          },
+        },
+        {
+          link: {
+            id: "usuarios",
+            text: "Registrar usuarios",
+            title: "registrar usuarios",
+            linkTo: "userRegister",
+            bootstrapIcon: {
+              class: "bi bi-people-fill",
+            },
+          },
+        },
+        {
+          link: {
+            id: "movimientos",
+            text: "Registro de movimientos",
+            title: "registro de movimientos",
+            linkTo: "movimientos",
+            bootstrapIcon: {
+              class: "bi bi-folder-fill",
+            },
+          },
+        },
+        {
+          link: {
+            id: "administrarElementos",
+            text: "Administrar elementos",
+            title: "administrar elementos",
+            linkTo: "adminElementos",
+            bootstrapIcon: {
+              class: "bi bi-pencil-square",
+            },
+          },
+        },
+        {
+          link: {
+            id: "exit-item",
+            text: "Cerrar sesión",
+            title: "Salir",
+            linkTo: "login",
+            bootstrapIcon: {
+              class: "bi bi-door-closed-fill",
+            },
+          },
+        },
+      ],
+      adminElementsList: [
+        {
+          element: "Artículo",
+          bootstrapIconClass: "bi bi-bag-fill",
+          urlParam: "items",
+        },
+        {
+          element: "Categoría",
+          bootstrapIconClass: "bi bi-bookmark-fill",
+          urlParam: "categories",
+        },
+        {
+          element: "Subcategoría",
+          bootstrapIconClass: "bi bi-bookmarks-fill",
+          urlParam: "subcategories",
+        },
+        {
+          element: "Diseño",
+          bootstrapIconClass: "bi bi-brush-fill",
+          urlParam: "designs",
+        },
+        {
+          element: "Marca",
+          bootstrapIconClass: "bi bi-tag-fill",
+          urlParam: "brands",
+        },
+        {
+          element: "Bodega",
+          bootstrapIconClass: "bi bi-buildings-fill",
+          urlParam: "warehouses",
+        },
+        {
+          element: "Usuarios",
+          bootstrapIconClass: "bi bi-person-circle",
+          urlParam: "users",
+        },
+      ],
+    };
+  },
+  mounted() {
+    this.token = localStorage.getItem("sessionToken");
+  },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
+  created() {
+    this.updateScreenSize();
+    window.addEventListener("resize", this.updateScreenSize);
+  },
+  unmounted() {
+    window.removeEventListener("resize", this.updateScreenSize);
+  },
+  methods: {
+    manageClick(id, param) {
+      if (id === "exit-item") {
+        this.logout();
+      } else {
+        this.action(param);
+      }
+    },
+    logout() {
+      Swal.fire({
+        icon: "question",
+        title: "Cerrar sesión",
+        text: "¿Estás seguro de que deseas cerrar sesión?",
+        showCancelButton: true,
+        confirmButtonText: "Sí",
+        cancelButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const config = {
+            headers: { Authorization: `${this.token}` },
+          };
+
+          axios
+              .delete(`${API_URL}/users/sign_out`, config)
+              .then((response) => {
+                console.log(response);
+                localStorage.removeItem("token");
+                this.$store.commit("setLoggedIn", false);
+                this.$router.push("/login");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        }
+      });
+    },
+
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
+    updateScreenSize() {
+      this.screenWidth = window.innerWidth;
+      this.screenHeight = window.innerHeight;
+      this.Desktop();
+    },
+    Desktop() {
+      this.isDesktop = this.screenWidth >= this.limit;
+    },
+    action(param) {
+      if (param == "adminElementos") {
+        document.getElementById("checkElements").checked = true;
+      } else {
+        this.$router.push("/" + param);
+      }
+    },
+    performElementsAction(param) {
+      this.$router.push("/" + param);
+      document.getElementById("checkElements").checked = false;
+    },
+  },
+};
+</script>
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Montserrat:600|Open+Sans:600&display=swap");
@@ -297,218 +535,3 @@ label #cancelElements {
   }
 }
 </style>
-
-<script>
-import { mapState, mapMutations } from "vuex";
-import Swal from "sweetalert2";
-
-
-export default {
-  data() {
-    return {
-      limit: 700,
-      screenWidth: 0,
-      screenHeight: 0,
-      isDesktop: false,
-      activePage: 0,
-      pages: [
-        {
-          link: {
-            id: "home",
-            text: "Inicio",
-            title: "inicio",
-            linkTo: "home",
-            bootstrapIcon: {
-              class: "bi bi-house-fill",
-            },
-          },
-        },
-        {
-          link: {
-            id: "inventario",
-            text: "Ver artículos",
-            title: "articulos",
-            linkTo: "inventory",
-            bootstrapIcon: {
-              class: "bi bi-box-seam",
-            },
-          },
-        },
-        {
-          link: {
-            id: "entrada",
-            text: "Entradas de Inventario",
-            title: "entradas de inventario",
-            linkTo: "entry",
-            bootstrapIcon: {
-              class: "bi bi-box-arrow-in-left",
-            },
-          },
-        },
-        {
-          link: {
-            id: "salida",
-            text: "Salidas de Inventario",
-            title: "salidas de inventario",
-            linkTo: "output",
-            bootstrapIcon: {
-              class: "bi bi-trash2",
-            },
-          },
-        },
-        {
-          link: {
-            id: "transferencia",
-            text: "Transferencias de Inventario",
-            title: "Transferencias de inventario",
-            linkTo: "transfer",
-            bootstrapIcon: {
-              class: "bi bi-box-arrow-in-right",
-            },
-          },
-        },
-        {
-          link: {
-            id: "usuarios",
-            text: "Registrar usuarios",
-            title: "registrar usuarios",
-            linkTo: "userRegister",
-            bootstrapIcon: {
-              class: "bi bi-people-fill",
-            },
-          },
-        },
-        {
-          link: {
-            id: "movimientos",
-            text: "Registro de movimientos",
-            title: "registro de movimientos",
-            linkTo: "movimientos",
-            bootstrapIcon: {
-              class: "bi bi-folder-fill",
-            },
-          },
-        },
-        {
-          link: {
-            id: "administrarElementos",
-            text: "Administrar elementos",
-            title: "administrar elementos",
-            linkTo: "adminElementos",
-            bootstrapIcon: {
-              class: "bi bi-pencil-square",
-            },
-          },
-        },
-        {
-          link: {
-            id: "exit-item",
-            text: "Cerrar sesión",
-            title: "Salir",
-            linkTo: "login",
-            bootstrapIcon: {
-              class: "bi bi-door-closed-fill",
-            },
-          },
-        },
-      ],
-
-      adminElementsList: [
-        {
-          element: "Artículo",
-          bootstrapIconClass: "bi bi-bag-fill",
-          urlParam: "items",
-        },
-        {
-          element: "Categoría",
-          bootstrapIconClass: "bi bi-bookmark-fill",
-          urlParam: "categories",
-        },
-        {
-          element: "Subcategoría",
-          bootstrapIconClass: "bi bi-bookmarks-fill",
-          urlParam: "subcategories",
-        },
-        {
-          element: "Diseño",
-          bootstrapIconClass: "bi bi-brush-fill",
-          urlParam: "designs",
-        },
-        {
-          element: "Marca",
-          bootstrapIconClass: "bi bi-tag-fill",
-          urlParam: "brands",
-        },
-        {
-          element: "Bodega",
-          bootstrapIconClass: "bi bi-buildings-fill",
-          urlParam: "warehouses",
-        },
-        {
-          element: "Usuarios",
-          bootstrapIconClass: "bi bi-person-circle",
-          urlParam: "users",
-        },
-      ],
-    };
-  },
-  computed: {
-    ...mapState(["checkboxValue"]),
-    checked: {
-      get() {
-        return this.checkboxValue;
-      },
-    },
-  },
-  created() {
-    this.updateScreenSize();
-    window.addEventListener("resize", this.updateScreenSize);
-  },
-  unmounted() {
-    window.removeEventListener("resize", this.updateScreenSize);
-  },
-  methods: {
-    methods: {
-      logout() {
-        Swal.fire({
-          icon: "question",
-          title: "Cerrar sesión",
-          text: "¿Estás seguro de que deseas cerrar sesión?",
-          showCancelButton: true,
-          confirmButtonText: "Sí",
-          cancelButtonText: "No",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Aquí puedes realizar las acciones necesarias para cerrar la sesión
-            this.$store.commit("setLoggedIn", false);
-            this.$router.push("/login");
-          }
-        });
-      },
-    },
-    ...mapMutations(["toggleCheckboxValue"]),
-    handleCheckboxChange() {
-      this.toggleCheckboxValue();
-    },
-    updateScreenSize() {
-      this.screenWidth = window.innerWidth;
-      this.screenHeight = window.innerHeight;
-      this.Desktop();
-    },
-    Desktop() {
-      this.isDesktop = this.screenWidth >= this.limit;
-    },
-    action(param) {
-      if (param == "adminElementos") {
-        document.getElementById("checkElements").checked = true;
-      } else {
-        this.$router.push("/" + param);
-      }
-    },
-    performElementsAction(param) {
-      this.$router.push("/" + param);
-      document.getElementById("checkElements").checked = false;
-    },
-  },
-};
-</script>

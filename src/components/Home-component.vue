@@ -44,6 +44,8 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import Swal from "sweetalert2";
+
 export default {
   name: "MovementTable",
   data() {
@@ -87,6 +89,13 @@ export default {
     // Llama a la función de actualización del título del navbar
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = "Inicio";
+    const user = this.$store.state.user;
+    Swal.fire({
+      title: "Bienvenido",
+      text: "Hola " + user.name + " bienvenido al sistema de inventario del Mercado de las Telas",
+      icon: "success",
+      confirmButtonText: "Ok",
+    });
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
