@@ -1,3 +1,4 @@
+<!--suppress JSPotentiallyInvalidConstructorUsage -->
 <template>
   <div class="nav-wrapper" style="height:110px;">
     <nav class="navbar navbar-expand-lg" :class="{ 'sticky': isSticky }">
