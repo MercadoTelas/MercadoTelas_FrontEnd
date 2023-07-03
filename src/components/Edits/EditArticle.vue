@@ -111,6 +111,7 @@ export default {
       designs: [],
       brands: [],
       item: {},
+      user: ''
     };
   },
   computed: {
@@ -180,9 +181,10 @@ export default {
         conversion_factor: this.conversion_factor,
         subcategory_id: this.subcategory_id,
         design_id: this.design_id,
-        brand_id: this.brand_id
+        brand_id: this.brand_id,
+        user: this.$store.state.user.id,
       }
-      axios.patch(`${API_URL}/items/${this.id}`, item)
+      axios.patch(`${API_URL}/items/${this.id}`, {item, user: this.current_user_id})
           .then(response => {
             Swal.fire({
               title: '¡Artículo actualizado!',

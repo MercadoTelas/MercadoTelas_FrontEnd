@@ -35,6 +35,7 @@ export default {
   },
   methods: {
     updateCategory() {
+      this.category.user = this.$store.state.user.id;
       // Lógica para actualizar la categoría
       axios.put(`${API_URL}/categories/${this.category.id}`, this.category)
           .then(response => {

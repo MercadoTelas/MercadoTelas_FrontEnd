@@ -42,6 +42,7 @@ export default {
   },
   methods: {
     updateSubcategory() {
+      this.subcategory.user = this.$store.state.user.id;
       // Lógica para actualizar la subcategoría
       axios
           .put(`${API_URL}/subcategories/${this.subcategory.id}`, this.subcategory)

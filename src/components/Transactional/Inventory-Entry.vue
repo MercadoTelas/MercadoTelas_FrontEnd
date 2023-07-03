@@ -131,6 +131,9 @@
             <button @click.prevent="cancel" class="btn btn-secondary">
               Cancelar
             </button>
+            <a v-if="pdfUrl" :href="pdfUrl" download="documento.pdf" class="btn btn-success">
+              Descargar PDF
+            </a>
           </div>
         </div>
       </div>
@@ -158,6 +161,7 @@ export default {
         inventory_items: [],
         warehouse_id: "",
       },
+      pdfUrl: null
     };
   },
   computed: {
@@ -251,11 +255,26 @@ export default {
         };
         this.inventory.inventory_items.push(inventoryItem);
         this.inventory.warehouse_id = this.recieverWarehouse.id;
+        this.inventory.user = this.$store.state.user.id;
       }
-      console.log(this.inventory);
+
       axios
-        .post(`${API_URL}/inventories/insert_items`, this.inventory)
-        .then((response) => {
+        .post(`${API_URL}/inventories/insert_items`, this.inventory, {responseType: 'arraybuffer'})
+          .then((response) => {
+            // Verificar si la respuesta contiene datos
+            if (response.data && response.data.byteLength > 0) {
+              // Crear un Blob a partir de los datos recibidos
+              const blob = new Blob([response.data], {type: 'application/pdf'});
+              // Crear una URL para el Blob
+              this.pdfUrl = URL.createObjectURL(blob);
+            } else {
+              // Mostrar un mensaje de error si la respuesta está vacía
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo generar el archivo PDF',
+              });
+            }
           Swal.fire({
             icon: "success",
             title: "Transacción realizada",
@@ -272,6 +291,7 @@ export default {
           });
           console.log(error);
         });
+      this.inventory.inventory_items = [];
     },
     insertItem() {
       if (this.itemID === "") {

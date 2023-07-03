@@ -26,26 +26,38 @@
 <script>
 import axios from "axios";
 import { API_URL } from "@/config";
+import Swal from "sweetalert2";
 
 export default {
   name: 'EditWarehouse',
   data() {
     return {
-      warehouse: '',
+      warehouse: ''
     };
   },
   methods: {
     updateWarehouse() {
+      this.warehouse.user =  this.$store.state.user.id;
       // Lógica para actualizar la bodega
       axios
           .put(`${API_URL}/warehouses/${this.warehouse.id}`, this.warehouse)
           .then((response) => {
+            Swal.fire({
+              title: 'Bodega actualizada',
+              icon: 'success',
+              confirmButtonText: 'Ok',
+            });
             // Manejar la respuesta exitosa
             console.log(response.data);
             // Redirigir a la vista de listar bodegas
             this.$router.push('/warehouses');
           })
           .catch((error) => {
+            Swal.fire({
+              title: 'Error al actualizar la bodega',
+              icon: 'error',
+              confirmButtonText: 'Ok',
+            });
             // Manejar el error
             console.error(error);
           });

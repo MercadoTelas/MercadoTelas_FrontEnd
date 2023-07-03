@@ -25,11 +25,12 @@
     },
     methods: {
       onCreateDesign() {
-        const design = {
+        let design = {
           design: {
             name: this.name
           }
         };
+        design.user = this.$store.state.user.id;
         const errors = [];
         axios.post(API_URL + '/designs', design).then(response => {
           Swal.fire({

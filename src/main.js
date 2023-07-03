@@ -100,7 +100,7 @@ const router = createRouter({
         {path: '/designs', component: ListDesign, meta: {requiresAuth: true},},
         {path: '/warehouses', component: ListWareHouse, meta: {requiresAuth: true},},
         {path: '/users', component: ListUser, meta: {requiresAuth: true},},
-        {path: '/userRegister', component: RegisterUser, meta: {requiresAuth: true},},
+        {path: '/users/new', name: 'AddUser', component: RegisterUser, meta: {requiresAuth: true},},
         {path: '/login', component: LoginUser,},
         {path: '/sendEmail', component: SendEmail,},
         {

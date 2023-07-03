@@ -38,6 +38,7 @@ export default {
   methods: {
     updateDesign() {
       const designId = this.$route.params.id;
+      this.design.user = this.$store.state.user.id;
       axios
           .put(`${API_URL}/designs/${designId}`, this.design)
           .then((response) => {

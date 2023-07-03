@@ -1,15 +1,15 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
   <div class="form-container">
     <form
-      class="form container"
-      id="generalContainer"
-      @submit.prevent="saveTransaction"
+        class="form container"
+        id="generalContainer"
+        @submit.prevent="saveTransaction"
     >
       <div class="row">
         <div class="col-md-7" style="width: 320px">
@@ -20,11 +20,11 @@
               </div>
             </label>
             <input
-              v-model="itemID"
-              type="text"
-              class="form-control"
-              id="itemID"
-              placeholder="Ingrese el código del artículo..."
+                v-model="itemID"
+                type="text"
+                class="form-control"
+                id="itemID"
+                placeholder="Ingrese el código del artículo..."
             />
           </div>
           <div id="form-group">
@@ -34,32 +34,32 @@
               </div>
             </label>
             <input
-              v-model="amount"
-              type="number"
-              class="form-control"
-              id="entryAmount"
-              placeholder="Digite la cantidad a retirar..."
+                v-model="amount"
+                type="number"
+                class="form-control"
+                id="entryAmount"
+                placeholder="Digite la cantidad a retirar..."
             />
           </div>
         </div>
         <div class="col-md-7" style="width: 320px">
           <div id="form-group">
             <label for="bodegaFuente" class="form-label"
-              >Seleccione la bodega de origen</label
+            >Seleccione la bodega de origen</label
             >
             <select
-              v-model="sourceWarehouse"
-              class="form-select"
-              id="bodegaFuente"
-              :disabled="isSelectDisabled"
+                v-model="sourceWarehouse"
+                class="form-select"
+                id="bodegaFuente"
+                :disabled="isSelectDisabled"
             >
               <option value="" selected disabled>
                 Seleccione la bodega de origen
               </option>
               <option
-                v-for="warehouse in filteredSourceWarehouses"
-                :key="warehouse.id"
-                :value="warehouse"
+                  v-for="warehouse in filteredSourceWarehouses"
+                  :key="warehouse.id"
+                  :value="warehouse"
               >
                 {{ warehouse.name }}
               </option>
@@ -67,21 +67,21 @@
           </div>
           <div id="form-group">
             <label for="bodegaDestino" class="form-label"
-              >Seleccione la bodega de destino</label
+            >Seleccione la bodega de destino</label
             >
             <select
-              v-model="destinyWarehouse"
-              class="form-select"
-              id="bodegaDestino"
-              :disabled="isSelectDisabled"
+                v-model="destinyWarehouse"
+                class="form-select"
+                id="bodegaDestino"
+                :disabled="isSelectDisabled"
             >
               <option value="" selected disabled>
                 Seleccione la bodega de destino
               </option>
               <option
-                v-for="warehouse in filteredDestinyWarehouses"
-                :key="warehouse.id"
-                :value="warehouse"
+                  v-for="warehouse in filteredDestinyWarehouses"
+                  :key="warehouse.id"
+                  :value="warehouse"
               >
                 {{ warehouse.name }}
               </option>
@@ -104,46 +104,46 @@
 
       <!-- Tabla -->
       <table
-        class="table table-responsive"
-        style="margin-top: 30px; margin-bottom: 30px"
+          class="table table-responsive"
+          style="margin-top: 30px; margin-bottom: 30px"
       >
         <thead>
-          <tr id="tableContent">
-            <th>Código</th>
-            <th>Nombre artículo</th>
-            <th>Cantidad en unidades de venta transferidas</th>
-            <th>Factor de Conversión</th>
-            <th>Cantidad en unidades de almacenamiento transferidas</th>
-            <th></th>
-          </tr>
+        <tr id="tableContent">
+          <th>Código</th>
+          <th>Nombre artículo</th>
+          <th>Cantidad en unidades de venta transferidas</th>
+          <th>Factor de Conversión</th>
+          <th>Cantidad en unidades de almacenamiento transferidas</th>
+          <th></th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in tableData" :key="index">
-            <td>{{ item.item_id }}</td>
-            <td>{{ item.name }}</td>
-            <td>
-              {{ item.transferring_format_units }}
-              {{ item.transferring_unit_format_name }}
-            </td>
-            <td>
-              <input
+        <tr v-for="(item, index) in tableData" :key="index">
+          <td>{{ item.item_id }}</td>
+          <td>{{ item.name }}</td>
+          <td>
+            {{ item.transferring_format_units }}
+            {{ item.transferring_unit_format_name }}
+          </td>
+          <td>
+            <input
                 v-model="item.conversion_factor"
                 type="number"
                 class="form-control"
-              />
-              {{ item.transferring_unit_format_name }} por
-              {{ item.storing_unit_format_name }}
-            </td>
-            <td>
-              {{ item.storing_format_units }}
-              {{ item.storing_unit_format_name }}
-            </td>
-            <td>
-              <button @click.prevent="removeItem(index)" class="btn btn-danger">
-                Eliminar
-              </button>
-            </td>
-          </tr>
+            />
+            {{ item.transferring_unit_format_name }} por
+            {{ item.storing_unit_format_name }}
+          </td>
+          <td>
+            {{ item.storing_format_units }}
+            {{ item.storing_unit_format_name }}
+          </td>
+          <td>
+            <button @click.prevent="removeItem(index)" class="btn btn-danger">
+              Eliminar
+            </button>
+          </td>
+        </tr>
         </tbody>
       </table>
 
@@ -157,6 +157,9 @@
             <button @click.prevent="cancel" class="btn btn-secondary">
               Cancelar
             </button>
+            <a v-if="pdfUrl" :href="pdfUrl" download="documento.pdf" class="btn btn-success">
+              Descargar PDF
+            </a>
           </div>
         </div>
       </div>
@@ -166,9 +169,9 @@
 
 <script>
 import axios from "axios";
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 import Swal from "sweetalert2";
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
 
 export default {
   name: "InventoryTransfer",
@@ -186,6 +189,7 @@ export default {
         sourceWarehouse_id: "",
         destinyWarehouse_id: "",
       },
+      pdfUrl: null,
     };
   },
   computed: {
@@ -209,13 +213,13 @@ export default {
     this.$state.navbarTitle = "Transferencias de inventario";
     // Obtener las bodegas
     axios
-      .get(`${API_URL}/warehouses`)
-      .then((response) => {
-        this.warehouses = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .get(`${API_URL}/warehouses`)
+        .then((response) => {
+          this.warehouses = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
   watch: {
     tableData: {
@@ -224,7 +228,7 @@ export default {
         // Recalcular los valores de transferring_format_units para cada elemento en tableData
         newTableData.forEach((item) => {
           item.storing_format_units =
-            item.transferring_format_units / item.conversion_factor;
+              item.transferring_format_units / item.conversion_factor;
         });
       },
     },
@@ -237,8 +241,8 @@ export default {
     filterWarehouses(warehouses, selectedWarehouse) {
       return warehouses.filter((warehouse) => {
         return (
-          !selectedWarehouse ||
-          (selectedWarehouse && warehouse.id !== selectedWarehouse.id)
+            !selectedWarehouse ||
+            (selectedWarehouse && warehouse.id !== selectedWarehouse.id)
         );
       });
     },
@@ -257,9 +261,9 @@ export default {
           // Reinicia los datos de la tabla o realiza alguna acción adicional
           this.tableData = [];
           Swal.fire(
-            "Cancelado",
-            "La transacción ha sido cancelada.",
-            "success"
+              "Cancelado",
+              "La transacción ha sido cancelada.",
+              "success"
           );
         }
       });
@@ -299,35 +303,51 @@ export default {
         this.inventory.inventory_items.push(inventoryItem);
         this.inventory.sourceWarehouse_id = this.sourceWarehouse.id;
         this.inventory.destinyWarehouse_id = this.destinyWarehouse.id;
+        this.inventory.user = this.$store.state.user.id;
       }
       console.log(this.inventory);
       axios
-        .post(`${API_URL}/inventories/transfer_items`, this.inventory)
-        .then((response) => {
-          Swal.fire({
-            icon: "success",
-            title: "Transacción realizada",
-            text: "La transacción se ha realizado con éxito",
+          .post(`${API_URL}/inventories/transfer_items`, this.inventory, {responseType: 'arraybuffer'})
+          .then((response) => {
+            console.log(response.data && response.data.byteLength > 0);
+            // Verificar si la respuesta contiene datos
+            if (response.data && response.data.byteLength > 0) {
+              // Crear un Blob a partir de los datos recibidos
+              const blob = new Blob([response.data], {type: 'application/pdf'});
+              // Crear una URL para el Blob
+              this.pdfUrl = URL.createObjectURL(blob);
+            } else {
+              // Mostrar un mensaje de error si la respuesta está vacía
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo generar el archivo PDF',
+              });
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Transacción realizada",
+              text: "La transacción se ha realizado con éxito",
+            });
+            console.log(response);
+            this.tableData = [];
+          })
+          .catch((error) => {
+            if (error.response && error.response.status === 422) {
+              Swal.fire({
+                icon: "warning",
+                title: "Algunos artículos no pudieron ser actualizados",
+                text: "Verifica los artículos y vuelve a intentarlo",
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "No se pudo realizar la transacción",
+              });
+            }
+            console.log(error);
           });
-          console.log(response);
-          this.tableData = [];
-        })
-        .catch((error) => {
-          if (error.response && error.response.status === 422) {
-            Swal.fire({
-              icon: "warning",
-              title: "Algunos artículos no pudieron ser actualizados",
-              text: "Verifica los artículos y vuelve a intentarlo",
-            });
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Error",
-              text: "No se pudo realizar la transacción",
-            });
-          }
-          console.log(error);
-        });
       this.inventory.inventory_items = [];
     },
     insertItem() {
@@ -365,26 +385,26 @@ export default {
       }
       // Realiza la llamada a la API para obtener los datos del artículo
       axios
-        .get(`${API_URL}/inventory_items/${this.itemID}`)
-        .then((response) => {
-          // Procesa la respuesta de la API
-          this.inventory_item = response.data;
-          // Calcula la cantidad de unidades de almacenamiento
-          this.inventory_item.storing_format_units =
-            this.amount / this.inventory_item.conversion_factor;
-          // Calcula la cantidad de unidades de venta
-          this.inventory_item.transferring_format_units = this.amount;
-          // Agrega el nuevo artículo a la tabla
-          this.tableData.push(this.inventory_item);
-        })
-        .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se encontró el artículo",
+          .get(`${API_URL}/inventory_items/${this.itemID}`)
+          .then((response) => {
+            // Procesa la respuesta de la API
+            this.inventory_item = response.data;
+            // Calcula la cantidad de unidades de almacenamiento
+            this.inventory_item.storing_format_units =
+                this.amount / this.inventory_item.conversion_factor;
+            // Calcula la cantidad de unidades de venta
+            this.inventory_item.transferring_format_units = this.amount;
+            // Agrega el nuevo artículo a la tabla
+            this.tableData.push(this.inventory_item);
+          })
+          .catch((error) => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "No se encontró el artículo",
+            });
+            console.log(error);
           });
-          console.log(error);
-        });
     },
     removeItem(index) {
       // Elimina el artículo de la tabla según el índice proporcionado

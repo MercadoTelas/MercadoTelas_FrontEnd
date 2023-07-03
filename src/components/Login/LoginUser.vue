@@ -74,7 +74,7 @@ export default {
       this.$router.push('/sendEmail');
     },
     login() {
-      // Obtener los valores de correo electrónico y contraseña
+      // Obtener los valores de email electrónico y contraseña
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       let user = {
@@ -87,6 +87,7 @@ export default {
           .then(response => {
             const headers = response.headers;
             const token = headers['authorization'];
+            console.log(response);
             user = response.data.data;
             if (response.data.status === 'success') {
               Swal.fire({
@@ -109,7 +110,7 @@ export default {
             Swal.fire({
               icon: 'error',
               title: 'Error de inicio de sesión',
-              text: 'Credenciales inválidas',
+              text: response.data.message,
             });
           });
 

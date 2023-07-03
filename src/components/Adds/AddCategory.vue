@@ -26,11 +26,12 @@ export default {
   },
   methods: {
     onCategoryCreate() {
-      const category = {
+      let category = {
         category: {
           name: this.name
         }
       };
+      category.user = this.$store.state.user.id;
       axios.post(API_URL + '/categories', category).then(response => {
         Swal.fire({
           title: 'Categoría creada exitosamente',
@@ -49,8 +50,8 @@ export default {
           timer: 1500
         });
         // Shows why the error was thrown using sweetalert2
-        const errors = error.response.data;
-        console.log(errors);
+        console.log(error);
+
 
       });
     },

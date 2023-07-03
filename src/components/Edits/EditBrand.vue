@@ -14,7 +14,6 @@
           <router-link to="/brands" class="btn btn-danger">Cancelar</router-link>
         </div>
       </form>
-
     </div>
   </div>
 </template>
@@ -35,6 +34,7 @@ export default {
   },
   methods: {
     updateBrand() {
+      this.brand.current_user_id = this.$store.state.user.id;
       // Realizar la petición HTTP para actualizar la marca
       axios.put(API_URL + '/brands/' + this.$route.params.id, this.brand)
           .then(response => {

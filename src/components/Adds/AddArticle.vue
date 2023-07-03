@@ -128,7 +128,7 @@ export default {
           this.filter.subcategory = ''
         },
         onCreateItem() {
-          const item = {
+          let item = {
             id: this.id,
             name: this.name,
             minimal_stock: this.minimal_stock,
@@ -139,6 +139,7 @@ export default {
             design_id: this.design_id,
             brand_id: this.brand_id
           }
+          item.user = this.$store.state.user.id;
           console.log(item);
           axios.post(`${API_URL}/items`, item)
               .then(response => {

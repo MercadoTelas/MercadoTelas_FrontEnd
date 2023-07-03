@@ -26,11 +26,13 @@
     },
     methods: {
       onCreateWarehouse(){
-        const warehouse = {
+        let warehouse = {
           warehouse: {
             name: this.name
           }
         };
+        warehouse.user = this.$store.state.user.id;
+        console.log(warehouse);
         axios.post(API_URL + '/warehouses', warehouse).then(response => {
           Swal.fire({
             title: 'Bodega creada exitosamente',
@@ -46,7 +48,7 @@
             showConfirmButton: false,
             timer: 1500
           });
-          console.log(error.response.data);
+          console.log(error);
         });
       },
     }, 
