@@ -92,7 +92,7 @@ export default {
         {
           link: {
             id: "inventario",
-            text: "Ver artículos",
+            text: "Ver Inventario",
             title: "articulos",
             linkTo: "inventory",
             bootstrapIcon: {
@@ -146,10 +146,10 @@ export default {
         },
         {
           link: {
-            id: "movimientos",
+            id: "transactions",
             text: "Registro de movimientos",
             title: "registro de movimientos",
-            linkTo: "movimientos",
+            linkTo: "transactions",
             bootstrapIcon: {
               class: "bi bi-folder-fill",
             },
@@ -158,7 +158,7 @@ export default {
         {
           link: {
             id: "administrarElementos",
-            text: "Administrar elementos",
+            text: "Catalogo",
             title: "administrar elementos",
             linkTo: "adminElementos",
             bootstrapIcon: {

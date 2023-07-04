@@ -28,6 +28,7 @@ import ListDesign from './components/Lists/ListDesign.vue';
 import ListWareHouse from './components/Lists/ListWarehouse.vue';
 import ListArticle from './components/Lists/ListArticle.vue';
 import ListUser from './components/Lists/ListUsers.vue';
+import ListTransaction from "./components/Lists/ListTransaction.vue";
 
 //--Articulos relacionadas--
 import ViewArticle from './components/Details/ViewArticle.vue';
@@ -140,6 +141,7 @@ const router = createRouter({
             props: true,
             meta: {requiresAuth: true},
         },
+        {path: '/transactions', name: 'ListTransaction', component: ListTransaction, meta: {requiresAuth: true},},
     ]
 });
 

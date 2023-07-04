@@ -38,27 +38,6 @@
 
       <!-- Submit button -->
       <button type="submit" class="btn btn-primary full-width d-block" @click="log">Iniciar sesión</button>
-
-      <!-- Register buttons -->
-      <div class="text-center">
-        <p>¿No tienes una cuenta? <a href="#">Registrarse</a></p>
-        <p>O inicia sesión con:</p>
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="bi bi-facebook"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="bi bi-google"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="bi bi-twitter"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="bi bi-github"></i>
-        </button>
-      </div>
     </form>
   </div>
 </template>

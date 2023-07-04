@@ -13,7 +13,6 @@
         <a href="#" class="btn btn-primary w-100" @click="resetPassword">Restablecer contraseña</a>
         <div class="d-flex justify-content-between mt-4">
           <a class="" href="" @click="goToLogin">Iniciar sesión</a>
-          <a class="" href="#">Registrarse</a>
         </div>
       </div>
     </div>
