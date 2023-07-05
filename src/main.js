@@ -8,6 +8,7 @@ import UserProfile from './components/UserProfile.vue';
 import InventoryTable from './components/Lists/InventoryTableCopy.vue';
 import BarsGraphic from './components/BarsGraphic.vue';
 
+
 //--Vistas transaccionales--
 import Entry from './components/Transactional/Inventory-Entry.vue';
 import Transfer from './components/Transactional/Inventory-Transfer.vue';

@@ -12,7 +12,7 @@
 
       <div class="warehouse-select-container">
         <button class="warehouse-select-button" @click="toggleWarehouseDropdown">
-          {{ selectedWarehouse ? selectedWarehouse.name : "Seleccionar Bodega" }}
+          {{ senderWarehouse ? senderWarehouse.name : "Seleccionar Bodega" }}
         </button>
         <div class="warehouse-dropdown" :class="{ show: showWarehouseDropdown }">
           <ul>
