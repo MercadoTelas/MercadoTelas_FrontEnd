@@ -13,13 +13,6 @@ import Entry from './components/Transactional/Inventory-Entry.vue';
 import Transfer from './components/Transactional/Inventory-Transfer.vue';
 import Output from './components/Transactional/Inventory-Output.vue'
 
-//--Editar--
-import EditCategory from './components/Edits/EditCategory.vue';
-import EditSubcategory from './components/Edits/EditSubcategory.vue';
-import EditBrand from './components/Edits/EditBrand.vue';
-import EditDesign from './components/Edits/EditDesign.vue';
-import EditWarehouse from './components/Edits/EditWarehouse.vue';
-
 //--Enlistar--
 import ListCategory from './components/Lists/ListCategory.vue';
 import ListSubcategory from './components/Lists/ListSubcategory.vue';
@@ -30,18 +23,16 @@ import ListArticle from './components/Lists/ListArticle.vue';
 import ListUser from './components/Lists/ListUsers.vue';
 
 //--Articulos relacionadas--
-import ViewArticle from './components/Details/ViewArticle.vue';
 import AddArticle from './components/Adds/AddArticle.vue';
 import AddCategory from './components/Adds/AddCategory.vue';
 import AddBrand from './components/Adds/AddBrand.vue';
 import AddSubcategory from './components/Adds/AddSubcategory.vue';
 import AddDesign from './components/Adds/AddDesign.vue';
 import AddWareHouse from './components/Adds/AddWareHouse.vue';
-import EditArticle from './components/Edits/EditArticle.vue';
+import RegisterUser from './components/Adds/RegisterUser.vue';
 
 //--Login--
 import LoginUser from './components/Login/LoginUser.vue';
-import RegisterUser from './components/Login/RegisterUser.vue';
 import SendEmail from './components/Login/SendEmail.vue';
 //import ResetPassword from './components/Login/ResetPassword.vue';
 
@@ -87,7 +78,7 @@ const router = createRouter({
     { path: '/transfer', component: Transfer, meta: { requiresAuth: true }},
     { path: '/output', component: Output, meta: { requiresAuth: true }},
     { path: '/inventory', component: InventoryTable, meta: { requiresAuth: true }, },
-    { path: '/items/new', name: 'AddArticle', component: AddArticle, meta: { requiresAuth: true },},
+    { path: '/items/new/', name: 'AddArticle', component: AddArticle, meta: { requiresAuth: true },},
     { path: '/categories/new', name: 'AddCategory', component: AddCategory, meta: { requiresAuth: true },},
     { path: '/subcategories/new', name: 'AddSubcategory', component: AddSubcategory, meta: { requiresAuth: true },},
     { path: '/brands/new', name: 'AddBrand', component: AddBrand, meta: { requiresAuth: true },},
@@ -103,13 +94,6 @@ const router = createRouter({
     { path: '/userRegister', component: RegisterUser, meta: { requiresAuth: true },},
     { path: '/login', component: LoginUser,},
     { path: '/sendEmail', component: SendEmail,},
-    { path: '/items/edit/:id', name: 'EditArticle', component: EditArticle, props: true, meta: { requiresAuth: true },},
-    { path: '/items/:id', name: 'ViewArticle', component: ViewArticle, meta: { requiresAuth: true },},
-    { path: '/categories/edit/:id', name: 'EditCategory', component: EditCategory, props: true, meta: { requiresAuth: true },},
-    { path: '/subcategories/edit/:id', name: 'EditSubcategory', component: EditSubcategory, props: true, meta: { requiresAuth: true },},
-    { path: '/warehouses/edit/:id', name: 'EditWarehouse', component: EditWarehouse, props: true, meta: { requiresAuth: true },},
-    { path: '/brands/edit/:id', name: 'EditBrand', component: EditBrand, props: true, meta: { requiresAuth: true },},
-    { path: '/designs/edit/:id', name: 'EditDesign', component: EditDesign, props: true, meta: { requiresAuth: true },},
   ]
 });
 

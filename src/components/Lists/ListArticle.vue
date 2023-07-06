@@ -39,8 +39,8 @@
             <td class="text-center">{{ item.brand_id !== null ? item.brand_name : 'No posee' }}</td>
             <td class="text-center">{{ item.design_id !== null ? item.design_name : 'No posee' }}</td>
             <td class="text-center">
-              <router-link :to="{ name: 'ViewArticle', params: { id: item.id } }" class="btn btn-primary">Ver detalles</router-link>
-              <router-link :to="{ name: 'EditArticle', params: { id: item.id } }" class="btn btn-secondary">Editar</router-link>
+              <router-link :to="{ name: 'AddArticle', params: { id: item.id } }" class="btn btn-primary">Ver detalles</router-link>
+              <router-link :to="{ name: 'AddArticle', params: { id: item.id } }" class="btn btn-secondary">Editar</router-link>
               <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
             </td>
           </tr>
@@ -60,7 +60,28 @@ export default {
   name: 'ArticleList',
   data() {
     return {
-      items: [],
+      items: [
+      {
+        id: '1',
+        name: 'Artículo 1',
+        category_name: 'Categoría 1',
+        subcategory_name: 'Subcategoría 1',
+        minimal_stock: '10',
+        status: 'active',
+        brand_name: 'Marca 1',
+        design_name: 'Diseño 1',
+      },
+      {
+        id: '2',
+        name: 'Artículo 2',
+        category_name: 'Categoría 2',
+        subcategory_name: 'Subcategoría 2',
+        minimal_stock: '5',
+        status: 'inactive',
+        brand_name: 'Marca 2',
+        design_name: 'Diseño 2',
+      },
+      ],
       searchQuery: '',
     };
   },

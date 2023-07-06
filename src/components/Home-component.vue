@@ -36,7 +36,7 @@
           </div>
         </div>
         <router-view></router-view>
-        <router-link to="/home/barsGraphic">Ir a BarsGraphic</router-link>
+        <router-link to="/home/barsGraphic">Ver gráficos</router-link>
       </div>
     </div>
   </div>

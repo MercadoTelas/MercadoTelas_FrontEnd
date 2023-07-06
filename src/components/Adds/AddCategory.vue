@@ -1,12 +1,23 @@
 <template>
   <div class="container">
     <form @submit.prevent="onCategoryCreate">
-      <div class="form-group mt-4">
-        <label for="categoryName">Ingrese el nombre de la categoría:</label>
-        <input type="text" class="form-control" id="category" name="category" v-model="name">
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td class="table-label">Nombre de la categoría:</td>
+              <td class="table-input" colspan="5">
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
+                  <input type="text" class="form-control" id="category" name="category" v-model="name" :disabled="isReadOnly">
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
         <router-link to="/categories" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -21,7 +32,8 @@ import { API_URL } from '@/config'
 export default {
   data() {
     return {
-      name: ''
+      name: '',
+      isReadOnly: false
     };
   },
   methods: {
@@ -66,14 +78,50 @@ export default {
   padding: 20px;
 }
 
-.buttons-container {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  padding: 100px;
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
 }
 
-.buttons-container button {
-  margin-left: 10px;
+.table-bordered {
+  border-collapse: collapse;
+  border-color: #dee2e6;
+}
+
+.table-label {
+  width: 40%;
+  vertical-align: middle;
+  border-color: #dee2e6;
+  padding: 0.75rem;
+}
+
+.table-input {
+  vertical-align: middle;
+  border-color: #dee2e6;
+  padding: 0.75rem;
+}
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  margin-bottom: 0;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
 }
 </style>

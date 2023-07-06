@@ -23,7 +23,7 @@
             <tr v-for="brand in filteredBrands" :key="brand.name">
               <td class="text-center">{{ brand.name }}</td>
               <td class="text-center">
-                <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }" class="btn btn-secondary">Editar</router-link>
+                <router-link :to="{ name: 'AddBrand', params: { id: brand.id } }" class="btn btn-secondary">Editar</router-link>
                 <button @click="deleteBrand(brand)" class="btn btn-danger">Eliminar</button>
               </td>
             </tr>

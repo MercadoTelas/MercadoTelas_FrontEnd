@@ -1,19 +1,29 @@
 <template>
   <div class="container">
     <form @submit.prevent="onCreateSubcategory">
-      <div class="form-group mt-4">
-        <label for="subCategoryName">Ingrese el nombre de la subcategoría:</label>
-        <input type="text" class="form-control" id="subcategory" v-model="name">
-      </div>
-      <div class="form-group mt-4">
-        <label for="category">Seleccione la categoría a la que se asociará esta subcategoría:</label>
-        <select class="form-control" id="category" v-model="category">
-          <option value="" disabled selected>Seleccione una categoría</option>
-          <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
-        </select>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td class="table-label">Ingrese el nombre de la subcategoría:</td>
+              <td class="table-input">
+                <input type="text" class="form-control" id="subcategory" v-model="name" :disabled="isReadOnly">
+              </td>
+            </tr>
+            <tr>
+              <td class="table-label">Seleccione la categoría a la que se asociará esta subcategoría:</td>
+              <td class="table-input">
+                <select class="form-control" id="category" v-model="category" :disabled="isReadOnly">
+                  <option value="" disabled selected>Seleccione una categoría</option>
+                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit">Guardar cambios</button>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
         <router-link to="/subcategories" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -29,7 +39,9 @@ export default {
   data() {
     return {
       name: '',
-      categories: []
+      category: '',
+      categories: [],
+      isReadOnly: false
     };
   },
   mounted() {
@@ -56,16 +68,13 @@ export default {
           timer: 1500
         });
         console.log(response);
-
       }).catch(error => {
-        // Show error message
         Swal.fire({
           title: 'Error al crear la subcategoría',
           icon: 'error',
           showConfirmButton: false,
           timer: 1500
         });
-        // Shows why the error was thrown using sweetalert2
         const errors = error.response.data;
         console.log(errors);
       });
@@ -79,15 +88,27 @@ export default {
   padding: 20px;
 }
 
-.buttons-container {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  padding: 100px;
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
 }
 
-.buttons-container button {
-  margin-left: 10px;
+.table-bordered {
+  border-collapse: collapse;
+  border-color: #dee2e6;
+}
+
+.table-label {
+  width: 50%;
+  vertical-align: middle;
+  border-color: #dee2e6;
+  padding: 0.75rem;
+}
+
+.table-input {
+  vertical-align: middle;
+  border-color: #dee2e6;
+  padding: 0.75rem;
 }
 </style>
-  
