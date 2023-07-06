@@ -34,14 +34,14 @@
       <div class="row">
         <h1>Lista de Artículos</h1>
         <div class="form-group ms-0">
-          <label for="senderWarehouse">Bodega de salida:</label>
+          <label for="senderWarehouse">Bodega de origen:</label>
           <select id="senderWarehouse" class="form-select ms-2" v-model="senderWarehouse">
             <option value="" disabled selected>Seleccionar</option>
             <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>
           </select>
         </div>
         <div class="form-group ms-0">
-          <label for="senderWarehouse">Bodega de entrada:</label>
+          <label for="senderWarehouse">Bodega de destino:</label>
           <select id="senderWarehouse" class="form-select ms-2" v-model="recieverWarehouse">
             <option value="" disabled selected>Seleccionar</option>
             <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>
@@ -56,8 +56,8 @@
         <tr>
           <th class="text-center">Código del artículo</th>
           <th class="text-center">Nombre del artículo</th>
-          <th class="text-center">Cantidad en unidades de inventario a remover</th>
-          <th class="text-center">Cantidad en unidades de venta a remover</th>
+          <th class="text-center">Cantidad en unidades de inventario a transferir</th>
+          <th class="text-center">Cantidad en unidades de venta a transferir</th>
           <th class="text-center">Acciones</th>
         </tr>
         </thead>
