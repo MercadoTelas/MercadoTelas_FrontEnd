@@ -18,6 +18,7 @@
       </div>
       <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
         <router-link to="/warehouses" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -36,6 +37,14 @@ export default {
       name: '',
       isReadOnly: false
     };
+  },
+  created() {
+    const idParam = this.$route.params.id;
+    if (idParam) {
+      this.fetchCategoryData(idParam);
+    } else {
+      this.isReadOnly = false;
+    }
   },
   methods: {
     onCreateWarehouse(){
@@ -57,6 +66,17 @@ export default {
         console.log(error.response.data);
       });
     },
+    fetchWarehouseData(warehouseId) {
+    axios.get(`${API_URL}/warehouses/${warehouseId}`)
+      .then(response => {
+        const warehouseData = response.data;
+        this.name = warehouseData.name;
+        // Asigna otros datos de la bodega a las propiedades correspondientes si es necesario
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
   }, 
   mounted() {
     this.$state.navbarTitle = 'Agregar Nueva Bodega';

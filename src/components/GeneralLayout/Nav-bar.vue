@@ -64,7 +64,7 @@
     font-size: 34px;
     font-weight: bold;
     text-align: center;
-    margin-right: 10%;
+    margin-right: 12%;
     flex-grow: 1;
   }
 

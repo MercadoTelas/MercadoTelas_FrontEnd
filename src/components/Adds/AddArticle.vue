@@ -175,7 +175,6 @@ export default {
     } else {
       this.fetchNewItemData();
     }
-
     // Verificar si la URL contiene la palabra "details"
     if (window.location.href.includes('details')) {
       this.isReadOnly = true; // Establecer isReadOnly en true

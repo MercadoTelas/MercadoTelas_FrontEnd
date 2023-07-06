@@ -9,7 +9,8 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
-                  <input type="text" class="form-control" id="category" name="category" v-model="name" :disabled="isReadOnly">
+                  <input type="text" class="form-control" id="category" name="category" v-model="name"
+                    :disabled="isReadOnly">
                 </div>
               </td>
             </tr>
@@ -38,6 +39,14 @@ export default {
       isReadOnly: false
     };
   },
+  created() {
+    const idParam = this.$route.params.id;
+    if (idParam) {
+      this.fetchCategoryData(idParam);
+    } else {
+      this.isReadOnly = false;
+    }
+  },
   methods: {
     onCategoryCreate() {
       const category = {
@@ -47,21 +56,32 @@ export default {
       };
       axios.post(API_URL + '/categories', category).then(response => {
         // Mostrar Toast de éxito
-      toast.success('Categoría añadida correctamente', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+        toast.success('Categoría añadida correctamente', {
+          autoClose: 2000, // Duración en milisegundos
+        });
         console.log(response);
 
       }).catch(error => {
         // Show error message
         toast.error('Error al agregar la Categoría', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+          autoClose: 2000, // Duración en milisegundos
+        });
         // Shows why the error was thrown using sweetalert2
         const errors = error.response.data;
         console.log(errors);
 
       });
+    },
+    fetchCategoryData(categoryId) {
+      axios.get(`${API_URL}/categories/${categoryId}`)
+        .then(response => {
+          const categoryData = response.data;
+          this.name = categoryData.name;
+          // Asigna otros datos de la categoría a las propiedades correspondientes si es necesario
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
   },
   mounted() {

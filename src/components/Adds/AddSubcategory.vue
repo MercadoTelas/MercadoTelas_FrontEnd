@@ -15,7 +15,8 @@
               <td class="table-input">
                 <select class="form-control" id="category" v-model="category" :disabled="isReadOnly">
                   <option value="" disabled selected>Seleccione una categoría</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}</option>
+                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
+                  </option>
                 </select>
               </td>
             </tr>
@@ -24,6 +25,7 @@
       </div>
       <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
         <router-link to="/subcategories" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -32,7 +34,7 @@
 
 <script>
 import axios from 'axios';
-import {API_URL} from '@/config'
+import { API_URL } from '@/config'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
@@ -44,6 +46,14 @@ export default {
       categories: [],
       isReadOnly: false
     };
+  },
+  created() {
+    const idParam = this.$route.params.id;
+    if (idParam) {
+      this.fetchCategoryData(idParam);
+    } else {
+      this.isReadOnly = false;
+    }
   },
   mounted() {
     this.$state.navbarTitle = 'Agregar Nueva Subcategoría';
@@ -63,19 +73,32 @@ export default {
       };
       axios.post(API_URL + '/subcategories', subcategory).then(response => {
         // Mostrar Toast de éxito
-      toast.success('Subcategoría agregada correctamente', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+        toast.success('Subcategoría agregada correctamente', {
+          autoClose: 2000, // Duración en milisegundos
+        });
         console.log(response);
       }).catch(error => {
         toast.error('Error al agregar la Subcategoría', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+          autoClose: 2000, // Duración en milisegundos
+        });
         const errors = error.response.data;
         console.log(errors);
       });
     },
-  }, 
+    methods: {
+      fetchSubcategoryData(subcategoryId) {
+        axios.get(`${API_URL}/subcategories/${subcategoryId}`)
+          .then(response => {
+            const subcategoryData = response.data;
+            this.name = subcategoryData.name;
+            // Asigna otros datos de la subcategoría a las propiedades correspondientes si es necesario
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
+    }
+  },
 };
 </script>
 

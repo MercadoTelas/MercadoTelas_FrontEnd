@@ -18,7 +18,7 @@
       </div>
       <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar</button>
-        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
+        <button class="btn btn-primary" type="submit" v-if="isReadOnly">Guardar cambios</button>
         <router-link to="/brands" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -37,6 +37,14 @@ export default {
       name: '',
       isReadOnly: false
     };
+  },
+  created() {
+    const idParam = this.$route.params.id;
+    if (idParam) {
+      this.fetchBrandData(idParam);
+    } else {
+      this.isReadOnly = false;
+    }
   },
   methods: {
     onBrandCreate() {
@@ -59,10 +67,20 @@ export default {
           });
           console.log(error);
         });
+    },
+    fetchBrandData(brandId) {
+      axios.get(`${API_URL}/brands/${brandId}`)
+        .then(response => {
+          const brandData = response.data;
+          this.name = brandData.name;
+         
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Marca';
   }
 };
 </script>

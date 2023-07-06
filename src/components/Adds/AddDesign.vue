@@ -9,8 +9,8 @@
               <td class="table-input">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-x-diamond-fill"></i></span>
-                <input type="text" class="form-control" id="design" v-model="name" :disabled="isReadOnly">
-              </div>
+                  <input type="text" class="form-control" id="design" v-model="name" :disabled="isReadOnly">
+                </div>
               </td>
             </tr>
           </tbody>
@@ -18,6 +18,7 @@
       </div>
       <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
         <router-link to="/designs" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -37,6 +38,14 @@ export default {
       isReadOnly: false
     };
   },
+  created() {
+    const idParam = this.$route.params.id;
+    if (idParam) {
+      this.fetchCategoryData(idParam);
+    } else {
+      this.isReadOnly = false;
+    }
+  },
   methods: {
     onCreateDesign() {
       const design = {
@@ -46,17 +55,30 @@ export default {
       };
       axios.post(API_URL + '/designs', design).then(response => {
         // Mostrar Toast de éxito
-      toast.success('Diseño agregado correctamente', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+        toast.success('Diseño agregado correctamente', {
+          autoClose: 2000, // Duración en milisegundos
+        });
         console.log(response);
         this.$router.go(-1);
       }).catch(error => {
         toast.error('Error al agregar el Diseño', {
-        autoClose: 2000, // Duración en milisegundos
-      });
+          autoClose: 2000, // Duración en milisegundos
+        });
         console.log(error);
       });
+    },
+    methods: {
+      fetchDesignData(designId) {
+        axios.get(`${API_URL}/designs/${designId}`)
+          .then(response => {
+            const designData = response.data;
+            this.name = designData.name;
+            // Asigna otros datos del diseño a las propiedades correspondientes si es necesario
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }
     },
   },
   mounted() {
