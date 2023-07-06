@@ -65,42 +65,40 @@
 </template>
 
   
-  <script>
-    import Swal from 'sweetalert2';
+<script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
-  export default {
-    data() {
-      return {
-        nombre: '',
-        apellidos: '',
-        cedula: '',
-        correo: '',
-        contrasena: '',
-        confirmar_contrasena: ''
-      };
+export default {
+  data() {
+    return {
+      nombre: '',
+      apellidos: '',
+      cedula: '',
+      correo: '',
+      contrasena: '',
+      confirmar_contrasena: ''
+    };
+  },
+  methods: {
+    registerUser() {
+      // Mostrar Toast de éxito
+      toast.success('Usuario registrado existosamente', {
+        autoClose: 2000, // Duración en milisegundos
+      });
     },
-    methods: {
-      registerUser() {
-         // Mostrar Sweet Alert
-        Swal.fire({
-            icon: 'success',
-            title: '¡Registrado!',
-            text: 'El usuario ha sido registrado exitosamente.',
-            confirmButtonText: 'Aceptar',
-        });
-      },
-      cancelRegistration() {
-        // Aquí puedes implementar la lógica para cancelar el registro del usuario
-        // Puedes redirigir al usuario a otra página o realizar cualquier otra acción necesaria
-      }
-    },
-    mounted() {
-      this.$state.navbarTitle = 'Registro de usuario';
+    cancelRegistration() {
+      // Aquí puedes implementar la lógica para cancelar el registro del usuario
+      // Puedes redirigir al usuario a otra página o realizar cualquier otra acción necesaria
     }
-  };
-  </script>
+  },
+  mounted() {
+    this.$state.navbarTitle = 'Registro de usuario';
+  }
+};
+</script>
   
-  <style scoped>
+<style scoped>
 .container {
   max-width: 600px;
   margin: 0 auto;

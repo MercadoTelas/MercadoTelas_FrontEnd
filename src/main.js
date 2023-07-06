@@ -1,5 +1,6 @@
 import { createApp, reactive } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
+//import Toasted from 'vue-toasted';
 
 import store from './store';
 import App from './App.vue';
@@ -107,6 +108,7 @@ const router = createRouter({
 const app = createApp(App);
 app.use(store);
 app.use(router);
+//app.use(Toasted);
 
 
 // Agregar un guardia de navegación para verificar la autenticación en las rutas con requiresAuth: true

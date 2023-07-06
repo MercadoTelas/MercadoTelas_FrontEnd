@@ -19,6 +19,8 @@
     "sweetalert2": "^11.4.8",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2",
+    "vue-toasted": "^1.1.28",
+    "vue3-toastify": "^0.1.11",
     "vuex": "^4.1.0"
   },
   "devDependencies": {

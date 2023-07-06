@@ -26,8 +26,9 @@
 
 <script>
 import axios from 'axios';
-import Swal from "sweetalert2";
 import { API_URL } from '@/config'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -44,22 +45,17 @@ export default {
         }
       };
       axios.post(API_URL + '/categories', category).then(response => {
-        Swal.fire({
-          title: 'Categoría creada exitosamente',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        // Mostrar Toast de éxito
+      toast.success('Categoría añadida correctamente', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         console.log(response);
 
       }).catch(error => {
         // Show error message
-        Swal.fire({
-          title: 'Error al crear la categoría',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        toast.error('Error al agregar la Categoría', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         // Shows why the error was thrown using sweetalert2
         const errors = error.response.data;
         console.log(errors);

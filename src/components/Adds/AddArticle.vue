@@ -131,6 +131,9 @@
 <script>
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 import { API_URL } from "@/config";
 
 export default {
@@ -242,11 +245,10 @@ export default {
       console.log(item);
       axios.post(`${API_URL}/items`, item)
         .then(response => {
-          Swal.fire({
-            title: '¡Artículocreado!',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
-          });
+          // Mostrar Toast de éxito
+      toast.success('Artículo creado', {
+        autoClose: 2000, // Duración en milisegundos
+      });
           console.log(response);
         })
         .catch(error => {

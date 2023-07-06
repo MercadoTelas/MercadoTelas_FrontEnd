@@ -1,14 +1,9 @@
 <template>
-  <input
-        type="checkbox"
-        id="check"
-        v-model="checked"
-        @change="handleCheckboxChange"
-      />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
 
   <div class="container-fluid">
     <div class="row">
-      
+
       <div id="contentDiv" class="col-lg-9">
         <div class="movement-table">
           <h1 class="header text-primary">
@@ -44,6 +39,8 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 export default {
   name: "MovementTable",
   data() {
@@ -85,6 +82,10 @@ export default {
   },
   mounted() {
     // Llama a la función de actualización del título del navbar
+    // Mostrar Toast de éxito
+    toast.success('Inicio de sesión correcto', {
+      autoClose: 2000, // Duración en milisegundos
+    });
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = "Inicio";
   },
@@ -103,12 +104,11 @@ export default {
 </script>
 
 <style scoped>
-
-#check:checked ~ .container-fluid {
+#check:checked~.container-fluid {
   padding-left: 345px;
 }
 
-#check:checked ~ #contentDiv {
+#check:checked~#contentDiv {
   height: auto;
   display: block;
 }

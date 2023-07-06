@@ -26,8 +26,9 @@
 
 <script>
 import axios from 'axios';
-import Swal from "sweetalert2";
-import { API_URL } from '@/config'
+import { API_URL } from '@/config';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -44,21 +45,16 @@ export default {
         }
       };
       axios.post(API_URL + '/designs', design).then(response => {
-        Swal.fire({
-          title: 'Diseño creado exitosamente',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        // Mostrar Toast de éxito
+      toast.success('Diseño agregado correctamente', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         console.log(response);
         this.$router.go(-1);
       }).catch(error => {
-        Swal.fire({
-          title: 'Error al crear el diseño',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        toast.error('Error al agregar el Diseño', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         console.log(error);
       });
     },

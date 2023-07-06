@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -49,11 +50,7 @@ export default {
     registrarUsuario() {
       // Aquí puedes realizar la lógica para enviar los datos del usuario al servidor
       // Por ahora, mostraremos una alerta de SweetAlert como confirmación
-      Swal.fire({
-        icon: 'success',
-        title: 'Usuario registrado',
-        text: 'El usuario ha sido registrado exitosamente.',
-      });
+      
       // Luego de mostrar la alerta, puedes reiniciar los campos del formulario
       this.nombre = '';
       this.apellidos = '';

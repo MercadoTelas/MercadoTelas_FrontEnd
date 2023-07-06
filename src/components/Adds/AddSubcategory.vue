@@ -32,8 +32,9 @@
 
 <script>
 import axios from 'axios';
-import Swal from "sweetalert2";
 import {API_URL} from '@/config'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -61,20 +62,15 @@ export default {
         }
       };
       axios.post(API_URL + '/subcategories', subcategory).then(response => {
-        Swal.fire({
-          title: 'Subcategoría creada exitosamente',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        // Mostrar Toast de éxito
+      toast.success('Subcategoría agregada correctamente', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         console.log(response);
       }).catch(error => {
-        Swal.fire({
-          title: 'Error al crear la subcategoría',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 1500
-        });
+        toast.error('Error al agregar la Subcategoría', {
+        autoClose: 2000, // Duración en milisegundos
+      });
         const errors = error.response.data;
         console.log(errors);
       });

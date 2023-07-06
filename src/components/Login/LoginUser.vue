@@ -87,13 +87,6 @@ export default {
       // Aquí puedes realizar la verificación de las credenciales
       if (email === 'admin@gmail.com' && password === 'admin') {
         // Las credenciales son válidas
-        Swal.fire({
-          icon: 'success',
-          title: '¡Inicio de sesión exitoso!',
-          text: 'Bienvenido',
-          showConfirmButton: false
-        });
-
         this.$store.commit('setLoggedIn', true);
         this.$router.push('/home');
       } else {
