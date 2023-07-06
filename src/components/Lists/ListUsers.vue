@@ -16,7 +16,7 @@
 
 
                 <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-bordered table-secondary">
                         <thead>
                             <tr>
                                 <th>Nombre</th>

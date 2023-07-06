@@ -2,7 +2,7 @@
   <div class="add-item container">
     <form class="form-estilo" @submit.prevent="onSubmit">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-secondary">
           <tbody>
             <tr>
               <td class="table-label">Código:</td>
@@ -123,6 +123,7 @@
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-primary btn-save" v-if="!isReadOnly">Guardar</button>
+        <router-link to="/items" type="button" class="btn btn-danger btn-save" v-if="isReadOnly">Volver</router-link>
       </div>
     </form>
   </div>
@@ -178,6 +179,7 @@ export default {
     // Verificar si la URL contiene la palabra "details"
     if (window.location.href.includes('details')) {
       this.isReadOnly = true; // Establecer isReadOnly en true
+      this.$state.navbarTitle = 'Detalles Artículo';
     }
   },
   methods: {

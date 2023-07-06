@@ -32,7 +32,7 @@
             
             <div class="mt-4">
               <label for="email">Email:</label>
-              <input type="email" id="email" class="form-control" value="admin@gmail.com"/>
+              <input type="email" id="email" class="form-control" value="admin@gmail.com" readonly/>
             </div>
             <div class="mt-4">
               <label for="password">Contraseña:</label>

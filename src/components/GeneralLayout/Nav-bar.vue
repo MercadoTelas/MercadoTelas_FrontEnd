@@ -4,7 +4,7 @@
       <div class="logo-container">
         <img
           id="logotelas"
-          src="../assets/logo_telas.jpg"
+          src="../../assets/logo_telas.jpg"
           @click="NavigateToAnotherPage('home')"
         />
       </div>
@@ -47,7 +47,8 @@
   height: 110px;
 
   .logo-container {
-    margin-right: 20px;
+    margin-right: 15px;
+    margin-left: 15px;
 
     #logotelas {
       width: 130px;

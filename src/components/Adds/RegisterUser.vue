@@ -1,7 +1,9 @@
 <template>
   <div class="register-user container">
     <form @submit.prevent="registerUser">
-      <table class="form-table">
+      <div class="table-responsive">
+        <table class="table table-bordered ">
+          <tbody>
         <tr>
           <td>
             <label for="nombre" class="label">Nombre:</label>
@@ -59,7 +61,9 @@
             <button class="btn btn-danger btn-cancel" type="button" @click="cancelRegistration">Cancelar</button>
           </td>
         </tr>
+      </tbody>
       </table>
+      </div>
     </form>
   </div>
 </template>
@@ -108,9 +112,20 @@ export default {
   /* Ajusta la altura según tus necesidades */
 }
 .container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+}
+
+.table-bordered {
+  border-collapse: collapse;
+  border-color: #dee2e6;
 }
 
 .header {

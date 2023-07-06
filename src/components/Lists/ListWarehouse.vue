@@ -14,7 +14,7 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-striped table-responsive">
+          <table class="table table-responsive table-bordered table-secondary">
             <thead>
             <tr>
               <th class="text-center">Nombre de Bodega</th>

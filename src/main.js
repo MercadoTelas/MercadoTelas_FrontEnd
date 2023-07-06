@@ -1,13 +1,16 @@
 import { createApp, reactive } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-//import Toasted from 'vue-toasted';
 
+//-- Archivo JavaScript para guardar parámetros durante sesión
 import store from './store';
+
+//--Inicio--
+import Home from './components/Home/Home-component.vue';
+import KPIs from './components/Home/KPIs.vue';
+
+//Vistas del diseño
+import UserProfile from './components/GeneralLayout/UserProfile.vue';
 import App from './App.vue';
-import Home from './components/Home-component.vue';
-import UserProfile from './components/UserProfile.vue';
-import InventoryTable from './components/Lists/InventoryTableCopy.vue';
-import BarsGraphic from './components/BarsGraphic.vue';
 
 //--Vistas transaccionales--
 import Entry from './components/Transactional/Inventory-Entry.vue';
@@ -15,6 +18,7 @@ import Transfer from './components/Transactional/Inventory-Transfer.vue';
 import Output from './components/Transactional/Inventory-Output.vue'
 
 //--Enlistar--
+import InventoryTable from './components/Lists/InventoryTable.vue';
 import ListCategory from './components/Lists/ListCategory.vue';
 import ListSubcategory from './components/Lists/ListSubcategory.vue';
 import ListBrand from './components/Lists/ListBrand.vue';
@@ -69,7 +73,7 @@ const router = createRouter({
       children: [
         {
           path: '/home',
-          component: BarsGraphic,
+          component: KPIs,
           meta: { requiresAuth: true },
         },
       ]

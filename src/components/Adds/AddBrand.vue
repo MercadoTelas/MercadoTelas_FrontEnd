@@ -2,10 +2,10 @@
   <div class="container">
     <form @submit.prevent="onBrandCreate">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-secondary">
           <tbody>
             <tr>
-              <td class="table-label">Nombre de la marca:</td>
+              <td class="table-label">Marca:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-medium"></i></span>
@@ -17,7 +17,8 @@
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar</button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
         <router-link to="/brands" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -26,7 +27,7 @@
 
 <script>
 import axios from 'axios';
-import { API_URL } from '@/config'
+import { API_URL } from '@/config';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
@@ -44,29 +45,32 @@ export default {
           name: this.name
         }
       };
-      axios.post(API_URL + '/brands', brand).then(response => {
-        // Mostrar Toast de éxito
-      toast.success('Marca añadida correctamente', {
-        autoClose: 2000, // Duración en milisegundos
-      });
-        console.log(response);
-        this.$router.go(-1);
-      }).catch(error => {
-        toast.error('Error al agregar la Marca', {
-        autoClose: 2000, // Duración en milisegundos
-      });
-        console.log(error);
-      });
-    },
+      axios.post(API_URL + '/brands', brand)
+        .then(response => {
+          toast.success('Marca añadida correctamente', {
+            autoClose: 2000 // Duración en milisegundos
+          });
+          console.log(response);
+          this.$router.go(-1);
+        })
+        .catch(error => {
+          toast.error('Error al agregar la Marca', {
+            autoClose: 2000 // Duración en milisegundos
+          });
+          console.log(error);
+        });
+    }
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nueva Marca';
-  },
+    this.$state.navbarTitle = 'Agregar Marca';
+  }
 };
 </script>
 
 <style scoped>
 .container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -118,4 +122,3 @@ export default {
   border-radius: 0.25rem;
 }
 </style>
-  

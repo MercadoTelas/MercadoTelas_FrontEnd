@@ -2,7 +2,7 @@
   <div class="container">
     <form @submit.prevent="onCategoryCreate">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-secondary">
           <tbody>
             <tr>
               <td class="table-label">Nombre de la categoría:</td>
@@ -18,6 +18,7 @@
       </div>
       <div class="d-flex justify-content-end">
         <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
         <router-link to="/categories" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -71,6 +72,8 @@ export default {
 
 <style scoped>
 .container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 

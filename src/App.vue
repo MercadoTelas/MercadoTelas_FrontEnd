@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import sidebar from "./components/Side-bar.vue";
-import navbar from "./components/Nav-bar.vue";
+import sidebar from "./components/GeneralLayout/Side-bar.vue";
+import navbar from "./components/GeneralLayout/Nav-bar.vue";
 import { useStore } from "vuex";
 
 export default {

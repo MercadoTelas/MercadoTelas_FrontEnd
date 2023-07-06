@@ -14,7 +14,7 @@
     </div>
     <div class="row">
       <div class="table-responsive col-md-12">
-        <table class="table table-hover table-responsive table-striped">
+        <table class="table table-hover table-responsive table-bordered table-secondary">
           <thead>
           <tr>
             <th class="text-center">Código</th>

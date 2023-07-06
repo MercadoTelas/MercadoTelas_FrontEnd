@@ -2,7 +2,7 @@
   <div class="container">
     <form @submit.prevent="onCreateWarehouse">
       <div class="table-responsive">
-        <table class="table table-bordered">
+        <table class="table table-bordered table-secondary">
           <tbody>
             <tr>
               <td class="table-label">Ingrese el nombre de la bodega:</td>
@@ -66,6 +66,8 @@ export default {
 
 <style scoped>
 .container {
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 
