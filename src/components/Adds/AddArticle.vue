@@ -167,10 +167,14 @@ export default {
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.isReadOnly = true;
       this.fetchItemData(idParam);
     } else {
       this.fetchNewItemData();
+    }
+
+    // Verificar si la URL contiene la palabra "details"
+    if (window.location.href.includes('details')) {
+      this.isReadOnly = true; // Establecer isReadOnly en true
     }
   },
   methods: {

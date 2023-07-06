@@ -39,8 +39,8 @@
             <td class="text-center">{{ item.brand_id !== null ? item.brand_name : 'No posee' }}</td>
             <td class="text-center">{{ item.design_id !== null ? item.design_name : 'No posee' }}</td>
             <td class="text-center">
-              <router-link :to="{ name: 'AddArticle', params: { id: item.id } }" class="btn btn-primary">Ver detalles</router-link>
-              <router-link :to="{ name: 'AddArticle', params: { id: item.id } }" class="btn btn-secondary">Editar</router-link>
+              <router-link :to="{ name: 'ArticleDetails', params: { id: item.id } }" class="btn btn-primary">Ver detalles</router-link>
+              <router-link :to="{ name: 'EditArticle', params: { id: item.id } }" class="btn btn-secondary">Editar</router-link>
               <button @click="deleteArticle(item)" class="btn btn-danger">Eliminar</button>
             </td>
           </tr>

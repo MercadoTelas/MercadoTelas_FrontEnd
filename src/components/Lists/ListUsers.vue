@@ -87,8 +87,8 @@ export default {
     },
     methods: {
         addUser() {
-            // Lógica para agregar un nuevo usuario
-            // ...
+            // Redireccionar a la vista de registrar usuario
+            this.$router.push('/userRegister');
         },
         viewUser(/*user*/) {
             // Lógica para ver los detalles de un usuario
