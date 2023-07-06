@@ -68,7 +68,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
       children: [
         {
-          path: 'barsGraphic',
+          path: '/home',
           component: BarsGraphic,
           meta: { requiresAuth: true },
         },

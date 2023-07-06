@@ -99,6 +99,14 @@ export default {
 </script>
   
 <style scoped>
+
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  /* Ajusta la altura según tus necesidades */
+}
 .container {
   max-width: 600px;
   margin: 0 auto;

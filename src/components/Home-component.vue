@@ -32,7 +32,6 @@
           </div>
         </div>
         <router-view></router-view>
-        <router-link to="/home/barsGraphic">Ver gráficos</router-link>
       </div>
     </div>
   </div>
@@ -40,7 +39,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import { toast } from 'vue3-toastify';
+//import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 export default {
   name: "MovementTable",
@@ -53,7 +52,7 @@ export default {
           date: "2023-06-01",
           description: "5 entradas de tela Brush Azul",
           warehouse: "Bodega 1",
-          responsible: "Andres Mendez",
+          responsible: "Andrés Méndez",
         },
         {
           id: 2,
@@ -83,10 +82,7 @@ export default {
   },
   mounted() {
     // Llama a la función de actualización del título del navbar
-    // Mostrar Toast de éxito
-    toast.success('Inicio de sesión correcto', {
-      autoClose: 2000, // Duración en milisegundos
-    });
+    this.$router.push("/home");
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = "Inicio";
   },

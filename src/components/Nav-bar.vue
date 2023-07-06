@@ -25,7 +25,7 @@
       <div class="logo-usuario-container">
         <i
           id="logousuario"
-          class="bi bi-person"
+          class="bi bi-person-circle"
           @click="NavigateToAnotherPage('userProfile')"
         ></i>
       </div>
@@ -110,6 +110,7 @@
 
   .logo-usuario-container {
     margin-left: auto;
+    margin-right: 15px;
 
     #logousuario {
       width: 90px;
