@@ -6,9 +6,10 @@
 
       <div id="contentDiv" class="col-lg-9">
         <div class="movement-table">
-          <h1 class="header text-primary">
-            Lista de los últimos movimientos realizados en el inventario
-          </h1>
+
+          <div class="centered-div">
+            <h4 class="text-primary">Lista de los últimos movimientos realizados en el inventario</h4>
+          </div>
           <div class="table-responsive">
             <table class="table table-bordered">
               <thead>
@@ -104,6 +105,14 @@ export default {
 </script>
 
 <style scoped>
+.centered-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  /* Ajusta la altura según tus necesidades */
+}
+
 #check:checked~.container-fluid {
   padding-left: 345px;
 }
