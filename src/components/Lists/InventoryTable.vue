@@ -1,11 +1,13 @@
 <template>
+  <input
+        type="checkbox"
+        id="check"
+        v-model="checked"
+        @change="handleCheckboxChange"
+      />
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-2 col-md-12">
-        <Side-bar></Side-bar>
-      </div>
-
-      <div class="col-lg-10 col-md-12">
+      <div id="contentDiv" class="col-lg-10 col-md-12">
         <div class="table-container">
           <h1 class="filter-title text-primary">Filtros</h1>
           <div class="filters-container row">
@@ -50,8 +52,17 @@
               <div class="form-group">
                 <label for="brand">Marca:</label>
                 <select id="brand" class="form-control" v-model="filter.brand">
-                  <option value="" disabled>Seleccionar marca</option>
+                  <option value="" selected disabled>Seleccionar marca</option>
                   <option v-for="brand in brands" :value="brand.name" :key="brand.name">{{ brand.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-group">
+                <label for="warehouse">Bodega:</label>
+                <select id="warehouse" class="form-control" v-model="filter.warehouse">
+                  <option value="" selected disabled>Seleccionar bodega</option>
+                  <option v-for="warehouse in warehouses" :value="warehouse.name" :key="warehouse.name">{{ warehouse.name }}</option>
                 </select>
               </div>
             </div>
@@ -65,7 +76,7 @@
                 <th>Nombre</th>
                 <th>Unidades de Entrada</th>
                 <th>Unidades de Salida</th>
-                <th>Acciones</th>
+                <th>Bodega</th>
               </tr>
               </thead>
               <tbody>
@@ -74,13 +85,7 @@
                 <td>{{ item.name }}</td>
                 <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
                 <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
-                <td>
-                  <div class="button-group">
-                    <button @click="editArticle(item.id)">Editar</button>
-                    <button @click="viewProductDetails(item.id)">Detalles</button>
-                    <button @click="confirmDeleteArticle(item.id)">Eliminar</button>
-                  </div>
-                </td>
+                <td>{{ item.warehouse }}</td>
               </tr>
               </tbody>
             </table>
@@ -93,8 +98,8 @@
 
 <script>
 import axios from "axios";
-import Swal from 'sweetalert2';
 import {API_URL} from "@/config";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: 'InventoryTable',
@@ -106,14 +111,22 @@ export default {
         subcategory: '',
         design: '',
         brand: '',
+        warehouse: '',
       },
       items: [],
       categories: [],
       designs: [],
       brands: [],
+      warehouses: [],
     };
   },
   computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
     filteredSubcategories() {
       return this.categories.filter((category) => {
         return category.name === this.filter.category
@@ -127,70 +140,62 @@ export default {
             (this.filter.category === '' || item.category === this.filter.category) &&
             (this.filter.subcategory === '' || item.subcategory === this.filter.subcategory) &&
             (this.filter.design === '' || item.design === this.filter.design) &&
-            (this.filter.brand === '' || item.brand === this.filter.brand)
+            (this.filter.brand === '' || item.brand === this.filter.brand) &&
+            (this.filter.warehouse === '' || item.warehouse === this.filter.warehouse)
       })
     }
   },
   mounted() {
+    this.$state.navbarTitle = 'Inventario';
     //Gets the all elements from the API
     axios.get(API_URL + '/inventory_items').then(response => {
-      this.items = response.data.inventory_items
+      this.items = response.data.items
       this.categories = response.data.categories
       this.designs = response.data.designs
       this.brands = response.data.brands
+      this.warehouses = response.data.warehouses
     }).catch(error => {
       console.log(error)
     });
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     resetSubcategory() {
       this.filter.subcategory = ''
-    },
-    editArticle(articleId) {
-      // Lógica para editar el artículo
-      console.log('Editar artículo con ID:', articleId);
-
-      // Navegar a la vista de edición del artículo con el ID proporcionado
-      this.$router.push({name: 'EditArticle', params: {id: articleId}});
-    },
-    deleteArticle(articleId) {
-      // Lógica para eliminar el artículo
-      console.log('Eliminar artículo con ID:', articleId);
-    },
-
-    viewProductDetails(articleId) {
-      // Lógica para ver los detalles del producto
-      console.log('Ver detalles del producto con ID:', articleId);
-      this.$router.push({name: 'ViewArticle', params: {id: articleId}});
-    },
-
-    confirmDeleteArticle(articleId) {
-      Swal.fire({
-        title: '¿Estás seguro?',
-        text: 'Esta acción no se puede deshacer',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.deleteArticle(articleId);
-          Swal.fire('¡Eliminado!', 'El artículo ha sido eliminado.', 'success');
-        }
-      });
     },
   },
 };
 </script>
 
 <style>
+
+#check:checked ~ .container-fluid {
+  padding-left: 345px;
+}
+
+#check:checked ~ #contentDiv {
+  height: auto;
+  display: block;
+}
+
+.container-fluid div {
+  justify-content: center;
+  align-items: center;
+}
+
 .table-container {
   margin-top: 20px;
 }
 
 .filters-container {
   margin-bottom: 10px;
+}
+
+.filters-container div {
+  margin-left: 0px;
 }
 
 .buttonClass {
