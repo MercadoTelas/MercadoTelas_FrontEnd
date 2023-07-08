@@ -48,11 +48,12 @@ export default {
   },
   methods: {
     onCreateWarehouse(){
-      const warehouse = {
+      let warehouse = {
         warehouse: {
           name: this.name
         }
       };
+      warehouse.user = this.$store.state.user.id
       axios.post(API_URL + '/warehouses', warehouse).then(response => {
         // Mostrar Toast de éxito
       toast.success('Bodega agregada correctamente', {

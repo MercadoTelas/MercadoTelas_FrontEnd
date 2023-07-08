@@ -4,7 +4,7 @@
       <div class="card-header h5 text-white bg-primary">Restablecimiento de Contraseña</div>
       <div class="card-body px-5">
         <p class="card-text py-3">
-          Ingrese su dirección de correo electrónico y le enviaremos un correo electrónico con las instrucciones para restablecer su contraseña.
+          Ingrese su dirección de email electrónico y le enviaremos un email electrónico con las instrucciones para restablecer su contraseña.
         </p>
         <div class="form-outline">
           <input type="email" id="typeEmail" class="form-control my-3" v-model="email" />
@@ -13,7 +13,6 @@
         <a href="#" class="btn btn-primary w-100" @click="resetPassword">Restablecer contraseña</a>
         <div class="d-flex justify-content-between mt-4">
           <a class="" href="" @click="goToLogin">Iniciar sesión</a>
-          <a class="" href="#">Registrarse</a>
         </div>
       </div>
     </div>

@@ -236,7 +236,7 @@ export default {
           });
     },
     onSubmit() {
-      const item = {
+      let item = {
         id: this.id,
         name: this.name,
         minimal_stock: this.minimal_stock,
@@ -248,6 +248,7 @@ export default {
         brand_id: this.brand_id,
         image: this.image
       };
+      item.user = this.$store.state.user.id
       if (this.mode === 'edit') {
         this.updateItem(item);
       } else {

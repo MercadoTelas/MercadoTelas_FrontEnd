@@ -44,11 +44,7 @@ export default {
   name: 'BrandList',
   data() {
     return {
-      brands: [
-        { name: 'Adidas', id: 1 },
-        { name: 'Tommy Hilfiger', id: 2 },
-        { name: 'Nike', id: 3 },
-      ],
+      brands: [],
       searchQuery: '',
     };
   },

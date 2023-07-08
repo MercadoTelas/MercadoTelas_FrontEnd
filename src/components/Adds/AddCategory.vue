@@ -49,11 +49,12 @@ export default {
   },
   methods: {
     onCategoryCreate() {
-      const category = {
+      let category = {
         category: {
           name: this.name
         }
       };
+      category.user = this.$store.state.user.id;
       axios.post(API_URL + '/categories', category).then(response => {
         // Mostrar Toast de éxito
         toast.success('Categoría añadida correctamente', {
@@ -67,8 +68,8 @@ export default {
           autoClose: 2000, // Duración en milisegundos
         });
         // Shows why the error was thrown using sweetalert2
-        const errors = error.response.data;
-        console.log(errors);
+        console.log(error);
+
 
       });
     },

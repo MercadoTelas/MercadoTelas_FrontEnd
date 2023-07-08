@@ -39,8 +39,13 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+<<<<<<< HEAD:src/components/Home/Home-component.vue
 //import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+=======
+import Swal from "sweetalert2";
+
+>>>>>>> add_user:src/components/Home-component.vue
 export default {
   name: "MovementTable",
   data() {
@@ -85,6 +90,13 @@ export default {
     this.$router.push("/home");
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = "Inicio";
+    const user = this.$store.state.user;
+    Swal.fire({
+      title: "Bienvenido",
+      text: "Hola " + user.name + " bienvenido al sistema de inventario del Mercado de las Telas",
+      icon: "success",
+      confirmButtonText: "Ok",
+    });
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -113,11 +125,14 @@ export default {
   padding-left: 345px;
 }
 
+<<<<<<< HEAD:src/components/Home/Home-component.vue
 #check:checked~#contentDiv {
   height: auto;
   display: block;
 }
 
+=======
+>>>>>>> add_user:src/components/Home-component.vue
 .container-fluid div {
   justify-content: center;
   align-items: center;

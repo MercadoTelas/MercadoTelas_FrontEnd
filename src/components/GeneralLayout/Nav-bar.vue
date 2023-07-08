@@ -1,3 +1,4 @@
+<!--suppress JSPotentiallyInvalidConstructorUsage -->
 <template>
   <div class="nav-wrapper" style="height:110px;">
     <nav class="navbar navbar-expand-lg" :class="{ 'sticky': isSticky }">
@@ -6,18 +7,18 @@
           id="logotelas"
           src="../../assets/logo_telas.jpg"
           @click="NavigateToAnotherPage('home')"
-        />
+         alt="logo"/>
       </div>
 
-      <div class="bodega-select-container">
-        <button class="bodega-select-button" @click="toggleBodegaDropdown">
-          {{ selectedBodega ? selectedBodega : "Seleccionar Bodega" }}
+      <div class="warehouse-select-container">
+        <button class="warehouse-select-button" @click="toggleWarehouseDropdown">
+          {{ senderWarehouse ? senderWarehouse.name : "Seleccionar Bodega" }}
         </button>
-        <div class="bodega-dropdown" :class="{ show: showBodegaDropdown }">
+        <div class="warehouse-dropdown" :class="{ show: showWarehouseDropdown }">
           <ul>
-            <li @click="selectBodega('Bodega 1')">Bodega 1</li>
-            <li @click="selectBodega('Bodega 2')">Bodega 2</li>
-            <li @click="selectBodega('Bodega 3')">Bodega 3</li>
+            <li v-for="warehouse in warehouses" :key="warehouse.id" @click="selectWarehouse(warehouse)">
+              {{ warehouse.name }}
+            </li>
           </ul>
         </div>
       </div>
@@ -68,10 +69,10 @@
     flex-grow: 1;
   }
 
-  .bodega-select-container {
+  .warehouse-select-container {
     position: relative;
 
-    .bodega-select-button {
+    .warehouse-select-button {
       padding: 10px;
       font-size: 16px;
       border: none;
@@ -81,7 +82,7 @@
       cursor: pointer;
     }
 
-    .bodega-dropdown {
+    .warehouse-dropdown {
       position: absolute;
       top: calc(100% + 10px);
       left: 0;
@@ -104,7 +105,7 @@
       }
     }
 
-    .bodega-dropdown.show {
+    .warehouse-dropdown.show {
       display: block;
     }
   }
@@ -127,15 +128,21 @@
 </style>
 
 <script>
+import axios from "axios";
+import {API_URL} from "@/config";
 export default {
   data() {
     return {
       isSticky: false,
-      showBodegaDropdown: false,
-      selectedBodega: null,
+      showWarehouseDropdown: false,
+      selectedWarehouse: null,
+      warehouses: ''
     };
   },
   mounted() {
+    axios.get(API_URL + "/warehouses").then((response) => {
+      this.warehouses = response.data;
+    });
     window.addEventListener('scroll', this.handleScroll);
   },
   beforeUnmount() {
@@ -145,12 +152,12 @@ export default {
     NavigateToAnotherPage(page) {
       this.$router.push("/" + page);
     },
-    toggleBodegaDropdown() {
-      this.showBodegaDropdown = !this.showBodegaDropdown;
+    toggleWarehouseDropdown() {
+      this.showWarehouseDropdown = !this.showWarehouseDropdown;
     },
-    selectBodega(bodega) {
-      this.selectedBodega = bodega;
-      this.showBodegaDropdown = false;
+    selectWarehouse(warehouse) {
+      this.selectedWarehouse = warehouse;
+      this.showWarehouseDropdown = false;
     },
     updateNavbarTitle(newTitle) {
       // Utilizamos la mutación del store para actualizar el título del navbar

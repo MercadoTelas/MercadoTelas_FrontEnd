@@ -48,11 +48,12 @@ export default {
   },
   methods: {
     onCreateDesign() {
-      const design = {
+      let design = {
         design: {
           name: this.name
         }
       };
+      design.user = this.$store.state.user.id
       axios.post(API_URL + '/designs', design).then(response => {
         // Mostrar Toast de éxito
         toast.success('Diseño agregado correctamente', {

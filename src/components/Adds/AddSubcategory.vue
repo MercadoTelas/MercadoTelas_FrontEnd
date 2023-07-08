@@ -65,12 +65,13 @@ export default {
   },
   methods: {
     onCreateSubcategory() {
-      const subcategory = {
+      let subcategory = {
         subcategory: {
           name: this.name,
           category_id: this.category
         }
       };
+      subcategory.user = this.$store.state.user.id;
       axios.post(API_URL + '/subcategories', subcategory).then(response => {
         // Mostrar Toast de éxito
         toast.success('Subcategoría agregada correctamente', {

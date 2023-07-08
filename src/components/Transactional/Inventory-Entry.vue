@@ -1,422 +1,405 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
-  <div class="form-container">
-    <form
-      id="generalContainer"
-      class="form container"
-      @submit.prevent="saveTransaction"
-    >
-      <div class="row">
-        <div class="col-md-7" style="width: 255px">
-          <div id="form-group">
-            <label for="itemID" class="form-label">
-              <div class="blue-box">
-                <div class="label-text">Código del artículo</div>
-              </div>
-            </label>
-            <input
-              v-model="itemID"
-              type="text"
-              class="form-control"
-              id="itemID"
-              placeholder="Ingrese el código del artículo..."
-            />
+  <div class="container">
+    <div>
+      <div v-if="modalVisible">
+        <div class="modal-background"></div>
+        <div class="modal-content container-md">
+          <h2>Búsqueda de artículos</h2>
+          <div class="search-container">
+            <label for="searchInput">Buscar por Nombre o Código:</label>
+            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field">
+            <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
-        </div>
-        <div class="col-md-7" style="width: 255px">
-          <div id="form-group">
-            <label for="entryAmount" class="form-label">
-              <div class="blue-box">
-                <div class="label-text">Cantidad a ingresar</div>
-              </div>
-            </label>
-            <input
-              v-model="amount"
-              type="number"
-              class="form-control"
-              id="entryAmount"
-              placeholder="Digite la cantidad a ingresar..."
-            />
+          <div class="table-container">
+            <table class="table table-responsive-lg text-center">
+              <thead>
+              <tr>
+                <th class="text-center">Código del artículo</th>
+                <th class="text-center">Nombre del artículo</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="item in filteredItems" :key="item.id">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+              </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-        <div class="col-md-7" style="width: 255px">
-          <div id="form-group">
-            <label for="bodegaFuente" class="form-label"
-              >Seleccione la bodega de destino</label
-            >
-            <select
-              v-model="recieverWarehouse"
-              class="form-select"
-              id="bodegaFuente"
-              :disabled="isSelectDisabled"
-            >
-              <option value="" selected disabled>Seleccione la bodega</option>
-              <option
-                v-for="warehouse in warehouses"
-                :key="warehouse.id"
-                :value="warehouse"
-              >
-                {{ warehouse.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="col-sm-4">
-          <div class="row">
-            <div class="col-sm-12 text-center">
-              <div id="form-group">
-                <button class="btn btn-primary" @click.prevent="insertItem">
-                  Agregar artículo
-                </button>
-              </div>
-            </div>
-          </div>
+          <button @click="closeModal">Cerrar</button>
         </div>
       </div>
-
-      <table
-        class="table table-responsive"
-        style="margin-top: 30px; margin-bottom: 30px"
-      >
+    </div>
+    <div class="document-header">
+      <div class="header-row">
+        <h1>Lista de Artículos</h1>
+        <div class="form-group ms-0">
+          <label for="warehouseSelect">Bodega:</label>
+          <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
+            <option value="" disabled selected>Seleccionar</option>
+            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>
+          </select>
+        </div>
+      </div>
+      <p>Fecha: {{ getCurrentDate() }}</p>
+    </div>
+    <div class="table-container">
+      <table class="table table-responsive-lg text-center">
         <thead>
-          <tr id="tableContent">
-            <th>Código</th>
-            <th>Nombre artículo</th>
-            <th>Cantidad en unidades de almacenamiento</th>
-            <th>Factor de Conversión</th>
-            <th>Cantidad en unidades de venta</th>
-          </tr>
+        <tr>
+          <th class="text-center">Código del artículo</th>
+          <th class="text-center">Nombre del artículo</th>
+          <th class="text-center">Cantidad en unidades de inventario a agregar</th>
+          <th class="text-center">Cantidad en unidades de venta a agregar</th>
+          <th class="text-center">Acciones</th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in tableData" :key="index">
-            <td>{{ item.item_id }}</td>
-            <td>{{ item.name }}</td>
-            <td>
-              {{ item.storing_format_units }}
-              {{ item.storing_unit_format_name }}
-            </td>
-            <td>
-              <input
-                v-model="item.conversion_factor"
-                type="number"
-                class="form-control"
-              />
-              {{ item.transferring_unit_format_name }} por
-              {{ item.storing_unit_format_name }}
-            </td>
-            <td>
-              {{ item.transferring_format_units }}
-              {{ item.transferring_unit_format_name }}
-            </td>
-            <td>
-              <button @click.prevent="removeItem(index)" class="btn btn-danger">
-                Eliminar
-              </button>
-            </td>
-          </tr>
+        <tr v-for="(item, index) in tableData" :key="index">
+          <td>
+            <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
+                   class="input">
+          </td>
+          <td>
+            <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input">
+          </td>
+          <td>
+            <div class="row align-items-center">
+              <div class="col-8">
+                <input type="number" v-model="item.storing_format_units"
+                       @input="onCellInput(item, 'storing_format_units', $event)" class="input">
+              </div>
+              <div class="col-4">
+                {{ item.storing_unit_format_name }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="row align-items-center">
+              <div class="col-8">
+                <input type="number" v-model="item.transferring_format_units"
+                       @input="onCellInput(item, 'sale_units', $event)" class="input">
+              </div>
+              <div class="col-4">
+                {{ item.transferring_unit_format_name }}
+              </div>
+            </div>
+          </td>
+          <td>
+            <button class="btn btn-danger" @click="removeItem(index)">Eliminar</button>
+          </td>
+        </tr>
         </tbody>
       </table>
+    </div>
 
-      <div class="row">
-        <div class="col-sm-12 text-center">
-          <div id="form-group">
-            <button type="submit" class="btn btn-primary">
-              Realizar transacción
-            </button>
-            <button @click.prevent="cancel" class="btn btn-secondary">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      </div>
-    </form>
+    <div class="observations-section mt-4">
+      <h3>Observaciones</h3>
+      <textarea class="form-control" v-model="notes"></textarea>
+    </div>
+
+
+    <div class="form-footer text-center">
+      <button class="btn btn-success" type="submit" @click="saveTransaction">Guardar transacción</button>
+    </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 import Swal from "sweetalert2";
-import { mapState, mapMutations } from "vuex";
 
 export default {
-  name: "EntradaInventario",
   data() {
     return {
-      itemID: "",
-      amount: 0,
-      inventory_item: [],
+      tableData: [
+        {
+          id: "",
+          item_id: "",
+          name: "",
+          storing_format_units: "",
+          conversion_factor: "",
+          transferring_format_units: "",
+          warehouse: "",
+        }
+      ],
+      filteredItems: [],
+      inventory_items: [],
       warehouses: [],
-      recieverWarehouse: "",
-      tableData: [],
-      inventory: {
-        id: "",
-        inventory_items: [],
-        warehouse_id: "",
-      },
+      modalVisible: false,
+      selectedWarehouse: '',
+      notes: "",
     };
-  },
-  computed: {
-    ...mapState(["checkboxValue"]),
-    checked: {
-      get() {
-        return this.checkboxValue;
-      },
-    },
-    isSelectDisabled() {
-      return this.tableData.length > 0;
-    },
   },
   mounted() {
     this.$state.navbarTitle = "Entradas de inventario";
-    // Obtener las bodegas
-    axios
-      .get(`${API_URL}/warehouses`)
-      .then((response) => {
-        this.warehouses = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-  watch: {
-    tableData: {
-      deep: true,
-      handler(newTableData) {
-        // Recalcular los valores de transferring_format_units para cada elemento en tableData
-        newTableData.forEach((item) => {
-          item.transferring_format_units =
-            item.storing_format_units * item.conversion_factor;
+    document.addEventListener("keydown", this.handleKeyDown);
+    axios.get(`${API_URL}/warehouses/`)
+        .then(response => {
+          this.warehouses = response.data;
+        })
+        .catch(error => {
+          console.error(error);
         });
-      },
-    },
+  },
+  beforeUnmount() {
+    document.removeEventListener("keydown", this.handleKeyDown);
   },
   methods: {
-    ...mapMutations(["toggleCheckboxValue"]),
-    handleCheckboxChange() {
-      this.toggleCheckboxValue();
+    updateWarehouse(item, warehouseName) {
+      item.warehouse = warehouseName;
     },
-    cancel() {
-      Swal.fire({
-        title: "¿Estás seguro?",
-        text: "Se eliminarán todos los artículos agregados. Esta acción no se puede deshacer.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, cancelar",
-        cancelButtonText: "No, volver",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Reinicia los datos de la tabla o realiza alguna acción adicional
-          this.tableData = [];
-          Swal.fire(
-            "Cancelado",
-            "La transacción ha sido cancelada.",
-            "success"
-          );
-        }
-      });
+    showModal() {
+      this.modalVisible = true;
     },
-    saveTransaction() {
-      if (this.tableData.length === 0) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe agregar al menos un artículo",
-        });
-        return;
-      }
-      for (let item of this.tableData) {
-        const inventoryItem = {
-          id: item.id,
-          item_id: item.item_id,
-          storing_format_units: item.storing_format_units,
-          transferring_format_units: item.transferring_format_units,
-          inventory_id: item.inventory_id,
-          created_at: item.created_at,
-          updated_at: item.updated_at,
-          name: item.name,
-          brand: item.brand,
-          design: item.design,
-          subcategory: item.subcategory,
-          category: item.category,
-          conversion_factor: item.conversion_factor,
-          storing_unit_format_name: item.storing_unit_format_name,
-          transferring_unit_format_name: item.transferring_unit_format_name,
-        };
-        this.inventory.inventory_items.push(inventoryItem);
-        this.inventory.warehouse_id = this.recieverWarehouse.id;
-      }
-      console.log(this.inventory);
-      axios
-        .post(`${API_URL}/inventories/insert_items`, this.inventory)
-        .then((response) => {
-          Swal.fire({
-            icon: "success",
-            title: "Transacción realizada",
-            text: "La transacción se ha realizado con éxito",
-          });
-          console.log(response);
-          this.tableData = [];
-        })
-        .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se pudo realizar la transacción",
-          });
-          console.log(error);
-        });
+    closeModal() {
+      this.modalVisible = false;
     },
-    insertItem() {
-      if (this.itemID === "") {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe ingresar el código del artículo",
-        });
-        return;
-      }
-      if (this.amount <= 0) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe ingresar una cantidad válida",
-        });
-        return;
-      }
-      if (this.recieverWarehouse === "") {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe seleccionar una bodega",
-        });
-        return;
-      }
-      // Realiza la llamada a la API para obtener los datos del artículo
-      axios
-        .get(`${API_URL}/inventory_items/${this.itemID}`)
-        .then((response) => {
-          // Procesa la respuesta de la API
-          this.inventory_item = response.data;
-          // Calcula la cantidad de unidades de almacenamiento
-          this.inventory_item.storing_format_units = this.amount;
-          // Calcula la cantidad de unidades de venta
-          this.inventory_item.transferring_format_units =
-            this.amount * this.inventory_item.conversion_factor;
-          // Agrega el nuevo artículo a la tabla
-          this.tableData.push(this.inventory_item);
-        })
-        .catch((error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se encontró el artículo",
-          });
-          console.log(error);
-        });
+    addItem() {
+      const newItem = {
+        item_id: "",
+        name: "",
+        storing_format_units: "",
+        conversion_factor: "",
+        sale_units: ""
+      };
+      this.tableData.push(newItem);
     },
     removeItem(index) {
-      // Elimina el artículo de la tabla según el índice proporcionado
-      this.tableData.splice(index, 1);
+      if (this.tableData.length > 1) {
+        this.tableData.splice(index, 1);
+      }
     },
-  },
+    searchItem() {
+      const query = this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      if (query !== "") {
+        const url = `${API_URL}/search_items/?data=${query}`;
+        axios.get(url)
+            .then(response => {
+              console.log(response);
+              this.filteredItems = response.data;
+            })
+            .catch(error => {
+              console.error(error);
+            });
+      }
+    },
+    onCellInput(item, field, event) {
+      event.stopPropagation();
+      event.preventDefault();
+      // Actualizar el valor del campo en el objeto item
+      item[field] = event.target.value;
+
+      // Verificar si se está editando la última fila
+      if (item === this.tableData[this.tableData.length - 1]) {
+        // Verificar si el campo del código está lleno en la última fila
+        if (item.item_id.trim() !== "") {
+          // Agregar una nueva fila vacía
+          this.addItem();
+        }
+      }
+
+      // Verificar si se presionó la tecla Enter en las celdas de código o nombre
+      if (event.key === "Enter" && (field === "item_id" || field === "name") && this.selectedWarehouse !== "") {
+        const itemId = item.item_id.trim();
+        const itemName = item.name.trim();
+        if (itemId !== "" || itemName !== "") {
+          let url = `${API_URL}/search_inventory_item?`;
+          if (itemId !== "" && itemName === "") {
+            url += `item_id=${itemId}&warehouse_id=${this.selectedWarehouse.id}`;
+          } else if (itemId === "" && itemName !== "") {
+            url += `name=${itemName}&warehouse_id=${this.selectedWarehouse.id}`;
+          }
+          axios.get(url)
+              .then(response => {
+                const data = response.data;
+
+                // Actualizar los valores de la fila con los datos obtenidos de la API
+                item.id = data.id || "";
+                item.item_id = data.item_id || "";
+                item.name = data.name || "";
+                item.storing_unit_format_name = data.storing_unit_format_name || "";
+                item.conversion_factor = data.conversion_factor || "";
+                item.transferring_unit_format_name = data.transferring_unit_format_name || "";
+
+                // Realizar el cálculo de la cantidad de venta
+                this.calculateSaleUnits(item);
+              })
+              .catch(error => {
+                console.error(error);
+              });
+        }
+      } else if (field === "storing_format_units" || field === "conversion_factor") {
+        // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
+        this.calculateSaleUnits(item);
+      } else if (event.key === "Enter" && this.selectedWarehouse === "") {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Debe seleccionar un almacén",
+          showConfirmButton: true,
+          timer: 1500
+        });
+      }
+    },
+    calculateSaleUnits(item) {
+      const storingUnits = parseFloat(item.storing_format_units);
+      const conversionFactor = parseFloat(item.conversion_factor);
+      if (!isNaN(storingUnits) && !isNaN(conversionFactor)) {
+        const saleUnits = storingUnits * conversionFactor;
+        item.transferring_format_units = saleUnits.toFixed(2);
+      }
+    },
+    saveTransaction() {
+      // Filtrar las filas que tienen todos los campos llenos
+      this.inventory_items = this.tableData.filter(item => {
+        return (
+            item.item_id.trim() !== "" &&
+            item.name.trim() !== "" &&
+            item.storing_format_units !== "" &&
+            item.transferring_format_units !== ""
+        );
+      });
+
+      // Verificar si hay filas válidas
+      if (this.inventory_items.length > 0) {
+        const url = `${API_URL}/inventories/insert_items`;
+        console.log(this.$store.state.user.id);
+        const data = {
+          inventory_items: this.inventory_items,
+          currentDate: this.getCurrentDate(),
+          warehouse_id: this.selectedWarehouse.id,
+          user: this.$store.state.user.id,
+          notes: this.notes
+        };
+
+        axios
+            .post(url, data)
+            .then(response => {
+              // Lógica de respuesta exitosa
+              console.log(response);
+              Swal.fire({
+                icon: "success",
+                title: "Transacción guardada",
+                showConfirmButton: true,
+                timer: 1500
+              });
+              this.tableData = [];
+              this.addItem();
+              this.notes = "";
+              this.selectedWarehouse = "";
+            })
+            .catch(error => {
+              // Lógica de error
+              Swal.fire({
+                icon: "error",
+                title: "Error al guardar la transacción",
+                text: error.message,
+                showConfirmButton: true,
+                timer: 1500
+              });
+            });
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "No hay filas válidas",
+          text: "Debe llenar todos los campos en al menos una fila antes de guardar la transacción.",
+          showConfirmButton: true,
+          timer: 1500
+        });
+      }
+      this.inventory_items = [];
+    },
+    getCurrentDate() {
+      const currentDate = new Date();
+      return currentDate.toLocaleDateString();
+    },
+    handleKeyDown(event) {
+      if (event.shiftKey && event.key === "Tab") {
+        this.showModal();
+      }
+    }
+  }
 };
 </script>
 
-<style lang="scss">
-#form-group {
+<style scoped>
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.document-header {
   margin-bottom: 20px;
 }
 
-#check:checked ~ .form-container {
-  margin-left: 345px;
-}
-
-.table-responsive {
+.table-container {
   overflow-x: auto;
+  max-width: 100%;
 }
 
-#tableContent th {
-  text-align: center;
+.table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.form-container {
-  margin-top: 0px;
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.input {
+  width: 100%;
+  padding: 8px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.form-footer {
+  margin-top: 16px;
+}
+
+.form-group {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  padding: 8px 0;
 }
 
-.form-title {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
+
+/* Estilos del componente modal */
+.modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.form {
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+}
+
+.search-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
+}
 
-  .form-column {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-    flex: 1;
+.search-container label {
+  margin-right: 10px;
+}
 
-    #form-group {
-      margin-bottom: 10px;
-      display: inline-flex;
-
-      .form-label {
-        color: #15386e;
-        font-size: 20px;
-      }
-
-      .form-control {
-        border-radius: 10px;
-        font-size: 17px;
-      }
-
-      .form-select {
-        font-size: 17px;
-      }
-    }
-  }
-
-  .resumen {
-    margin-top: 10px;
-    color: #e26d5a;
-    font-size: 17px;
-    text-align: center;
-
-    p {
-      font-size: 20px;
-    }
-  }
-
-  #form-group.text-center {
-    margin-top: 10px;
-    text-align: center;
-
-    .submit {
-      background-color: #3066be;
-      color: white;
-      height: 40px;
-      width: 200px;
-      text-align: center;
-      border-radius: 10px;
-      border: #3066be;
-    }
-  }
+.search-container input {
+  margin-right: 10px;
 }
 </style>

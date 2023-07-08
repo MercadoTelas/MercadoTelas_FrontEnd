@@ -38,40 +38,16 @@
             </div>
           </div>
 
-          <!-- Submit button -->
-          <button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
-
-          <!-- Register buttons -->
-          <div class="text-center mt-4">
-            <p>¿No tienes una cuenta? <a href="#!">Registrarse</a></p>
-            <p>O inicia sesión con:</p>
-            <div class="d-flex justify-content-center">
-              <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="bi bi-facebook"></i>
-              </button>
-
-              <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="bi bi-google"></i>
-              </button>
-
-              <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="bi bi-twitter"></i>
-              </button>
-
-              <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="bi bi-github"></i>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+      <!-- Submit button -->
+      <button type="submit" class="btn btn-primary full-width d-block" @click="log">Iniciar sesión</button>
+    </form>
   </div>
 </template>
 
-  
 <script>
 import Swal from 'sweetalert2';
+import axios from "axios";
+import {API_URL} from "@/config";
 
 export default {
   methods: {
@@ -79,26 +55,47 @@ export default {
       this.$router.push('/sendEmail');
     },
     login() {
-      // Obtener los valores de correo electrónico y contraseña
+      // Obtener los valores de email electrónico y contraseña
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      console.log(email);
-      console.log(password);
-      // Aquí puedes realizar la verificación de las credenciales
-      if (email === 'admin@gmail.com' && password === 'admin') {
-        // Las credenciales son válidas
-        this.$store.commit('setLoggedIn', true);
-        this.$router.push('/home');
-      } else {
-        // Las credenciales son inválidas, muestra un mensaje de error o realiza alguna acción apropiada
-        console.log('Credenciales inválidas');
-        Swal.fire({
-          icon: 'error',
-          title: 'Error de inicio de sesión',
-          text: 'Credenciales inválidas',
-        });
-      }
-    },
+      let user = {
+        email,
+        password,
+        current_warehouse_logged_id: 1
+      };
+
+      axios.post(`${API_URL}/users/sign_in`, user)
+          .then(response => {
+            const headers = response.headers;
+            const token = headers['authorization'];
+            console.log(response);
+            user = response.data.data;
+            if (response.data.status === 'success') {
+              Swal.fire({
+                icon: 'success',
+                title: '¡Inicio de sesión exitoso!',
+                text: 'Bienvenido',
+                showConfirmButton: false,
+                timer: 1500
+              });
+
+              this.$store.commit('setLoggedIn', true);
+              this.$store.commit('setUser', user);
+              this.$store.commit('setSessionToken', token);
+              this.$router.push('/home');
+            }
+          }).catch(
+          error => {
+            const {response} = error;
+            console.log(response);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de inicio de sesión',
+              text: response.data.message,
+            });
+          });
+
+    }
   },
   mounted() {
     console.log('logged false');

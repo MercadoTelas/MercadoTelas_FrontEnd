@@ -48,11 +48,12 @@ export default {
   },
   methods: {
     onBrandCreate() {
-      const brand = {
+      let brand = {
         brand: {
           name: this.name
         }
       };
+      brand.user = this.$store.state.user.id
       axios.post(API_URL + '/brands', brand)
         .then(response => {
           toast.success('Marca añadida correctamente', {
