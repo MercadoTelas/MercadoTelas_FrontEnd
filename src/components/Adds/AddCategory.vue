@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit.prevent="onCategoryCreate">
+    <form @submit.prevent="onSubmit">
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
@@ -36,53 +36,69 @@ export default {
   data() {
     return {
       name: '',
-      isReadOnly: false
+      isReadOnly: false,
+      type: ''
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
+      this.type = 'edit';
       this.fetchCategoryData(idParam);
     } else {
+      this.type = 'new';
       this.isReadOnly = false;
     }
   },
   methods: {
-    onCategoryCreate() {
+    onSubmit() {
       let category = {
         category: {
           name: this.name
         }
       };
       category.user = this.$store.state.user.id;
-      axios.post(API_URL + '/categories', category).then(response => {
-        // Mostrar Toast de éxito
-        toast.success('Categoría añadida correctamente', {
-          autoClose: 2000, // Duración en milisegundos
-        });
-        console.log(response);
-
-      }).catch(error => {
-        // Show error message
-        toast.error('Error al agregar la Categoría', {
-          autoClose: 2000, // Duración en milisegundos
-        });
-        // Shows why the error was thrown using sweetalert2
-        console.log(error);
-
-
-      });
+      if (this.type === 'new') {
+        this.createCategory(category);
+      } else {
+        this.updateCategory(category);
+      }
     },
-    fetchCategoryData(categoryId) {
-      axios.get(`${API_URL}/categories/${categoryId}`)
+    createCategory(category) {
+      axios.post(`${API_URL}/categories`, category)
         .then(response => {
-          const categoryData = response.data;
-          this.name = categoryData.name;
-          // Asigna otros datos de la categoría a las propiedades correspondientes si es necesario
+          console.log(response);
+          toast.success('Categoría creada exitosamente', { timeout: 5000 });
+          this.$router.push('/categories');
         })
         .catch(error => {
           console.log(error);
+          toast.error('Error al crear la categoría', { closeOnClick: false });
         });
+    },
+    updateCategory(category) {
+      const categoryId = this.$route.params.id;
+      axios.put(`${API_URL}/categories/${categoryId}`, category)
+        .then(response => {
+          console.log(response);
+          toast.success('Categoría actualizada exitosamente', { timeout: 5000 });
+          this.$router.push('/categories');
+        })
+        .catch(error => {
+          console.log(error);
+          toast.error('Error al actualizar la categoría', { closeOnClick: false });
+        });
+    },
+    fetchCategoryData(categoryId) {
+      axios
+          .get(`${API_URL}/categories/${categoryId}`)
+          .then(response => {
+            const categoryData = response.data;
+            this.name = categoryData.name;
+          })
+          .catch(error => {
+            console.log(error);
+          });
     },
   },
   mounted() {

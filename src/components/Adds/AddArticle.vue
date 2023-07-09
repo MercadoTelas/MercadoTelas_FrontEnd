@@ -132,10 +132,9 @@
 
 <script>
 import axios from 'axios';
-import {toast} from 'vue3-toastify';
+import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
-import {API_URL} from "@/config";
+import {API_URL} from '@/config';
 
 export default {
   data() {
@@ -256,27 +255,29 @@ export default {
       }
     },
     updateItem(item) {
-      axios.put(`${API_URL}/items/${item.id}`, item)
+      axios
+          .put(`${API_URL}/items/${item.id}`, item)
           .then(response => {
             console.log(response);
-            toast.success('Artículo actualizado exitosamente');
+            toast.success('Artículo actualizado exitosamente', { timeout: 5000 });
             this.$router.push('/items');
           })
           .catch(error => {
             console.log(error);
-            toast.error('Error al actualizar artículo');
+            toast.error('Error al actualizar artículo', { closeOnClick: false });
           });
     },
     createItem(item) {
-      axios.post(`${API_URL}/items`, item)
+      axios
+          .post(`${API_URL}/items`, item)
           .then(response => {
             console.log(response);
-            toast.success('Artículo creado exitosamente');
+            toast.success('Artículo creado exitosamente', { timeout: 5000 });
             this.$router.push('/items');
           })
           .catch(error => {
             console.log(error);
-            toast.error('Error al crear artículo');
+            toast.error('Error al crear artículo', { closeOnClick: false });
           });
     }
   }
@@ -288,14 +289,6 @@ export default {
   max-width: 600px;
   margin: 0 auto;
   padding: 20px;
-}
-
-.header {
-  text-align: left;
-}
-
-.form-group {
-  margin-bottom: 20px;
 }
 
 .btn-save {

@@ -4,22 +4,22 @@
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
-            <tr>
-              <td class="table-label">Ingrese el nombre de la subcategoría:</td>
-              <td class="table-input">
-                <input type="text" class="form-control" id="subcategory" v-model="name" :disabled="isReadOnly">
-              </td>
-            </tr>
-            <tr>
-              <td class="table-label">Seleccione la categoría a la que se asociará esta subcategoría:</td>
-              <td class="table-input">
-                <select class="form-control" id="category" v-model="category" :disabled="isReadOnly">
-                  <option value="" disabled selected>Seleccione una categoría</option>
-                  <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
-                  </option>
-                </select>
-              </td>
-            </tr>
+          <tr>
+            <td class="table-label">Ingrese el nombre de la subcategoría:</td>
+            <td class="table-input">
+              <input type="text" class="form-control" id="subcategory" v-model="name" :disabled="isReadOnly">
+            </td>
+          </tr>
+          <tr>
+            <td class="table-label">Seleccione la categoría a la que se asociará esta subcategoría:</td>
+            <td class="table-input">
+              <select class="form-control" id="category" v-model="category" :disabled="isReadOnly">
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
+                </option>
+              </select>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -34,8 +34,8 @@
 
 <script>
 import axios from 'axios';
-import { API_URL } from '@/config'
-import { toast } from 'vue3-toastify';
+import {API_URL} from '@/config'
+import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
@@ -44,14 +44,17 @@ export default {
       name: '',
       category: '',
       categories: [],
-      isReadOnly: false
+      isReadOnly: false,
+      type: ''
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
+      this.type = 'edit';
       this.fetchCategoryData(idParam);
     } else {
+      this.type = 'new';
       this.isReadOnly = false;
     }
   },
@@ -72,32 +75,42 @@ export default {
         }
       };
       subcategory.user = this.$store.state.user.id;
+      if (this.type === "new") {
+        this.createSubcategory(subcategory);
+      } else {
+        this.updateSubcategory(subcategory);
+      }
+    },
+    createSubcategory(subcategory) {
       axios.post(API_URL + '/subcategories', subcategory).then(response => {
-        // Mostrar Toast de éxito
-        toast.success('Subcategoría agregada correctamente', {
-          autoClose: 2000, // Duración en milisegundos
-        });
         console.log(response);
+        toast.success('Subcategoría creada exitosamente');
+        this.$router.push('/subcategories');
       }).catch(error => {
-        toast.error('Error al agregar la Subcategoría', {
-          autoClose: 2000, // Duración en milisegundos
-        });
-        const errors = error.response.data;
-        console.log(errors);
+        console.log(error);
+        toast.error('Error al crear la subcategoría');
       });
     },
-    methods: {
-      fetchSubcategoryData(subcategoryId) {
-        axios.get(`${API_URL}/subcategories/${subcategoryId}`)
+    updateSubcategory(subcategory) {
+      const subcategoryId = this.$route.params.id;
+      axios.put(`${API_URL}/subcategories/${subcategoryId}`, subcategory).then(response => {
+        console.log(response);
+        toast.success('Subcategoría actualizada exitosamente');
+        this.$router.push('/subcategories');
+      }).catch(error => {
+        console.log(error);
+        toast.error('Error al actualizar la subcategoría');
+      });
+    },
+    fetchSubcategoryData(subcategoryId) {
+      axios.get(`${API_URL}/subcategories/${subcategoryId}`)
           .then(response => {
             const subcategoryData = response.data;
             this.name = subcategoryData.name;
-            // Asigna otros datos de la subcategoría a las propiedades correspondientes si es necesario
           })
           .catch(error => {
             console.log(error);
           });
-      }
     }
   },
 };

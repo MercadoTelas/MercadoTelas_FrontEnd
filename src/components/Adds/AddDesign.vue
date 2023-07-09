@@ -1,18 +1,18 @@
 <template>
   <div class="container">
-    <form @submit.prevent="onCreateDesign">
+    <form @submit.prevent="onSubmit">
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
-            <tr>
-              <td class="table-label">Ingrese el nombre del diseño:</td>
-              <td class="table-input">
-                <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-x-diamond-fill"></i></span>
-                  <input type="text" class="form-control" id="design" v-model="name" :disabled="isReadOnly">
-                </div>
-              </td>
-            </tr>
+          <tr>
+            <td class="table-label">Ingrese el nombre del diseño:</td>
+            <td class="table-input">
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-x-diamond-fill"></i></span>
+                <input type="text" class="form-control" id="design" v-model="name" :disabled="isReadOnly">
+              </div>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -27,60 +27,77 @@
 
 <script>
 import axios from 'axios';
-import { API_URL } from '@/config';
-import { toast } from 'vue3-toastify';
+import {API_URL} from '@/config';
+import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
     return {
       name: '',
-      isReadOnly: false
+      isReadOnly: false,
+      type: ''
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
+      this.type = 'edit';
       this.fetchCategoryData(idParam);
     } else {
+      this.type = 'new';
       this.isReadOnly = false;
     }
   },
   methods: {
-    onCreateDesign() {
+    onSubmit() {
       let design = {
         design: {
           name: this.name
         }
       };
       design.user = this.$store.state.user.id
-      axios.post(API_URL + '/designs', design).then(response => {
-        // Mostrar Toast de éxito
-        toast.success('Diseño agregado correctamente', {
-          autoClose: 2000, // Duración en milisegundos
-        });
-        console.log(response);
-        this.$router.go(-1);
-      }).catch(error => {
-        toast.error('Error al agregar el Diseño', {
-          autoClose: 2000, // Duración en milisegundos
-        });
-        console.log(error);
-      });
+      if (this.type === 'new') {
+        this.createDesign(design);
+      } else {
+        this.updateDesign(design);
+      }
     },
-    methods: {
-      fetchDesignData(designId) {
-        axios.get(`${API_URL}/designs/${designId}`)
+    createDesign(design) {
+      axios.post(`${API_URL}/designs`, design)
+          .then(response => {
+            console.log(response);
+            toast.success('Diseño creado exitosamente');
+            this.$router.push('/designs');
+          })
+          .catch(error => {
+            console.log(error);
+            toast.error('Error al crear el diseño');
+          });
+    },
+    updateDesign(design) {
+      const designId = this.$route.params.id;
+      axios.put(`${API_URL}/designs/${designId}`, design)
+          .then(response => {
+            console.log(response);
+            toast.success('Diseño actualizado exitosamente');
+            this.$router.push('/designs');
+          })
+          .catch(error => {
+            console.log(error);
+            toast.error('Error al actualizar el diseño');
+          });
+    },
+    fetchDesignData(designId) {
+      axios.get(`${API_URL}/designs/${designId}`)
           .then(response => {
             const designData = response.data;
             this.name = designData.name;
-            // Asigna otros datos del diseño a las propiedades correspondientes si es necesario
           })
           .catch(error => {
             console.log(error);
           });
-      }
-    },
+    }
   },
   mounted() {
     this.$state.navbarTitle = 'Agregar Nuevo Diseño';

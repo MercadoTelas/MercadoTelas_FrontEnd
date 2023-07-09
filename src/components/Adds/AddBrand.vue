@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit.prevent="onBrandCreate">
+    <form @submit.prevent="onSubmit">
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
@@ -35,37 +35,59 @@ export default {
   data() {
     return {
       name: '',
-      isReadOnly: false
+      isReadOnly: false,
+      type: ''
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
+      this.type = 'edit';
       this.fetchBrandData(idParam);
     } else {
       this.isReadOnly = false;
+      this.type = 'new';
     }
   },
+  mounted() {
+    this.$state.navbarTitle = 'Agregar Nueva Marca';
+  },
   methods: {
-    onBrandCreate() {
+    onSubmit() {
       let brand = {
         brand: {
           name: this.name
         }
       };
       brand.user = this.$store.state.user.id
-      axios.post(API_URL + '/brands', brand)
+      if (this.type === 'new') {
+        this.createBrand(brand);
+      } else {
+        this.updateBrand(brand);
+      }
+    },
+    createBrand(brand) {
+      axios.post(`${API_URL}/brands`, brand)
         .then(response => {
-          toast.success('Marca añadida correctamente', {
-            autoClose: 2000 // Duración en milisegundos
-          });
           console.log(response);
-          this.$router.go(-1);
+          toast.success('Marca creada exitosamente', { timeout: 5000 });
+          this.$router.push('/brands');
         })
         .catch(error => {
-          toast.error('Error al agregar la Marca', {
-            autoClose: 2000 // Duración en milisegundos
-          });
+          toast.error('Error al crear la marca', { closeOnClick: false });
+          console.log(error);
+        });
+    },
+    updateBrand(brand) {
+      const brandId = this.$route.params.id;
+      axios.put(`${API_URL}/brands/${brandId}`, brand)
+        .then(response => {
+          console.log(response);
+          toast.success('Marca actualizada exitosamente', { closeOnClick: false });
+          this.$router.push('/brands');
+        })
+        .catch(error => {
+          toast.error('Error al actualizar la marca', { closeOnClick: false });
           console.log(error);
         });
     },
@@ -80,8 +102,6 @@ export default {
           console.log(error);
         });
     }
-  },
-  mounted() {
   }
 };
 </script>
