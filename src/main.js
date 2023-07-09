@@ -41,7 +41,7 @@ import AddWareHouse from './components/Adds/AddWareHouse.vue';
 import LoginUser from './components/Login/LoginUser.vue';
 import RegisterUser from './components/Login/RegisterUser.vue';
 import SendEmail from './components/Login/SendEmail.vue';
-//import ResetPassword from './components/Login/ResetPassword.vue';
+import ResetPassword from './components/Login/ResetPassword.vue';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -108,6 +108,7 @@ const router = createRouter({
         {path: '/users/new', name: 'AddUser', component: RegisterUser, meta: {requiresAuth: true},},
         {path: '/login', component: LoginUser,},
         {path: '/sendEmail', component: SendEmail,},
+        {path: '/resetPassword', component: ResetPassword,},
         {path: '/transactions', name: 'ListTransaction', component: ListTransaction, meta: {requiresAuth: true},},
     ]
 });
