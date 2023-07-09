@@ -1,9 +1,9 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
 
   <div class="add-item container">
@@ -16,7 +16,7 @@
             <td class="table-input" colspan="5">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-123"></i></span>
-                <input type="text" id="code" class="form-control" :value="id" :readonly="isReadOnly">
+                <input type="text" id="id" class="form-control" :readonly="isReadOnly" v-model="id">
               </div>
             </td>
           </tr>
@@ -25,7 +25,7 @@
             <td class="table-input" colspan="5">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
-                <input type="text" id="name" class="form-control" :value="name" :readonly="isReadOnly">
+                <input type="text" id="name" class="form-control" :readonly="isReadOnly" v-model="name">
               </div>
             </td>
           </tr>
@@ -34,16 +34,14 @@
             <td class="table-input">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-dash-square-fill"></i></span>
-                <input type="number" id="minimal_stock" class="form-control" :value="minimal_stock"
-                       :readonly="isReadOnly">
+                <input type="number" id="minimal_stock" class="form-control" v-model="minimal_stock" :readonly="isReadOnly">
               </div>
             </td>
             <td class="table-label">Factor de Conversión:</td>
             <td class="table-input">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-input-cursor"></i></span>
-                <input type="number" id="conversion_factor" class="form-control" :value="conversion_factor"
-                       :readonly="isReadOnly">
+                <input type="number" id="conversion_factor" class="form-control" v-model="conversion_factor" :readonly="isReadOnly">
               </div>
             </td>
           </tr>
@@ -52,16 +50,14 @@
             <td class="table-input">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-postcard"></i></span>
-                <input type="text" id="storing_format_units_name" class="form-control"
-                       :value="storing_format_units_name" :readonly="isReadOnly">
+                <input type="text" id="storing_format_units_name" class="form-control" v-model="storing_format_units_name" :readonly="isReadOnly">
               </div>
             </td>
             <td class="table-label">Unidades de Venta:</td>
             <td class="table-input">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-postcard"></i></span>
-                <input type="text" id="transferring_format_units_name" class="form-control"
-                       :value="transferring_format_units_name" :readonly="isReadOnly">
+                <input type="text" id="transferring_format_units_name" class="form-control" v-model="transferring_format_units_name" :readonly="isReadOnly">
               </div>
             </td>
           </tr>
@@ -70,11 +66,9 @@
             <td class="table-input" colspan="5">
               <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
-                <select id="category" class="form-select" v-model="filter.category" @change="resetSubcategory"
-                        :disabled="isReadOnly">
+                <select id="category" class="form-select" v-model="filter.category" @change="onCategoryChange" :disabled="isReadOnly">
                   <option value="" disabled>Seleccionar categoría</option>
-                  <option v-for="category in categories" :value="category.name" :key="category.name">{{ category.name }}
-                  </option>
+                  <option v-for="category in categories" :value="category.name" :key="category.name">{{ category.name }}</option>
                 </select>
               </div>
             </td>
@@ -142,7 +136,7 @@ import { mapState, mapMutations } from "vuex";
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import {API_URL} from '@/config';
+import { API_URL }from '@/config';
 
 export default {
   data() {
@@ -203,7 +197,7 @@ export default {
     handleImageChange(event) {
       this.image = event.target.files[0];
     },
-    resetSubcategory() {
+    onCategoryChange() {
       this.filter.subcategory = '';
     },
     fetchNewItemData() {
@@ -265,7 +259,8 @@ export default {
         brand_id: this.brand_id,
         image: this.image
       };
-      item.user = this.$store.state.user.id
+      item.user = this.$store.state.user.id;
+      console.log(item);
       if (this.mode === 'edit') {
         this.updateItem(item);
       } else {
