@@ -1,32 +1,50 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
           <label for="search" class="form-label">Buscar diseño:</label>
-          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre">
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            v-model="searchQuery"
+            placeholder="Buscar por nombre"
+          />
         </div>
         <div class="row">
           <div class="col-md-12">
-            <button @click="addDesign" class="btn btn-success">Agregar diseño</button>
+            <button @click="addDesign" class="btn btn-success">
+              Agregar diseño
+            </button>
           </div>
         </div>
         <div class="table-responsive">
           <table class="table table-responsive table-bordered table-secondary">
             <thead>
-            <tr>
-              <th class="text-center">Nombre de Diseño</th>
-              <th class="text-center">Acciones</th>
-            </tr>
+              <tr>
+                <th class="text-center">Nombre de Diseño</th>
+                <th class="text-center">Acciones</th>
+              </tr>
             </thead>
             <tbody>
-            <tr v-for="design in filteredDesigns" :key="design.name">
-              <td class="text-center">{{ design.name }}</td>
-              <td class="text-center">
-                <button @click="editDesign(design)" class="btn btn-secondary">Editar</button>
-                <button @click="deleteDesign(design)" class="btn btn-danger">Eliminar</button>
-              </td>
-            </tr>
+              <tr v-for="design in filteredDesigns" :key="design.name">
+                <td class="text-center">{{ design.name }}</td>
+                <td class="text-center">
+                  <button @click="editDesign(design)" class="btn btn-secondary">
+                    Editar
+                  </button>
+                  <button @click="deleteDesign(design)" class="btn btn-danger">
+                    Eliminar
+                  </button>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -36,73 +54,94 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
+import { mapState, mapMutations } from "vuex";
+import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
 
 export default {
-  name: 'DesignList',
+  name: "DesignList",
   data() {
     return {
       designs: [],
-      searchQuery: '',
+      searchQuery: "",
     };
   },
   computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
     filteredDesigns() {
       return this.designs.filter((design) => {
-        return design.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+        return design.name
+          .toLowerCase()
+          .includes(this.searchQuery.toLowerCase());
       });
-    }
+    },
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     addDesign() {
       // Redirigir a la vista "Agregar Diseño"
-      this.$router.push({name: 'AddDesign'});
+      this.$router.push({ name: "AddDesign" });
     },
     editDesign(design) {
       // Redirigir a la vista "Editar Diseño" con el ID del diseño
-      this.$router.push({name: 'EditDesign', params:{id: design.id}});
+      this.$router.push({ name: "EditDesign", params: { id: design.id } });
     },
     deleteDesign(design) {
       // Lógica para eliminar un diseño
       Swal.fire({
-        title: '¿Estás seguro?',
+        title: "¿Estás seguro?",
         text: `Se eliminará el diseño ${design.name}. Esta acción no se puede deshacer.`,
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
           // Lógica para eliminar el diseño aquí
           // ...
 
           Swal.fire({
-            title: 'Eliminado',
-            text: 'El diseño ha sido eliminado correctamente.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar'
+            title: "Eliminado",
+            text: "El diseño ha sido eliminado correctamente.",
+            icon: "success",
+            confirmButtonText: "Aceptar",
           });
         }
       });
     },
   },
   mounted() {
-    this.$state.navbarTitle = 'Lista de Diseños';
+    this.$state.navbarTitle = "Lista de Diseños";
     // Obtener todos los diseños desde la API
-    axios.get(`${API_URL}/designs`).then(response => {
-      this.designs = response.data;
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+      .get(`${API_URL}/designs`)
+      .then((response) => {
+        this.designs = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
 };
 </script>
 
 <style>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1500px;
+}
+
 .container {
   padding-top: 20px;
   padding-bottom: 20px;

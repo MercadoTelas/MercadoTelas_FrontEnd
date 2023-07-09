@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <div>
       <div v-if="modalVisible">
@@ -7,22 +14,28 @@
           <h2>Búsqueda de artículos</h2>
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
-            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field">
+            <input
+              type="text"
+              id="searchInput"
+              v-model="searchQuery"
+              @keydown.enter="searchItem"
+              class="input-field"
+            />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
             <table class="table table-responsive-lg text-center">
               <thead>
-              <tr>
-                <th class="text-center">Código del artículo</th>
-                <th class="text-center">Nombre del artículo</th>
-              </tr>
+                <tr>
+                  <th class="text-center">Código del artículo</th>
+                  <th class="text-center">Nombre del artículo</th>
+                </tr>
               </thead>
               <tbody>
-              <tr v-for="item in filteredItems" :key="item.id">
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-              </tr>
+                <tr v-for="item in filteredItems" :key="item.id">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -35,9 +48,19 @@
         <h1>Lista de Artículos</h1>
         <div class="form-group ms-0">
           <label for="warehouseSelect">Bodega:</label>
-          <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
+          <select
+            id="warehouseSelect"
+            class="form-select ms-2"
+            v-model="selectedWarehouse"
+          >
             <option value="" disabled selected>Seleccionar</option>
-            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>
+            <option
+              v-for="warehouse in warehouses"
+              :value="warehouse"
+              :key="warehouse.id"
+            >
+              {{ warehouse.name }}
+            </option>
           </select>
         </div>
       </div>
@@ -46,49 +69,70 @@
     <div class="table-container">
       <table class="table table-responsive-lg text-center">
         <thead>
-        <tr>
-          <th class="text-center">Código del artículo</th>
-          <th class="text-center">Nombre del artículo</th>
-          <th class="text-center">Cantidad en unidades de inventario a agregar</th>
-          <th class="text-center">Cantidad en unidades de venta a agregar</th>
-          <th class="text-center">Acciones</th>
-        </tr>
+          <tr>
+            <th class="text-center">Código del artículo</th>
+            <th class="text-center">Nombre del artículo</th>
+            <th class="text-center">
+              Cantidad en unidades de inventario a agregar
+            </th>
+            <th class="text-center">Cantidad en unidades de venta a agregar</th>
+            <th class="text-center">Acciones</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, index) in tableData" :key="index">
-          <td>
-            <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
-                   class="input">
-          </td>
-          <td>
-            <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input">
-          </td>
-          <td>
-            <div class="row align-items-center">
-              <div class="col-8">
-                <input type="number" v-model="item.storing_format_units"
-                       @input="onCellInput(item, 'storing_format_units', $event)" class="input">
+          <tr v-for="(item, index) in tableData" :key="index">
+            <td>
+              <input
+                type="text"
+                v-model="item.item_id"
+                @keydown.enter="onCellInput(item, 'item_id', $event)"
+                class="input"
+              />
+            </td>
+            <td>
+              <input
+                type="text"
+                v-model="item.name"
+                @keydown.enter="onCellInput(item, 'name', $event)"
+                class="input"
+              />
+            </td>
+            <td>
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <input
+                    type="number"
+                    v-model="item.storing_format_units"
+                    @input="onCellInput(item, 'storing_format_units', $event)"
+                    class="input"
+                  />
+                </div>
+                <div class="col-4">
+                  {{ item.storing_unit_format_name }}
+                </div>
               </div>
-              <div class="col-4">
-                {{ item.storing_unit_format_name }}
+            </td>
+            <td>
+              <div class="row align-items-center">
+                <div class="col-8">
+                  <input
+                    type="number"
+                    v-model="item.transferring_format_units"
+                    @input="onCellInput(item, 'sale_units', $event)"
+                    class="input"
+                  />
+                </div>
+                <div class="col-4">
+                  {{ item.transferring_unit_format_name }}
+                </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <div class="row align-items-center">
-              <div class="col-8">
-                <input type="number" v-model="item.transferring_format_units"
-                       @input="onCellInput(item, 'sale_units', $event)" class="input">
-              </div>
-              <div class="col-4">
-                {{ item.transferring_unit_format_name }}
-              </div>
-            </div>
-          </td>
-          <td>
-            <button class="btn btn-danger" @click="removeItem(index)">Eliminar</button>
-          </td>
-        </tr>
+            </td>
+            <td>
+              <button class="btn btn-danger" @click="removeItem(index)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -98,16 +142,18 @@
       <textarea class="form-control" v-model="notes"></textarea>
     </div>
 
-
     <div class="form-footer text-center">
-      <button class="btn btn-success" type="submit" @click="saveTransaction">Guardar transacción</button>
+      <button class="btn btn-success" type="submit" @click="saveTransaction">
+        Guardar transacción
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 import axios from "axios";
-import {API_URL} from "@/config";
+import { API_URL } from "@/config";
 import Swal from "sweetalert2";
 
 export default {
@@ -122,31 +168,44 @@ export default {
           conversion_factor: "",
           transferring_format_units: "",
           warehouse: "",
-        }
+        },
       ],
       filteredItems: [],
       inventory_items: [],
       warehouses: [],
       modalVisible: false,
-      selectedWarehouse: '',
+      selectedWarehouse: "",
       notes: "",
     };
   },
   mounted() {
     this.$state.navbarTitle = "Entradas de inventario";
     document.addEventListener("keydown", this.handleKeyDown);
-    axios.get(`${API_URL}/warehouses/`)
-        .then(response => {
-          this.warehouses = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+    axios
+      .get(`${API_URL}/warehouses/`)
+      .then((response) => {
+        this.warehouses = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   },
   beforeUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     updateWarehouse(item, warehouseName) {
       item.warehouse = warehouseName;
     },
@@ -162,7 +221,7 @@ export default {
         name: "",
         storing_format_units: "",
         conversion_factor: "",
-        sale_units: ""
+        sale_units: "",
       };
       this.tableData.push(newItem);
     },
@@ -172,17 +231,19 @@ export default {
       }
     },
     searchItem() {
-      const query = this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      const query =
+        this.searchQuery === undefined ? "" : this.searchQuery.trim();
       if (query !== "") {
         const url = `${API_URL}/search_items/?data=${query}`;
-        axios.get(url)
-            .then(response => {
-              console.log(response);
-              this.filteredItems = response.data;
-            })
-            .catch(error => {
-              console.error(error);
-            });
+        axios
+          .get(url)
+          .then((response) => {
+            console.log(response);
+            this.filteredItems = response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
     onCellInput(item, field, event) {
@@ -201,7 +262,11 @@ export default {
       }
 
       // Verificar si se presionó la tecla Enter en las celdas de código o nombre
-      if (event.key === "Enter" && (field === "item_id" || field === "name") && this.selectedWarehouse !== "") {
+      if (
+        event.key === "Enter" &&
+        (field === "item_id" || field === "name") &&
+        this.selectedWarehouse !== ""
+      ) {
         const itemId = item.item_id.trim();
         const itemName = item.name.trim();
         if (itemId !== "" || itemName !== "") {
@@ -211,26 +276,32 @@ export default {
           } else if (itemId === "" && itemName !== "") {
             url += `name=${itemName}&warehouse_id=${this.selectedWarehouse.id}`;
           }
-          axios.get(url)
-              .then(response => {
-                const data = response.data;
+          axios
+            .get(url)
+            .then((response) => {
+              const data = response.data;
 
-                // Actualizar los valores de la fila con los datos obtenidos de la API
-                item.id = data.id || "";
-                item.item_id = data.item_id || "";
-                item.name = data.name || "";
-                item.storing_unit_format_name = data.storing_unit_format_name || "";
-                item.conversion_factor = data.conversion_factor || "";
-                item.transferring_unit_format_name = data.transferring_unit_format_name || "";
+              // Actualizar los valores de la fila con los datos obtenidos de la API
+              item.id = data.id || "";
+              item.item_id = data.item_id || "";
+              item.name = data.name || "";
+              item.storing_unit_format_name =
+                data.storing_unit_format_name || "";
+              item.conversion_factor = data.conversion_factor || "";
+              item.transferring_unit_format_name =
+                data.transferring_unit_format_name || "";
 
-                // Realizar el cálculo de la cantidad de venta
-                this.calculateSaleUnits(item);
-              })
-              .catch(error => {
-                console.error(error);
-              });
+              // Realizar el cálculo de la cantidad de venta
+              this.calculateSaleUnits(item);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
         }
-      } else if (field === "storing_format_units" || field === "conversion_factor") {
+      } else if (
+        field === "storing_format_units" ||
+        field === "conversion_factor"
+      ) {
         // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
         this.calculateSaleUnits(item);
       } else if (event.key === "Enter" && this.selectedWarehouse === "") {
@@ -239,7 +310,7 @@ export default {
           title: "Error",
           text: "Debe seleccionar un almacén",
           showConfirmButton: true,
-          timer: 1500
+          timer: 1500,
         });
       }
     },
@@ -253,12 +324,12 @@ export default {
     },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
-      this.inventory_items = this.tableData.filter(item => {
+      this.inventory_items = this.tableData.filter((item) => {
         return (
-            item.item_id.trim() !== "" &&
-            item.name.trim() !== "" &&
-            item.storing_format_units !== "" &&
-            item.transferring_format_units !== ""
+          item.item_id.trim() !== "" &&
+          item.name.trim() !== "" &&
+          item.storing_format_units !== "" &&
+          item.transferring_format_units !== ""
         );
       });
 
@@ -271,42 +342,42 @@ export default {
           currentDate: this.getCurrentDate(),
           warehouse_id: this.selectedWarehouse.id,
           user: this.$store.state.user.id,
-          notes: this.notes
+          notes: this.notes,
         };
 
         axios
-            .post(url, data)
-            .then(response => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              Swal.fire({
-                icon: "success",
-                title: "Transacción guardada",
-                showConfirmButton: true,
-                timer: 1500
-              });
-              this.tableData = [];
-              this.addItem();
-              this.notes = "";
-              this.selectedWarehouse = "";
-            })
-            .catch(error => {
-              // Lógica de error
-              Swal.fire({
-                icon: "error",
-                title: "Error al guardar la transacción",
-                text: error.message,
-                showConfirmButton: true,
-                timer: 1500
-              });
+          .post(url, data)
+          .then((response) => {
+            // Lógica de respuesta exitosa
+            console.log(response);
+            Swal.fire({
+              icon: "success",
+              title: "Transacción guardada",
+              showConfirmButton: true,
+              timer: 1500,
             });
+            this.tableData = [];
+            this.addItem();
+            this.notes = "";
+            this.selectedWarehouse = "";
+          })
+          .catch((error) => {
+            // Lógica de error
+            Swal.fire({
+              icon: "error",
+              title: "Error al guardar la transacción",
+              text: error.message,
+              showConfirmButton: true,
+              timer: 1500,
+            });
+          });
       } else {
         Swal.fire({
           icon: "info",
           title: "No hay filas válidas",
           text: "Debe llenar todos los campos en al menos una fila antes de guardar la transacción.",
           showConfirmButton: true,
-          timer: 1500
+          timer: 1500,
         });
       }
       this.inventory_items = [];
@@ -319,12 +390,17 @@ export default {
       if (event.shiftKey && event.key === "Tab") {
         this.showModal();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1500px;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -367,7 +443,6 @@ export default {
   align-items: center;
   padding: 8px 0;
 }
-
 
 /* Estilos del componente modal */
 .modal-background {

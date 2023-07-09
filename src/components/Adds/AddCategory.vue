@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <form @submit.prevent="onSubmit">
       <div class="table-responsive">
@@ -8,9 +15,17 @@
               <td class="table-label">Nombre de la categoría:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
-                  <input type="text" class="form-control" id="category" name="category" v-model="name"
-                    :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-tag-fill"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="category"
+                    name="category"
+                    v-model="name"
+                    :disabled="isReadOnly"
+                  />
                 </div>
               </td>
             </tr>
@@ -18,96 +33,126 @@
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
-        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
-        <router-link to="/categories" class="btn btn-danger">Cancelar</router-link>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">
+          Guardar cambios
+        </button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">
+          Volver
+        </button>
+        <router-link to="/categories" class="btn btn-danger"
+          >Cancelar</router-link
+        >
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { API_URL } from '@/config'
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
-      name: '',
+      name: "",
       isReadOnly: false,
-      type: ''
+      type: "",
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.type = 'edit';
+      this.type = "edit";
       this.fetchCategoryData(idParam);
     } else {
-      this.type = 'new';
+      this.type = "new";
       this.isReadOnly = false;
     }
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     onSubmit() {
       let category = {
         category: {
-          name: this.name
-        }
+          name: this.name,
+        },
       };
       category.user = this.$store.state.user.id;
-      if (this.type === 'new') {
+      if (this.type === "new") {
         this.createCategory(category);
       } else {
         this.updateCategory(category);
       }
     },
     createCategory(category) {
-      axios.post(`${API_URL}/categories`, category)
-        .then(response => {
+      axios
+        .post(`${API_URL}/categories`, category)
+        .then((response) => {
           console.log(response);
-          toast.success('Categoría creada exitosamente', { timeout: 5000 });
-          this.$router.push('/categories');
+          toast.success("Categoría creada exitosamente", { timeout: 5000 });
+          this.$router.push("/categories");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-          toast.error('Error al crear la categoría', { closeOnClick: false });
+          toast.error("Error al crear la categoría", { closeOnClick: false });
         });
     },
     updateCategory(category) {
       const categoryId = this.$route.params.id;
-      axios.put(`${API_URL}/categories/${categoryId}`, category)
-        .then(response => {
+      axios
+        .put(`${API_URL}/categories/${categoryId}`, category)
+        .then((response) => {
           console.log(response);
-          toast.success('Categoría actualizada exitosamente', { timeout: 5000 });
-          this.$router.push('/categories');
+          toast.success("Categoría actualizada exitosamente", {
+            timeout: 5000,
+          });
+          this.$router.push("/categories");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-          toast.error('Error al actualizar la categoría', { closeOnClick: false });
+          toast.error("Error al actualizar la categoría", {
+            closeOnClick: false,
+          });
         });
     },
     fetchCategoryData(categoryId) {
       axios
-          .get(`${API_URL}/categories/${categoryId}`)
-          .then(response => {
-            const categoryData = response.data;
-            this.name = categoryData.name;
-          })
-          .catch(error => {
-            console.log(error);
-          });
+        .get(`${API_URL}/categories/${categoryId}`)
+        .then((response) => {
+          const categoryData = response.data;
+          this.name = categoryData.name;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nueva Categoría';
+    this.$state.navbarTitle = "Agregar Nueva Categoría";
   },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;

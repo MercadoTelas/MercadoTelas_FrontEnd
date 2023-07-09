@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <form @submit.prevent="onSubmit">
       <div class="table-responsive">
@@ -8,104 +15,140 @@
               <td class="table-label">Ingrese el nombre de la bodega:</td>
               <td class="table-input">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-box-seam-fill"></i></span>
-                <input type="text" class="form-control" id="warehouse" name="warehouse" v-model="name" :disabled="isReadOnly">
-              </div>
+                  <span class="input-group-text"
+                    ><i class="bi bi-box-seam-fill"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="warehouse"
+                    name="warehouse"
+                    v-model="name"
+                    :disabled="isReadOnly"
+                  />
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
-        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
-        <router-link to="/warehouses" class="btn btn-danger">Cancelar</router-link>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">
+          Guardar cambios
+        </button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">
+          Volver
+        </button>
+        <router-link to="/warehouses" class="btn btn-danger"
+          >Cancelar</router-link
+        >
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import { API_URL } from '@/config';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
-      name: '',
+      name: "",
       isReadOnly: false,
-      type: ''
+      type: "",
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.type = 'edit';
+      this.type = "edit";
       this.fetchCategoryData(idParam);
     } else {
-      this.type = 'new';
+      this.type = "new";
       this.isReadOnly = false;
     }
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   methods: {
-    onSubmit(){
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
+    onSubmit() {
       let warehouse = {
         warehouse: {
-          name: this.name
-        }
+          name: this.name,
+        },
       };
-      warehouse.user = this.$store.state.user.id
-      if (this.type === 'new') {
+      warehouse.user = this.$store.state.user.id;
+      if (this.type === "new") {
         this.createWarehouse(warehouse);
       } else {
         this.updateWarehouse(warehouse);
       }
     },
     createWarehouse(warehouse) {
-      axios.post(`${API_URL}/warehouses`, warehouse)
-        .then(response => {
+      axios
+        .post(`${API_URL}/warehouses`, warehouse)
+        .then((response) => {
           console.log(response);
-          toast.success('Bodega creada exitosamente');
-          this.$router.push('/warehouses');
+          toast.success("Bodega creada exitosamente");
+          this.$router.push("/warehouses");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-          toast.error('Error al crear la bodega');
+          toast.error("Error al crear la bodega");
         });
     },
     updateWarehouse(warehouse) {
       const warehouseId = this.$route.params.id;
-      axios.put(`${API_URL}/warehouses/${warehouseId}`, warehouse)
-        .then(response => {
+      axios
+        .put(`${API_URL}/warehouses/${warehouseId}`, warehouse)
+        .then((response) => {
           console.log(response);
-          toast.success('Bodega actualizada exitosamente');
-          this.$router.push('/warehouses');
+          toast.success("Bodega actualizada exitosamente");
+          this.$router.push("/warehouses");
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
-          toast.error('Error al actualizar la bodega');
+          toast.error("Error al actualizar la bodega");
         });
     },
     fetchWarehouseData(warehouseId) {
-    axios.get(`${API_URL}/warehouses/${warehouseId}`)
-      .then(response => {
-        const warehouseData = response.data;
-        this.name = warehouseData.name;
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }
-  }, 
+      axios
+        .get(`${API_URL}/warehouses/${warehouseId}`)
+        .then((response) => {
+          const warehouseData = response.data;
+          this.name = warehouseData.name;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+  },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nueva Bodega';
+    this.$state.navbarTitle = "Agregar Nueva Bodega";
   },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;

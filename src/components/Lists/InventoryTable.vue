@@ -1,10 +1,10 @@
 <template>
   <input
-        type="checkbox"
-        id="check"
-        v-model="checked"
-        @change="handleCheckboxChange"
-      />
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="container-fluid">
     <div class="row">
       <div id="contentDiv" class="col-lg-10 col-md-12">
@@ -14,15 +14,31 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label for="codigo">Código de Artículo:</label>
-                <input type="text" id="codigo" class="form-control" v-model="filter.id" placeholder="Código">
+                <input
+                  type="text"
+                  id="codigo"
+                  class="form-control"
+                  v-model="filter.id"
+                  placeholder="Código"
+                />
               </div>
             </div>
             <div class="col-md-2">
               <div class="form-group">
                 <label for="category">Categoría:</label>
-                <select id="category" class="form-control" v-model="filter.category" @change="resetSubcategory()">
+                <select
+                  id="category"
+                  class="form-control"
+                  v-model="filter.category"
+                  @change="resetSubcategory()"
+                >
                   <option value="" disabled>Seleccionar categoría</option>
-                  <option v-for="category in categories" :value="category.name" :key="category.name">{{ category.name }}
+                  <option
+                    v-for="category in categories"
+                    :value="category.name"
+                    :key="category.name"
+                  >
+                    {{ category.name }}
                   </option>
                 </select>
               </div>
@@ -30,10 +46,19 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label for="subcategory">Subcategoría:</label>
-                <select id="subcategory" class="form-control" v-model="filter.subcategory">
-                  <option value="" disabled selected>Seleccionar subcategoría</option>
-                  <option v-for="subcategory in filteredSubcategories" :value="subcategory.name"
-                          :key="subcategory.name">
+                <select
+                  id="subcategory"
+                  class="form-control"
+                  v-model="filter.subcategory"
+                >
+                  <option value="" disabled selected>
+                    Seleccionar subcategoría
+                  </option>
+                  <option
+                    v-for="subcategory in filteredSubcategories"
+                    :value="subcategory.name"
+                    :key="subcategory.name"
+                  >
                     {{ subcategory.name }}
                   </option>
                 </select>
@@ -42,9 +67,19 @@
             <div class="col-md-2">
               <div class="form-group">
                 <label for="design">Diseño:</label>
-                <select id="design" class="form-control" v-model="filter.design">
+                <select
+                  id="design"
+                  class="form-control"
+                  v-model="filter.design"
+                >
                   <option value="" disabled selected>Seleccionar diseño</option>
-                  <option v-for="design in designs" :value="design.name" :key="design.name">{{ design.name }}</option>
+                  <option
+                    v-for="design in designs"
+                    :value="design.name"
+                    :key="design.name"
+                  >
+                    {{ design.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -53,16 +88,32 @@
                 <label for="brand">Marca:</label>
                 <select id="brand" class="form-control" v-model="filter.brand">
                   <option value="" selected disabled>Seleccionar marca</option>
-                  <option v-for="brand in brands" :value="brand.name" :key="brand.name">{{ brand.name }}</option>
+                  <option
+                    v-for="brand in brands"
+                    :value="brand.name"
+                    :key="brand.name"
+                  >
+                    {{ brand.name }}
+                  </option>
                 </select>
               </div>
             </div>
             <div class="col-md-auto">
               <div class="form-group">
                 <label for="warehouse">Bodega:</label>
-                <select id="warehouse" class="form-control" v-model="filter.warehouse">
+                <select
+                  id="warehouse"
+                  class="form-control"
+                  v-model="filter.warehouse"
+                >
                   <option value="" selected disabled>Seleccionar bodega</option>
-                  <option v-for="warehouse in warehouses" :value="warehouse.name" :key="warehouse.name">{{ warehouse.name }}</option>
+                  <option
+                    v-for="warehouse in warehouses"
+                    :value="warehouse.name"
+                    :key="warehouse.name"
+                  >
+                    {{ warehouse.name }}
+                  </option>
                 </select>
               </div>
             </div>
@@ -71,22 +122,28 @@
           <div class="table-responsive">
             <table class="table">
               <thead>
-              <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Unidades de Entrada</th>
-                <th>Unidades de Salida</th>
-                <th>Bodega</th>
-              </tr>
+                <tr>
+                  <th>Código</th>
+                  <th>Nombre</th>
+                  <th>Unidades de Entrada</th>
+                  <th>Unidades de Salida</th>
+                  <th>Bodega</th>
+                </tr>
               </thead>
               <tbody>
-              <tr v-for="item in filteredItems" :key="item.id">
-                <td>{{ item.item_id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.storing_format_units }} {{ item.storing_unit_format_name }}</td>
-                <td>{{ item.transferring_format_units }} {{ item.transferring_unit_format_name }}</td>
-                <td>{{ item.warehouse }}</td>
-              </tr>
+                <tr v-for="item in filteredItems" :key="item.id">
+                  <td>{{ item.item_id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>
+                    {{ item.storing_format_units }}
+                    {{ item.storing_unit_format_name }}
+                  </td>
+                  <td>
+                    {{ item.transferring_format_units }}
+                    {{ item.transferring_unit_format_name }}
+                  </td>
+                  <td>{{ item.warehouse }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -98,20 +155,20 @@
 
 <script>
 import axios from "axios";
-import {API_URL} from "@/config";
+import { API_URL } from "@/config";
 import { mapState, mapMutations } from "vuex";
 
 export default {
-  name: 'InventoryTable',
+  name: "InventoryTable",
   data() {
     return {
       filter: {
-        id: '',
-        category: '',
-        subcategory: '',
-        design: '',
-        brand: '',
-        warehouse: '',
+        id: "",
+        category: "",
+        subcategory: "",
+        design: "",
+        brand: "",
+        warehouse: "",
       },
       items: [],
       categories: [],
@@ -128,35 +185,46 @@ export default {
       },
     },
     filteredSubcategories() {
-      return this.categories.filter((category) => {
-        return category.name === this.filter.category
-      }).map((category) => {
-        return category.subcategories
-      }).flat()
+      return this.categories
+        .filter((category) => {
+          return category.name === this.filter.category;
+        })
+        .map((category) => {
+          return category.subcategories;
+        })
+        .flat();
     },
     filteredItems() {
       return this.items.filter((item) => {
-        return item.item_id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
-            (this.filter.category === '' || item.category === this.filter.category) &&
-            (this.filter.subcategory === '' || item.subcategory === this.filter.subcategory) &&
-            (this.filter.design === '' || item.design === this.filter.design) &&
-            (this.filter.brand === '' || item.brand === this.filter.brand) &&
-            (this.filter.warehouse === '' || item.warehouse === this.filter.warehouse)
-      })
-    }
+        return (
+          item.item_id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
+          (this.filter.category === "" ||
+            item.category === this.filter.category) &&
+          (this.filter.subcategory === "" ||
+            item.subcategory === this.filter.subcategory) &&
+          (this.filter.design === "" || item.design === this.filter.design) &&
+          (this.filter.brand === "" || item.brand === this.filter.brand) &&
+          (this.filter.warehouse === "" ||
+            item.warehouse === this.filter.warehouse)
+        );
+      });
+    },
   },
   mounted() {
-    this.$state.navbarTitle = 'Inventario';
+    this.$state.navbarTitle = "Inventario";
     //Gets the all elements from the API
-    axios.get(API_URL + '/inventory_items').then(response => {
-      this.items = response.data.items
-      this.categories = response.data.categories
-      this.designs = response.data.designs
-      this.brands = response.data.brands
-      this.warehouses = response.data.warehouses
-    }).catch(error => {
-      console.log(error)
-    });
+    axios
+      .get(API_URL + "/inventory_items")
+      .then((response) => {
+        this.items = response.data.items;
+        this.categories = response.data.categories;
+        this.designs = response.data.designs;
+        this.brands = response.data.brands;
+        this.warehouses = response.data.warehouses;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -164,14 +232,13 @@ export default {
       this.toggleCheckboxValue();
     },
     resetSubcategory() {
-      this.filter.subcategory = ''
+      this.filter.subcategory = "";
     },
   },
 };
 </script>
 
 <style>
-
 #check:checked ~ .container-fluid {
   padding-left: 345px;
 }

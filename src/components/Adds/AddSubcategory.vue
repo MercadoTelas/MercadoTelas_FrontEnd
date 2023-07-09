@@ -1,78 +1,127 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <form @submit.prevent="onCreateSubcategory">
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
-          <tr>
-            <td class="table-label">Ingrese el nombre de la subcategoría:</td>
-            <td class="table-input">
-              <input type="text" class="form-control" id="subcategory" v-model="name" :disabled="isReadOnly">
-            </td>
-          </tr>
-          <tr>
-            <td class="table-label">Seleccione la categoría a la que se asociará esta subcategoría:</td>
-            <td class="table-input">
-              <select class="form-control" id="category" v-model="category" :disabled="isReadOnly">
-                <option value="" disabled selected>Seleccione una categoría</option>
-                <option v-for="category in categories" :key="category.id" :value="category.id">{{ category.name }}
-                </option>
-              </select>
-            </td>
-          </tr>
+            <tr>
+              <td class="table-label">Ingrese el nombre de la subcategoría:</td>
+              <td class="table-input">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="subcategory"
+                  v-model="name"
+                  :disabled="isReadOnly"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="table-label">
+                Seleccione la categoría a la que se asociará esta subcategoría:
+              </td>
+              <td class="table-input">
+                <select
+                  class="form-control"
+                  id="category"
+                  v-model="category"
+                  :disabled="isReadOnly"
+                >
+                  <option value="" disabled selected>
+                    Seleccione una categoría
+                  </option>
+                  <option
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.id"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
-        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
-        <router-link to="/subcategories" class="btn btn-danger">Cancelar</router-link>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">
+          Guardar cambios
+        </button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">
+          Volver
+        </button>
+        <router-link to="/subcategories" class="btn btn-danger"
+          >Cancelar</router-link
+        >
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import {API_URL} from '@/config'
-import {toast} from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
-      name: '',
-      category: '',
+      name: "",
+      category: "",
       categories: [],
       isReadOnly: false,
-      type: ''
+      type: "",
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.type = 'edit';
+      this.type = "edit";
       this.fetchCategoryData(idParam);
     } else {
-      this.type = 'new';
+      this.type = "new";
       this.isReadOnly = false;
     }
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nueva Subcategoría';
-    axios.get(API_URL + '/categories').then(response => {
-      this.categories = response.data;
-    }).catch(error => {
-      console.log(error);
-    });
+    this.$state.navbarTitle = "Agregar Nueva Subcategoría";
+    axios
+      .get(API_URL + "/categories")
+      .then((response) => {
+        this.categories = response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     onCreateSubcategory() {
       let subcategory = {
         subcategory: {
           name: this.name,
-          category_id: this.category
-        }
+          category_id: this.category,
+        },
       };
       subcategory.user = this.$store.state.user.id;
       if (this.type === "new") {
@@ -82,41 +131,53 @@ export default {
       }
     },
     createSubcategory(subcategory) {
-      axios.post(API_URL + '/subcategories', subcategory).then(response => {
-        console.log(response);
-        toast.success('Subcategoría creada exitosamente');
-        this.$router.push('/subcategories');
-      }).catch(error => {
-        console.log(error);
-        toast.error('Error al crear la subcategoría');
-      });
+      axios
+        .post(API_URL + "/subcategories", subcategory)
+        .then((response) => {
+          console.log(response);
+          toast.success("Subcategoría creada exitosamente");
+          this.$router.push("/subcategories");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Error al crear la subcategoría");
+        });
     },
     updateSubcategory(subcategory) {
       const subcategoryId = this.$route.params.id;
-      axios.put(`${API_URL}/subcategories/${subcategoryId}`, subcategory).then(response => {
-        console.log(response);
-        toast.success('Subcategoría actualizada exitosamente');
-        this.$router.push('/subcategories');
-      }).catch(error => {
-        console.log(error);
-        toast.error('Error al actualizar la subcategoría');
-      });
+      axios
+        .put(`${API_URL}/subcategories/${subcategoryId}`, subcategory)
+        .then((response) => {
+          console.log(response);
+          toast.success("Subcategoría actualizada exitosamente");
+          this.$router.push("/subcategories");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Error al actualizar la subcategoría");
+        });
     },
     fetchSubcategoryData(subcategoryId) {
-      axios.get(`${API_URL}/subcategories/${subcategoryId}`)
-          .then(response => {
-            const subcategoryData = response.data;
-            this.name = subcategoryData.name;
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    }
+      axios
+        .get(`${API_URL}/subcategories/${subcategoryId}`)
+        .then((response) => {
+          const subcategoryData = response.data;
+          this.name = subcategoryData.name;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
