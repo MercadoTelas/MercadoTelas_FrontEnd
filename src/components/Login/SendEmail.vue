@@ -4,13 +4,16 @@
       <div class="card-header h5 text-white bg-primary">Restablecimiento de Contraseña</div>
       <div class="card-body px-5">
         <p class="card-text py-3">
-          Ingrese su dirección de email electrónico y le enviaremos un email electrónico con las instrucciones para restablecer su contraseña.
+          Ingrese su dirección de correo electrónico y le enviaremos un correo electrónico con las instrucciones para
+          restablecer su contraseña.
         </p>
-        <div class="form-outline">
-          <input type="email" id="typeEmail" class="form-control my-3" v-model="email" />
-          <label class="form-label" for="typeEmail">Correo electrónico</label>
-        </div>
-        <a href="#" class="btn btn-primary w-100" @click="resetPassword">Restablecer contraseña</a>
+        <form @submit.prevent="resetPassword">
+          <div class="form-outline">
+            <input type="email" id="typeEmail" class="form-control my-3" v-model="email"/>
+            <label class="form-label" for="typeEmail">Correo electrónico</label>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Restablecer contraseña</button>
+        </form>
         <div class="d-flex justify-content-between mt-4">
           <a class="" href="" @click="goToLogin">Iniciar sesión</a>
         </div>
@@ -20,6 +23,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import {API_URL} from "@/config";
+
 export default {
   data() {
     return {
@@ -28,7 +34,16 @@ export default {
   },
   methods: {
     resetPassword() {
-      // Lógica para restablecer la contraseña
+      const user = {
+        user: {
+          email: this.email,
+        }
+      };
+      axios.post(`${API_URL}/users/password/`, user).then((response) => {
+        console.log(response);
+      }).catch((error) => {
+        console.log(error);
+      });
     },
     goToLogin() {
       this.$router.push('/login');
