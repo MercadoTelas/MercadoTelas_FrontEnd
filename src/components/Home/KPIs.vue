@@ -1,5 +1,4 @@
 <template>
-<<<<<<< HEAD:src/components/Home/KPIs.vue
   <div>
     <div class="centered-div">
       <h4 class="text-primary">Top 10 productos con más envíos a tienda</h4>
@@ -12,57 +11,36 @@
     </div>
     <table class="kpi-table">
       <thead>
-        <tr>
-          <th>Código de producto</th>
-          <th>Nombre</th>
-          <th>Cantidad de stock</th>
-          <th>Acciones</th>
-        </tr>
+      <tr>
+        <th>Código de producto</th>
+        <th>Nombre</th>
+        <th>Cantidad de stock</th>
+        <th>Acciones</th>
+      </tr>
       </thead>
       <tbody>
-        <tr v-for="(producto, index) in productos" :key="index">
-          <td>{{ producto.codigo }}</td>
-          <td>{{ producto.nombre }}</td>
-          <td>{{ producto.stock }}</td>
-          <td>
-            <button @click="hacerEntrada(index)">Hacer entrada</button>
-          </td>
-        </tr>
+      <tr v-for="(producto, index) in productos" :key="index">
+        <td>{{ producto.codigo }}</td>
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.stock }}</td>
+        <td>
+          <button @click="hacerEntrada(index)">Hacer entrada</button>
+        </td>
+      </tr>
       </tbody>
     </table>
-=======
-  <div className="chart-container">
-    <canvas ref="chartCanvas"></canvas>
->>>>>>> add_user:src/components/BarsGraphic.vue
   </div>
 </template>
 
 <script>
 import Chart from 'chart.js/auto';
-<<<<<<< HEAD:src/components/Home/KPIs.vue
-=======
 import axios from "axios";
-import {API_URL} from '@/config';
->>>>>>> add_user:src/components/BarsGraphic.vue
+import { API_URL } from '@/config';
 
 export default {
   data() {
     return {
-<<<<<<< HEAD:src/components/Home/KPIs.vue
-      productos: [
-        { codigo: 'P001', nombre: 'Producto 1', stock: 25 },
-        { codigo: 'P002', nombre: 'Producto 2', stock: 18 },
-        { codigo: 'P003', nombre: 'Producto 3', stock: 10 },
-        { codigo: 'P004', nombre: 'Producto 4', stock: 32 }
-      ]
-    };
-  },
-  mounted() {
-    this.createChart();
-  },
-  methods: {
-=======
-      items: []
+      productos: []
     };
   },
   mounted() {
@@ -72,45 +50,42 @@ export default {
     fetchItems() {
       axios.get(`${API_URL}/items`)
           .then((response) => {
-            this.items = response.data.items;
+            this.productos = response.data.items;
             this.createChart();
           })
           .catch((error) => {
             console.log(error);
           });
     },
->>>>>>> add_user:src/components/BarsGraphic.vue
     createChart() {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext('2d');
 
-<<<<<<< HEAD:src/components/Home/KPIs.vue
-      const tiposTelas = ['Algodón', 'Seda', 'Lino', 'Poliéster'];
-      const inventario = [25, 18, 10, 32];
-=======
-      // Ordenar los artículos por cantidad de movimientos de mayor a menor
-      const sortedItems = this.items.sort((a, b) => b.number_of_movements - a.number_of_movements);
+      const tiposTelas = this.productos.map((producto) => producto.nombre);
+      const inventario = this.productos.map((producto) => producto.stock);
+      const sortedItems = this.productos.sort((a, b) => b.stock - a.stock);
 
-      const labels = sortedItems.map(item => item.name);
-      const data = sortedItems.map(item => item.number_of_movements);
->>>>>>> add_user:src/components/BarsGraphic.vue
+      const labels = sortedItems.map((item) => item.nombre);
+      const data = sortedItems.map((item) => item.stock);
 
       new Chart(ctx, {
         type: 'bar',
         data: {
-<<<<<<< HEAD:src/components/Home/KPIs.vue
           labels: tiposTelas,
-          datasets: [{
-            data: inventario,
-=======
-          labels: labels,
-          datasets: [{
-            data: data,
->>>>>>> add_user:src/components/BarsGraphic.vue
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
-          }]
+          datasets: [
+            {
+              data: inventario,
+              labels: labels,
+              datasets: [
+                {
+                  data: data,
+                  backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+                }
+              ]
+            }
+          ]
         },
         options: {
           responsive: true,
@@ -130,34 +105,25 @@ export default {
           }
         }
       });
-<<<<<<< HEAD:src/components/Home/KPIs.vue
     },
     hacerEntrada(index) {
       // Lógica para realizar una entrada en el producto seleccionado
       // Puedes implementar aquí tu código para hacer las modificaciones necesarias en el stock del producto
       // Por ejemplo, puedes usar una llamada a una API o actualizar los datos localmente
       console.log('Haciendo entrada para el producto con índice:', index);
-=======
->>>>>>> add_user:src/components/BarsGraphic.vue
     }
   }
 };
 </script>
-<<<<<<< HEAD:src/components/Home/KPIs.vue
-  
+
 <style>
 .centered-div {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
-  /* Ajusta la altura según tus necesidades */
 }
 
-=======
-
-<style>
->>>>>>> add_user:src/components/BarsGraphic.vue
 .chart-container {
   width: 80%;
   height: 470px;
@@ -166,7 +132,6 @@ export default {
   justify-content: center;
   align-items: center;
 }
-<<<<<<< HEAD:src/components/Home/KPIs.vue
 
 .kpi-table {
   width: 80%;
@@ -206,8 +171,3 @@ export default {
   cursor: not-allowed;
 }
 </style>
-
-  
-=======
-</style>
->>>>>>> add_user:src/components/BarsGraphic.vue

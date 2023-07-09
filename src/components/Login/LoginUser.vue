@@ -12,13 +12,13 @@
 
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="email" class="form-control" required />
+            <input type="email" id="email" class="form-control" required/>
             <label class="form-label" for="email">Correo electrónico</label>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
-            <input type="password" id="password" class="form-control" required />
+            <input type="password" id="password" class="form-control" required/>
             <label class="form-label" for="password">Contraseña</label>
           </div>
 
@@ -27,7 +27,7 @@
             <div class="col d-flex justify-content-center">
               <!-- Checkbox -->
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="remind_me" checked />
+                <input class="form-check-input" type="checkbox" value="" id="remind_me" checked/>
                 <label class="form-check-label" for="remind_me">Recordarme</label>
               </div>
             </div>
@@ -38,9 +38,11 @@
             </div>
           </div>
 
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary full-width d-block" @click="log">Iniciar sesión</button>
-    </form>
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary full-width d-block" @click="log">Iniciar sesión</button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,7 +106,7 @@ export default {
   },
 };
 </script>
-  
+
 <style scoped>
 .background-image {
   background-image: url('../../assets/background_image.jpg');

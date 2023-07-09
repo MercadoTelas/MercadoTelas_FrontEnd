@@ -36,7 +36,6 @@ import AddBrand from './components/Adds/AddBrand.vue';
 import AddSubcategory from './components/Adds/AddSubcategory.vue';
 import AddDesign from './components/Adds/AddDesign.vue';
 import AddWareHouse from './components/Adds/AddWareHouse.vue';
-import RegisterUser from './components/Adds/RegisterUser.vue';
 
 //--Login--
 import LoginUser from './components/Login/LoginUser.vue';
