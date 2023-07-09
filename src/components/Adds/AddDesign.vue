@@ -1,24 +1,43 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <form @submit.prevent="onSubmit">
       <div class="table-responsive">
         <table class="table table-bordered table-secondary">
           <tbody>
-          <tr>
-            <td class="table-label">Ingrese el nombre del diseño:</td>
-            <td class="table-input">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-x-diamond-fill"></i></span>
-                <input type="text" class="form-control" id="design" v-model="name" :disabled="isReadOnly">
-              </div>
-            </td>
-          </tr>
+            <tr>
+              <td class="table-label">Ingrese el nombre del diseño:</td>
+              <td class="table-input">
+                <div class="input-group">
+                  <span class="input-group-text"
+                    ><i class="bi bi-x-diamond-fill"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="design"
+                    v-model="name"
+                    :disabled="isReadOnly"
+                  />
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar cambios</button>
-        <button class="btn btn-danger" type="submit" v-if="isReadOnly">Volver</button>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">
+          Guardar cambios
+        </button>
+        <button class="btn btn-danger" type="submit" v-if="isReadOnly">
+          Volver
+        </button>
         <router-link to="/designs" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -26,86 +45,107 @@
 </template>
 
 <script>
-import axios from 'axios';
-import {API_URL} from '@/config';
-import {toast} from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
-      name: '',
+      name: "",
       isReadOnly: false,
-      type: ''
+      type: "",
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.type = 'edit';
+      this.type = "edit";
       this.fetchCategoryData(idParam);
     } else {
-      this.type = 'new';
+      this.type = "new";
       this.isReadOnly = false;
     }
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     onSubmit() {
       let design = {
         design: {
-          name: this.name
-        }
+          name: this.name,
+        },
       };
-      design.user = this.$store.state.user.id
-      if (this.type === 'new') {
+      design.user = this.$store.state.user.id;
+      if (this.type === "new") {
         this.createDesign(design);
       } else {
         this.updateDesign(design);
       }
     },
     createDesign(design) {
-      axios.post(`${API_URL}/designs`, design)
-          .then(response => {
-            console.log(response);
-            toast.success('Diseño creado exitosamente');
-            this.$router.push('/designs');
-          })
-          .catch(error => {
-            console.log(error);
-            toast.error('Error al crear el diseño');
-          });
+      axios
+        .post(`${API_URL}/designs`, design)
+        .then((response) => {
+          console.log(response);
+          toast.success("Diseño creado exitosamente");
+          this.$router.push("/designs");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Error al crear el diseño");
+        });
     },
     updateDesign(design) {
       const designId = this.$route.params.id;
-      axios.put(`${API_URL}/designs/${designId}`, design)
-          .then(response => {
-            console.log(response);
-            toast.success('Diseño actualizado exitosamente');
-            this.$router.push('/designs');
-          })
-          .catch(error => {
-            console.log(error);
-            toast.error('Error al actualizar el diseño');
-          });
+      axios
+        .put(`${API_URL}/designs/${designId}`, design)
+        .then((response) => {
+          console.log(response);
+          toast.success("Diseño actualizado exitosamente");
+          this.$router.push("/designs");
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error("Error al actualizar el diseño");
+        });
     },
     fetchDesignData(designId) {
-      axios.get(`${API_URL}/designs/${designId}`)
-          .then(response => {
-            const designData = response.data;
-            this.name = designData.name;
-          })
-          .catch(error => {
-            console.log(error);
-          });
-    }
+      axios
+        .get(`${API_URL}/designs/${designId}`)
+        .then((response) => {
+          const designData = response.data;
+          this.name = designData.name;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nuevo Diseño';
+    this.$state.navbarTitle = "Agregar Nuevo Diseño";
   },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;

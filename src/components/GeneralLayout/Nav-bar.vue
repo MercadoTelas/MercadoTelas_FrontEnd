@@ -1,28 +1,20 @@
 <!--suppress JSPotentiallyInvalidConstructorUsage -->
 <template>
-  <div class="nav-wrapper" style="height:110px;">
-    <nav class="navbar navbar-expand-lg" :class="{ 'sticky': isSticky }">
+  <div class="nav-wrapper" style="height: 110px">
+    <nav class="navbar navbar-expand-lg" :class="{ sticky: isSticky }">
       <div class="logo-container">
         <img
           id="logotelas"
           src="../../assets/logo_telas.jpg"
           @click="NavigateToAnotherPage('home')"
-         alt="logo"/>
+          alt="logo"
+        />
       </div>
 
-      <div class="warehouse-select-container">
-        <button class="warehouse-select-button" @click="toggleWarehouseDropdown">
-          {{ senderWarehouse ? senderWarehouse.name : "Seleccionar Bodega" }}
-        </button>
-        <div class="warehouse-dropdown" :class="{ show: showWarehouseDropdown }">
-          <ul>
-            <li v-for="warehouse in warehouses" :key="warehouse.id" @click="selectWarehouse(warehouse)">
-              {{ warehouse.name }}
-            </li>
-          </ul>
-        </div>
+      <div class="title-wrapper">
+        <h1 class="navbar-title">{{ $state.navbarTitle }}</h1>
       </div>
-      <h1 class="navbar-title">{{ $state.navbarTitle }}</h1>
+
       <div class="logo-usuario-container">
         <i
           id="logousuario"
@@ -48,8 +40,8 @@
   height: 110px;
 
   .logo-container {
-    margin-right: 15px;
     margin-left: 15px;
+    margin-right: auto;
 
     #logotelas {
       width: 130px;
@@ -61,12 +53,21 @@
     }
   }
 
-  .navbar-title {
+
+  .title-wrapper {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .title-wrapper .navbar-title {
+    width: fit-content;
     font-size: 34px;
     font-weight: bold;
-    text-align: center;
-    margin-right: 12%;
     flex-grow: 1;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .warehouse-select-container {
@@ -129,24 +130,24 @@
 
 <script>
 import axios from "axios";
-import {API_URL} from "@/config";
+import { API_URL } from "@/config";
 export default {
   data() {
     return {
       isSticky: false,
       showWarehouseDropdown: false,
       selectedWarehouse: null,
-      warehouses: ''
+      warehouses: "",
     };
   },
   mounted() {
     axios.get(API_URL + "/warehouses").then((response) => {
       this.warehouses = response.data;
     });
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     NavigateToAnotherPage(page) {
@@ -165,7 +166,7 @@ export default {
     },
     handleScroll() {
       this.isSticky = window.scrollY > 0;
-    }
+    },
   },
 };
 </script>

@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="add-item container">
     <form class="form-estilo" @submit.prevent="onSubmit">
       <div class="table-responsive">
@@ -131,6 +138,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 import axios from 'axios';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -160,6 +168,12 @@ export default {
     };
   },
   computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
     filteredSubcategories() {
       const selectedCategory = this.categories.find(category => category.name === this.filter.category);
       if (selectedCategory) {
@@ -182,6 +196,10 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     handleImageChange(event) {
       this.image = event.target.files[0];
     },
@@ -285,6 +303,11 @@ export default {
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 600px;
   margin: 0 auto;

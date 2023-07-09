@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
@@ -33,6 +40,7 @@
 </template>
 
 <script>
+import { mapState, mapMutations } from "vuex";
 import Swal from 'sweetalert2';
 import { API_URL } from '@/config';
 import axios from 'axios';
@@ -47,7 +55,19 @@ export default {
       current_user_id: ''
     };
   },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
+  },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     OnCreateUser() {
       const user = {
         name: this.name,
@@ -87,6 +107,11 @@ export default {
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1800px;
+}
+
 .container {
   margin-top: 50px;
 }

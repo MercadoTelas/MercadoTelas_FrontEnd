@@ -25,7 +25,8 @@
     "vue-router": "^4.2.2",
     "vue-toasted": "^1.1.28",
     "vue3-toastify": "^0.1.11",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

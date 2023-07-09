@@ -1,4 +1,11 @@
 <template>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <form @submit.prevent="onSubmit">
       <div class="table-responsive">
@@ -8,8 +15,17 @@
               <td class="table-label">Marca:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-medium"></i></span>
-                  <input type="text" class="form-control" id="brand" name="brand" v-model="name" :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-medium"></i
+                  ></span>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="brand"
+                    name="brand"
+                    v-model="name"
+                    :disabled="isReadOnly"
+                  />
                 </div>
               </td>
             </tr>
@@ -17,8 +33,12 @@
         </table>
       </div>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">Guardar</button>
-        <button class="btn btn-primary" type="submit" v-if="isReadOnly">Guardar cambios</button>
+        <button class="btn btn-primary" type="submit" v-if="!isReadOnly">
+          Guardar
+        </button>
+        <button class="btn btn-primary" type="submit" v-if="isReadOnly">
+          Guardar cambios
+        </button>
         <router-link to="/brands" class="btn btn-danger">Cancelar</router-link>
       </div>
     </form>
@@ -26,87 +46,109 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { API_URL } from '@/config';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { mapState, mapMutations } from "vuex";
+import axios from "axios";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
-      name: '',
+      name: "",
       isReadOnly: false,
-      type: ''
+      type: "",
     };
   },
   created() {
     const idParam = this.$route.params.id;
     if (idParam) {
-      this.type = 'edit';
+      this.type = "edit";
       this.fetchBrandData(idParam);
     } else {
       this.isReadOnly = false;
-      this.type = 'new';
+      this.type = "new";
     }
   },
   mounted() {
-    this.$state.navbarTitle = 'Agregar Nueva Marca';
+    this.$state.navbarTitle = "Agregar Nueva Marca";
+  },
+  computed: {
+    ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
   },
   methods: {
+    ...mapMutations(["toggleCheckboxValue"]),
+    handleCheckboxChange() {
+      this.toggleCheckboxValue();
+    },
     onSubmit() {
       let brand = {
         brand: {
-          name: this.name
-        }
+          name: this.name,
+        },
       };
-      brand.user = this.$store.state.user.id
-      if (this.type === 'new') {
+      brand.user = this.$store.state.user.id;
+      if (this.type === "new") {
         this.createBrand(brand);
       } else {
         this.updateBrand(brand);
       }
     },
     createBrand(brand) {
-      axios.post(`${API_URL}/brands`, brand)
-        .then(response => {
+      axios
+        .post(`${API_URL}/brands`, brand)
+        .then((response) => {
           console.log(response);
-          toast.success('Marca creada exitosamente', { timeout: 5000 });
-          this.$router.push('/brands');
+          toast.success("Marca creada exitosamente", { timeout: 5000 });
+          this.$router.push("/brands");
         })
-        .catch(error => {
-          toast.error('Error al crear la marca', { closeOnClick: false });
+        .catch((error) => {
+          toast.error("Error al crear la marca", { closeOnClick: false });
           console.log(error);
         });
     },
     updateBrand(brand) {
       const brandId = this.$route.params.id;
-      axios.put(`${API_URL}/brands/${brandId}`, brand)
-        .then(response => {
+      axios
+        .put(`${API_URL}/brands/${brandId}`, brand)
+        .then((response) => {
           console.log(response);
-          toast.success('Marca actualizada exitosamente', { closeOnClick: false });
-          this.$router.push('/brands');
+          toast.success("Marca actualizada exitosamente", {
+            closeOnClick: false,
+          });
+          this.$router.push("/brands");
         })
-        .catch(error => {
-          toast.error('Error al actualizar la marca', { closeOnClick: false });
+        .catch((error) => {
+          toast.error("Error al actualizar la marca", { closeOnClick: false });
           console.log(error);
         });
     },
     fetchBrandData(brandId) {
-      axios.get(`${API_URL}/brands/${brandId}`)
-        .then(response => {
+      axios
+        .get(`${API_URL}/brands/${brandId}`)
+        .then((response) => {
           const brandData = response.data;
           this.name = brandData.name;
-         
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1000px;
+}
+
 .container {
   max-width: 800px;
   margin: 0 auto;
