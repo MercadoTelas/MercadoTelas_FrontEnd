@@ -7,6 +7,7 @@ const store = createStore({
         const currentWarehouseLoggedId = localStorage.getItem("current_warehouse_logged_id") || "";
         const sessionTimeout = 600000;
         const sessionToken = localStorage.getItem("sessionToken") || "";
+        const LogAttempts = localStorage.getItem("LogAttempts") === "1";
         let user = null;
 
         try {
@@ -21,6 +22,7 @@ const store = createStore({
             currentWarehouseLoggedId,
             sessionTimeout,
             sessionToken,
+            LogAttempts,
             user
         };
     },
@@ -39,6 +41,9 @@ const store = createStore({
         setSessionToken(state, value) {
             state.sessionToken = value;
             localStorage.setItem("sessionToken", value.toString());
+        },
+        setLogAttempt(state, value) {
+            state.LogAttempts = value; 
         },
         setUser(state, value) {
             state.user = value;
