@@ -36,7 +36,11 @@
                 <tr v-for="item in filteredItems" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
-                  <td style="width: 10px;"><button @click="addItemToTable" class="btn btn-success"><i class="bi bi-plus-circle"></i></button></td>
+                  <td style="width: 10px">
+                    <button @click="addItemToTable" class="btn btn-success">
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -82,20 +86,26 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(item, index) in tableData" :key="index">
+          <tr
+            id="transactionList"
+            v-for="(item, index) in tableData"
+            :key="index"
+          >
             <td>
               <input
+                :id="'ID' + index"
                 type="text"
                 v-model="item.item_id"
-                @keydown.enter="onCellInput(item, 'item_id', $event)"
+                @keydown.enter="onCellInput(item, 'item_id', $event, index)"
                 class="input"
               />
             </td>
             <td>
               <input
+                :id="'ID' + index"
                 type="text"
                 v-model="item.name"
-                @keydown.enter="onCellInput(item, 'name', $event)"
+                @keydown.enter="onCellInput(item, 'name', $event, index)"
                 class="input"
               />
             </td>
@@ -105,7 +115,9 @@
                   <input
                     type="number"
                     v-model="item.storing_format_units"
-                    @input="onCellInput(item, 'storing_format_units', $event)"
+                    @input="
+                      onCellInput(item, 'storing_format_units', $event, index)
+                    "
                     class="input"
                   />
                 </div>
@@ -120,7 +132,9 @@
                   <input
                     type="number"
                     v-model="item.transferring_format_units"
-                    @input="onCellInput(item, 'sale_units', $event)"
+                    @input="
+                      onCellInput(item, 'sale_units', $event, 'ID' + index)
+                    "
                     class="input"
                   />
                 </div>
@@ -130,7 +144,10 @@
               </div>
             </td>
             <td>
-              <button class="btn btn-danger" @click="removeItem(index)">
+              <button
+                class="btn btn-danger"
+                @click="removeItem(index), enableField('ID' + index)"
+              >
                 Eliminar
               </button>
             </td>
@@ -228,8 +245,10 @@ export default {
       this.tableData.push(newItem);
     },
     removeItem(index) {
-      if (this.tableData.length > 1) {
-        this.tableData.splice(index, 1);
+      if (index != this.tableData.length - 1) {
+        if (this.tableData.length > 1) {
+          this.tableData.splice(index, 1);
+        }
       }
     },
     searchItem() {
@@ -248,7 +267,7 @@ export default {
           });
       }
     },
-    onCellInput(item, field, event) {
+    onCellInput(item, field, event, index) {
       event.stopPropagation();
       event.preventDefault();
       // Actualizar el valor del campo en el objeto item
@@ -271,6 +290,7 @@ export default {
       ) {
         const itemId = item.item_id.trim();
         const itemName = item.name.trim();
+
         if (itemId !== "" || itemName !== "") {
           let url = `${API_URL}/search_inventory_item?`;
           if (itemId !== "" && itemName === "") {
@@ -295,6 +315,7 @@ export default {
 
               // Realizar el cálculo de la cantidad de venta
               this.calculateSaleUnits(item);
+              this.disableFields("ID" + index);
             })
             .catch((error) => {
               console.error(error);
@@ -323,6 +344,18 @@ export default {
         const saleUnits = storingUnits * conversionFactor;
         item.transferring_format_units = saleUnits.toFixed(2);
       }
+    },
+    disableFields(id) {
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = true;
+      });
+    },
+    enableField(id) {
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = false;
+      });
     },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
