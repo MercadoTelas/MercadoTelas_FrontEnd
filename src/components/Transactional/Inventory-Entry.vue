@@ -29,12 +29,14 @@
                 <tr>
                   <th class="text-center">Código del artículo</th>
                   <th class="text-center">Nombre del artículo</th>
+                  <th class="text-center"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="item in filteredItems" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
+                  <td style="width: 10px;"><button @click="addItemToTable" class="btn btn-success"><i class="bi bi-plus-circle"></i></button></td>
                 </tr>
               </tbody>
             </table>
@@ -334,7 +336,7 @@ export default {
       });
 
       // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0) {
+      if (this.inventory_items.length > 0 && this.selectedWarehouse === "") {
         const url = `${API_URL}/inventories/insert_items`;
         console.log(this.$store.state.user.id);
         const data = {
