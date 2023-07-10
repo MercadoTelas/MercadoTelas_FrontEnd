@@ -49,7 +49,7 @@ import './styles/custom-bootstrap.scss';
 
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/MercadoTelas_FrontEnd/'),
     routes: [
         {
             path: '',
