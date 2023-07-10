@@ -1,17 +1,18 @@
 <template>
-  
   <input
-      type="checkbox"
-      id="check"
-      v-model="checked"
-      @change="handleCheckboxChange"
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
   />
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-success">Top 10 productos con más envíos a tienda</h4>
+            <h4 class="card-title text-success">
+              Top 10 productos con más envíos a tienda
+            </h4>
             <div class="chart-container">
               <canvas ref="chartCanvas"></canvas>
             </div>
@@ -21,7 +22,9 @@
       <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-danger">Artículos por debajo de la cantidad mínima de stock</h4>
+            <h4 class="card-title text-danger">
+              Artículos por debajo de la cantidad mínima de stock
+            </h4>
             <div class="table-responsive">
               <table class="table table-bordered kpi-table">
                 <thead>
@@ -33,7 +36,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(producto, index) in productos" :key="index">
+                  <tr v-for="(producto, index) in productosLow" :key="index">
                     <td>{{ producto.codigo }}</td>
                     <td>{{ producto.nombre }}</td>
                     <td>{{ producto.stock }}</td>
@@ -52,7 +55,9 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-primary text-center">Últimos movimientos realizados en el inventario</h4>
+            <h4 class="card-title text-primary text-center">
+              Últimos movimientos realizados en el inventario
+            </h4>
             <div class="table-responsive">
               <table class="table table-bordered kpi-table">
                 <thead>
@@ -82,73 +87,155 @@
 
 <script>
 import Chart from 'chart.js/auto';
-import axios from "axios";
+import axios from 'axios';
 import { API_URL } from '@/config';
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useStore } from "vuex";
 
 export default {
-  name: "CombinedComponent",
+  name: 'CombinedComponent',
   data() {
     return {
       sortedMovements: [],
-      productos: [],
+      productosLow: [
+        {
+          codigo: '001',
+          nombre: 'Producto 1',
+          stock: 10
+        },
+        {
+          codigo: '002',
+          nombre: 'Producto 2',
+          stock: 5
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 3',
+          stock: 7
+        },
+        // Agrega más productos de prueba según tu estructura de datos
+      ],
+      productos: [
+        {
+          codigo: '001',
+          nombre: 'Producto 1',
+          stock: 10
+        },
+        {
+          codigo: '002',
+          nombre: 'Producto 2',
+          stock: 5
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 3',
+          stock: 7
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 4',
+          stock: 12
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 5',
+          stock: 45
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 6',
+          stock: 12
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 7',
+          stock: 7
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 8',
+          stock: 1
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 9',
+          stock: 9
+        },
+        {
+          codigo: '003',
+          nombre: 'Producto 10',
+          stock: 5
+        },
+        // Agrega más productos de prueba según tu estructura de datos
+      ],
       movementsData: [
         {
           id: 1,
-          date: "2023-06-01",
-          description: "5 entradas de tela Brush Azul",
-          warehouse: "Bodega 1",
-          responsible: "Andrés Méndez",
+          date: '2023-06-01',
+          description: '5 entradas de tela Brush Azul',
+          warehouse: 'Bodega 1',
+          responsible: 'Andrés Méndez'
         },
         {
           id: 2,
-          date: "2023-06-02",
-          description: "5 salidas de tela Brush Negra",
-          warehouse: "Bodega 2",
-          responsible: "Jane Alfaro",
+          date: '2023-06-02',
+          description: '5 salidas de tela Brush Negra',
+          warehouse: 'Bodega 2',
+          responsible: 'Jane Alfaro'
         },
         {
           id: 3,
-          date: "2023-06-03",
-          description: "3 entradas de rollos de hilo Blanco",
-          warehouse: "Bodega 3",
-          responsible: "Silvia Castro",
-        },
+          date: '2023-06-03',
+          description: '3 entradas de rollos de hilo Blanco',
+          warehouse: 'Bodega 3',
+          responsible: 'Silvia Castro'
+        }
         // Agrega más objetos de movimiento según tu estructura de datos
-      ],
+      ]
     };
   },
   computed: {
-    ...mapState(["checkboxValue"]),
+    ...mapState(['checkboxValue']),
     checked: {
       get() {
         return this.checkboxValue;
-      },
-    },
+      }
+    }
   },
   mounted() {
-    this.fetchItems();
-    this.$router.push("/home");
+    //this.fetchLowItems();
+    //this.fetchItems
+    this.createChart();
+    this.$state.navbarTitle = 'Inicio';
     this.sortedMovements = this.sortMovements();
-    this.$state.navbarTitle = "Inicio";
+    this.productosLow = this.sortedProductsByStock();
     const store = useStore();
-    const user = store.state.user;
-    if (store.state.LogAttempts == false) {
+    if (!this.$store.state.LogAttempts) {
+      const user = this.$store.state.user;
       toast.success(`Hola ${user.name}, bienvenido al sistema de inventario del Mercado de las Telas`, {
         position: 'top-right',
         timeout: 2500,
         closeOnClick: true,
         pauseOnFocusLoss: true,
-        pauseOnHover: true,
+        pauseOnHover: true
       });
       store.commit('setLogAttempt', true);
     }
   },
   methods: {
-    ...mapMutations(["toggleCheckboxValue"]),
+    ...mapMutations(['toggleCheckboxValue']),
+    fetchLowItems() {
+      axios.get(`${API_URL}/low_stock_items`)
+        .then((response) => {
+          this.productosLow = response.data.items;
+          this.createChart();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     fetchItems() {
       axios.get(`${API_URL}/items`)
         .then((response) => {
@@ -163,8 +250,9 @@ export default {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext('2d');
 
-      const tiposTelas = this.productos.map((producto) => producto.nombre);
-      const inventario = this.productos.map((producto) => producto.stock);
+      const sortedProductos = [...this.productos].sort((a, b) => b.stock - a.stock);
+      const tiposTelas = sortedProductos.map((producto) => producto.nombre);
+      const inventario = sortedProductos.map((producto) => producto.stock);
 
       new Chart(ctx, {
         type: 'bar',
@@ -203,20 +291,20 @@ export default {
       const code = 'HBT123';
       const name = 'Tela brush';
       this.$router.push({
-      name: 'EntryMin',
-      params: {
-        code: code,
-        name: name
-      }
-    });
-      
+        name: 'EntryMin',
+        params: {
+          code: code,
+          name: name
+        }
+      });
     },
     sortMovements() {
-      return [...this.movementsData].sort(
-        (a, b) => new Date(b.date) - new Date(a.date)
-      );
+      return [...this.movementsData].sort((a, b) => new Date(b.date) - new Date(a.date));
     },
-  },
+    sortedProductsByStock() {
+      return [...this.productosLow].sort((a, b) => a.stock - b.stock);
+    }
+  }
 };
 </script>
 <style scoped>

@@ -10,29 +10,42 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <form @submit.prevent="OnCreateUser">
-          <div class="form-group">
-            <label for="nombre">Nombre Completo:</label>
-            <input type="text" class="form-control" v-model="name" required>
+          <table class="table table-bordered table-secondary">
+            <tbody>
+              <tr>
+                <td class="table-label">Nombre Completo:</td>
+                <td class="table-input">
+                  <input type="text" class="form-control" v-model="name" required>
+                </td>
+              </tr>
+              <tr>
+                <td class="table-label">Cédula:</td>
+                <td class="table-input">
+                  <input type="text" class="form-control" v-model="idCard" required>
+                </td>
+              </tr>
+              <tr>
+                <td class="table-label">Correo Electrónico:</td>
+                <td class="table-input">
+                  <input type="email" class="form-control" v-model="email" required>
+                </td>
+              </tr>
+              <tr>
+                <td class="table-label">Rol:</td>
+                <td class="table-input">
+                  <select class="form-control" v-model="role" required>
+                    <option value="" disabled selected>Seleccionar rol</option>
+                    <option value="admin">Administrador</option>
+                    <option value="user">Usuario Regular</option>
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="text-center">
+            <button type="submit" class="btn btn-primary">Registrar Usuario</button>
+            <router-link to="/users" class="btn btn-danger">Cancelar</router-link>
           </div>
-          <div class="form-group">
-            <label for="id_card">Cédula:</label>
-            <input type="text" class="form-control" v-model="idCard" required>
-          </div>
-          <div class="form-group">
-            <label for="correo">Correo Electrónico:</label>
-            <input type="email" class="form-control" v-model="email" required>
-          </div>
-          <div class="form-group">
-            <label for="role">Rol:</label>
-            <select class="form-control" v-model="role" required>
-              <option value="" disabled selected>Seleccionar rol</option>
-              <option value="admin">Administrador</option>
-              <option value="user">Usuario Regular</option>
-            </select>
-          </div>
-          <br>
-          <button type="submit" class="btn btn-primary">Registrar Usuario</button>
-          <router-link to="/users" class="btn btn-danger">Cancelar</router-link>
         </form>
       </div>
     </div>
@@ -118,6 +131,21 @@ export default {
 
 .container {
   margin-top: 50px;
+}
+
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: #f8f9fa;
+}
+
+.table-label {
+  width: 30%;
+  font-weight: bold;
+}
+
+.table-input {
+  width: 70%;
 }
 
 .btn {
