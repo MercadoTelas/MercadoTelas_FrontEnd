@@ -1,37 +1,61 @@
 <template>
-  <div class="centered-div">
-    <input
-        type="checkbox"
-        id="check"
-        v-model="checked"
-        @change="handleCheckboxChange"
-    />
-  </div>
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
+
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-6">
-        <div class="card" style="border-radius: 15px;">
+        <div class="card" style="border-radius: 15px">
           <div class="card-body text-center">
             <h4 class="mb-3">{{ user.name }}</h4>
             <form @submit.prevent="changePassword">
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" class="form-control" :value="user.email" readonly />
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  :value="user.email"
+                  readonly
+                />
               </div>
               <div class="form-group mt-4">
                 <label for="currentPassword">Contraseña actual:</label>
-                <input type="password" id="currentPassword" class="form-control" v-model="current_password" />
+                <input
+                  type="password"
+                  id="currentPassword"
+                  class="form-control"
+                  v-model="current_password"
+                />
               </div>
               <div class="form-group mt-4">
                 <label for="newPassword">Nueva contraseña:</label>
-                <input type="password" id="newPassword" class="form-control" v-model="new_password" />
+                <input
+                  type="password"
+                  id="newPassword"
+                  class="form-control"
+                  v-model="new_password"
+                />
               </div>
               <div class="form-group mt-4">
-                <label for="passwordConfirmation">Confirmar nueva contraseña:</label>
-                <input type="password" id="passwordConfirmation" class="form-control" v-model="new_password_confirmation" />
+                <label for="passwordConfirmation"
+                  >Confirmar nueva contraseña:</label
+                >
+                <input
+                  type="password"
+                  id="passwordConfirmation"
+                  class="form-control"
+                  v-model="new_password_confirmation"
+                />
               </div>
               <div class="mt-4">
-                <button type="submit" class="btn btn-primary btn-block">Cambiar contraseña</button>
+                <button type="submit" class="btn btn-primary btn-block">
+                  Cambiar contraseña
+                </button>
               </div>
             </form>
           </div>
@@ -51,15 +75,19 @@ export default {
   name: "MyComponent",
   data() {
     return {
-      checked: false,
       user: {},
       current_password: "",
       new_password: "",
-      new_password_confirmation: ""
+      new_password_confirmation: "",
     };
   },
   computed: {
     ...mapState(["checkboxValue"]),
+    checked: {
+      get() {
+        return this.checkboxValue;
+      },
+    },
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -69,58 +97,56 @@ export default {
     changePassword() {
       if (this.new_password === this.new_password_confirmation) {
         const config = {
-          headers: { Authorization: this.sessionToken }
+          headers: { Authorization: this.sessionToken },
         };
         const data = {
           email: this.user.email,
           current_password: this.current_password,
           new_password: this.new_password,
-          password_confirmation: this.new_password_confirmation
+          password_confirmation: this.new_password_confirmation,
         };
         axios
-            .put(`${API_URL}/users/password`, data, config)
-            .then(response => {
-              Swal.fire({
-                title: "Contraseña actualizada",
-                icon: "success",
-                confirmButtonText: "Aceptar"
-              });
-              console.log(response);
-            })
-            .catch(error => {
-              Swal.fire({
-                title: "Error",
-                text: "No se pudo actualizar la contraseña",
-                icon: "error",
-                confirmButtonText: "Aceptar"
-              });
-              console.log(error);
+          .put(`${API_URL}/users/password`, data, config)
+          .then((response) => {
+            Swal.fire({
+              title: "Contraseña actualizada",
+              icon: "success",
+              confirmButtonText: "Aceptar",
             });
+            console.log(response);
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Error",
+              text: "No se pudo actualizar la contraseña",
+              icon: "error",
+              confirmButtonText: "Aceptar",
+            });
+            console.log(error);
+          });
       } else {
         Swal.fire({
           title: "Error",
           text: "Las contraseñas no coinciden",
           icon: "error",
-          confirmButtonText: "Ok"
+          confirmButtonText: "Ok",
         });
       }
-    }
+    },
   },
   mounted() {
     this.$state.navbarTitle = "Perfil de usuario";
     this.user = JSON.parse(localStorage.getItem("user"));
     this.checked = this.checkboxValue;
     this.sessionToken = localStorage.getItem("sessionToken");
-  }
+  },
 };
 </script>
 
 <style scoped>
-.centered-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
+#check:checked ~ .container {
+  padding-left: 345px;
+  max-width: 1800px;
 }
 
 .container {
