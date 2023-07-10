@@ -157,7 +157,7 @@ export default {
     };
   },
   mounted() {
-    this.$state.navbarTitle = "Salidas de inventario";
+    this.$state.navbarTitle = "Transferencias de inventario";
     document.addEventListener("keydown", this.handleKeyDown);
     axios
       .get(`${API_URL}/warehouses/`)

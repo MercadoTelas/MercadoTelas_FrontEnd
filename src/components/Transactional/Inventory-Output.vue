@@ -342,7 +342,7 @@ export default {
 
           });
       } else {
-        toast.error(`Debe llenar todos los campos en al menos una fila antes de guardar la transacción`, {
+        toast.info(`Debe llenar todos los campos en al menos una fila antes de guardar la transacción`, {
           position: 'top-right',
           timeout: 2000,
           closeOnClick: true,

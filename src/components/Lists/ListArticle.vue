@@ -217,6 +217,10 @@ export default {
   color: #007bff;
 }
 
+.btn {
+  margin: 3px;
+}
+
 .table {
   margin-top: 20px;
 }

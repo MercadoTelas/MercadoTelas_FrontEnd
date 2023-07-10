@@ -9,13 +9,12 @@
             placeholder="Buscar por nombre o cédula" />
         </div>
 
-        <div class="row">
           <div class="col-md-12">
             <button @click="addUser" class="btn btn-success">
               Agregar usuario
             </button>
           </div>
-        </div>
+        
 
         <div class="table-responsive">
           <table class="table table-striped">
@@ -41,9 +40,6 @@
                 </td>
                 <td>{{ user.email }}</td>
                 <td>
-                  <button @click="viewUser(user)" class="btn btn-primary">
-                    Ver usuario
-                  </button>
                   <button @click="deactivateUser(user)" class="btn btn-danger">
                     {{ user.status === "active" ? "Desactivar" : "Activar" }}
                   </button>
@@ -100,10 +96,6 @@ export default {
       // Lógica para agregar un nuevo usuario
       this.$router.push({ name: "AddUser" });
     },
-    viewUser(/*user*/) {
-      // Lógica para ver los detalles de un usuario
-      // ...
-    },
     deactivateUser(user) {
       // Lógica para desactivar un usuario
       if (user.status === "active") {
@@ -125,7 +117,7 @@ export default {
               })
               .then((response) => {
                 toast.success(`Usuario desactivado correctamente`, {
-                  position: 'bottom-right',
+                  position: 'top-right',
                   timeout: 2000,
                   closeOnClick: true,
                   pauseOnFocusLoss: true,
@@ -164,7 +156,7 @@ export default {
               })
               .then((response) => {
                 toast.success(`Usuario activado correctamente`, {
-                  position: 'bottom-right',
+                  position: 'top-right',
                   timeout: 2000,
                   closeOnClick: true,
                   pauseOnFocusLoss: true,
@@ -188,7 +180,7 @@ export default {
     },
   },
   mounted() {
-    this.$state.navbarTitle = "Lista de Usuarios";
+    this.$state.navbarTitle = "Lista de usuarios";
     // Obtener todos los usuarios desde la API
     axios
       .get(API_URL + "/users")

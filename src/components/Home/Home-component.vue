@@ -52,9 +52,9 @@
       <div class="col-lg-12">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-primary">Lista de los últimos movimientos realizados en el inventario</h4>
+            <h4 class="card-title text-primary text-center">Últimos movimientos realizados en el inventario</h4>
             <div class="table-responsive">
-              <table class="table table-bordered">
+              <table class="table table-bordered kpi-table">
                 <thead>
                   <tr>
                     <th>Fecha de movimiento</th>
@@ -200,9 +200,14 @@ export default {
     },
     hacerEntrada(index) {
       // Lógica para realizar una entrada en el producto seleccionado
-      // Puedes implementar aquí tu código para hacer las modificaciones necesarias en el stock del producto
-      // Por ejemplo, puedes usar una llamada a una API o actualizar los datos localmente
-      console.log('Haciendo entrada para el producto con índice:', index);
+      // Implementar aquí tu código para hacer las modificaciones necesarias en el stock del producto
+      toast.success(`Haciendo entrada para el producto con índice: ${index}`, {
+        position: 'top-right',
+        timeout: 2500,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+      });
     },
     sortMovements() {
       return [...this.movementsData].sort(
@@ -215,7 +220,7 @@ export default {
 <style scoped>
 .container-fluid {
   margin-top: 20px;
-  margin-left: 5px;
+  margin-left: auto;
 }
 .centered-div {
   display: flex;

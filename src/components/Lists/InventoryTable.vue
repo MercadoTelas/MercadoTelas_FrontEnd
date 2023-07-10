@@ -9,7 +9,7 @@
     <div class="row">
       <div id="contentDiv" class="col-lg-10 col-md-12">
         <div class="table-container">
-          <h1 class="filter-title text-primary">Filtros</h1>
+          <h2 class="filter-title text-primary">Filtros</h2>
           <div class="filters-container row">
             <div class="col-md-2">
               <div class="form-group">
@@ -98,7 +98,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-auto">
+            <div class="col-md-2">
               <div class="form-group">
                 <label for="warehouse">Bodega:</label>
                 <select
@@ -120,7 +120,7 @@
           </div>
 
           <div class="table-responsive">
-            <table class="table">
+            <table class="table table-bordered">
               <thead>
                 <tr>
                   <th>Código</th>
@@ -277,6 +277,7 @@ export default {
   width: 100%;
   border-collapse: collapse;
 }
+
 
 .table th,
 .table td {
