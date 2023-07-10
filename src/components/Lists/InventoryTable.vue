@@ -347,4 +347,8 @@ export default {
 .container-fluid {
   padding: 20px;
 }
+
+#contentDiv {
+  height: 100%;
+}
 </style>

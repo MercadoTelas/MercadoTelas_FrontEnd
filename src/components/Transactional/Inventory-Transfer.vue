@@ -1,5 +1,10 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
 
   <div class="container">
     <div>
@@ -9,7 +14,13 @@
           <h2>Búsqueda de artículos</h2>
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
-            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field" />
+            <input
+              type="text"
+              id="searchInput"
+              v-model="searchQuery"
+              @keydown.enter="searchItem"
+              class="input-field"
+            />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
@@ -18,17 +29,23 @@
                 <tr>
                   <th class="text-center">Código del artículo</th>
                   <th class="text-center">Nombre del artículo</th>
+                  <th class="text-center"></th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="item in filteredItems" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
+                  <td style="width: 10px">
+                    <button @click="addItemToTable" class="btn btn-success">
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </div>
-          <button @click="closeModal">Cerrar</button>
+          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
         </div>
       </div>
     </div>
@@ -37,18 +54,34 @@
         <h1>Lista de Artículos</h1>
         <div class="form-group ms-0">
           <label for="senderWarehouse">Bodega de origen:</label>
-          <select id="senderWarehouse" class="form-select ms-2" v-model="senderWarehouse">
+          <select
+            id="senderWarehouse"
+            class="form-select ms-2"
+            v-model="senderWarehouse"
+          >
             <option value="" disabled selected>Seleccionar</option>
-            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
+            <option
+              v-for="warehouse in warehouses"
+              :value="warehouse"
+              :key="warehouse.id"
+            >
               {{ warehouse.name }}
             </option>
           </select>
         </div>
         <div class="form-group ms-0">
           <label for="senderWarehouse">Bodega de destino:</label>
-          <select id="senderWarehouse" class="form-select ms-2" v-model="recieverWarehouse">
+          <select
+            id="senderWarehouse"
+            class="form-select ms-2"
+            v-model="recieverWarehouse"
+          >
             <option value="" disabled selected>Seleccionar</option>
-            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
+            <option
+              v-for="warehouse in warehouses"
+              :value="warehouse"
+              :key="warehouse.id"
+            >
               {{ warehouse.name }}
             </option>
           </select>
@@ -74,17 +107,41 @@
         <tbody>
           <tr v-for="(item, index) in tableData" :key="index">
             <td>
-              <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
-                class="input" />
+              <input
+                :id="'ID' + index"
+                type="text"
+                v-model="item.item_id"
+                @keydown.enter="
+                  onCellInput(item, 'item_id', $event, index)
+                "
+                class="input"
+              />
             </td>
             <td>
-              <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input" />
+              <input
+                :id="'ID' + index"
+                type="text"
+                v-model="item.name"
+                @keydown.enter="onCellInput(item, 'name', $event, index)"
+                class="input"
+              />
             </td>
             <td>
               <div class="row align-items-center">
                 <div class="col-8">
-                  <input type="number" v-model="item.storing_format_units"
-                    @input="onCellInput(item, 'storing_format_units', $event)" class="input" />
+                  <input
+                    type="number"
+                    v-model="item.storing_format_units"
+                    @input="
+                      onCellInput(
+                        item,
+                        'storing_format_units',
+                        $event,
+                        'ID' + index
+                      )
+                    "
+                    class="input"
+                  />
                 </div>
                 <div class="col-4">
                   {{ item.storing_unit_format_name }}
@@ -94,8 +151,14 @@
             <td>
               <div class="row align-items-center">
                 <div class="col-8">
-                  <input type="number" v-model="item.transferring_format_units"
-                    @input="onCellInput(item, 'sale_units', $event)" class="input" />
+                  <input
+                    type="number"
+                    v-model="item.transferring_format_units"
+                    @input="
+                      onCellInput(item, 'sale_units', $event, index)
+                    "
+                    class="input"
+                  />
                 </div>
                 <div class="col-4">
                   {{ item.transferring_unit_format_name }}
@@ -103,7 +166,10 @@
               </div>
             </td>
             <td>
-              <button class="btn btn-danger" @click="removeItem(index)">
+              <button
+                class="btn btn-danger"
+                @click="removeItem(index), enableField('ID' + (tableData.length - 1))"
+              >
                 Eliminar
               </button>
             </td>
@@ -129,9 +195,8 @@
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
@@ -157,7 +222,7 @@ export default {
     };
   },
   mounted() {
-    this.$state.navbarTitle = "Transferencias de inventario";
+    this.$state.navbarTitle = "Transferencia de inventario";
     document.addEventListener("keydown", this.handleKeyDown);
     axios
       .get(`${API_URL}/warehouses/`)
@@ -204,8 +269,10 @@ export default {
       this.tableData.push(newItem);
     },
     removeItem(index) {
-      if (this.tableData.length > 1) {
-        this.tableData.splice(index, 1);
+      if (index != this.tableData.length - 1) {
+        if (this.tableData.length > 1) {
+          this.tableData.splice(index, 1);
+        }
       }
     },
     searchItem() {
@@ -224,7 +291,7 @@ export default {
           });
       }
     },
-    onCellInput(item, field, event) {
+    onCellInput(item, field, event, index) {
       event.stopPropagation();
       event.preventDefault();
       // Actualizar el valor del campo en el objeto item
@@ -249,9 +316,9 @@ export default {
         const itemName = item.name.trim();
         if (itemId !== "" || itemName !== "") {
           let url = `${API_URL}/search_inventory_item?`;
-          if (itemId !== "" && itemName === "") {
+          if (itemId !== "" && itemName === "" && this.senderWarehouse !== "" && this.recieverWarehouse !== "") {
             url += `item_id=${itemId}&warehouse_id=${this.senderWarehouse.id}`;
-          } else if (itemId === "" && itemName !== "") {
+          } else if (itemId === "" && itemName !== "" && this.senderWarehouse !== "" && this.recieverWarehouse !== "") {
             url += `name=${itemName}&warehouse_id=${this.senderWarehouse.id}`;
           }
           axios
@@ -271,9 +338,17 @@ export default {
 
               // Realizar el cálculo de la cantidad de venta
               this.calculateSaleUnits(item);
+              this.disableFields("ID" + index);
             })
             .catch((error) => {
               console.error(error);
+              toast.error(`No se encontró el artículo`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
             });
         }
       } else if (
@@ -284,13 +359,26 @@ export default {
         this.calculateSaleUnits(item);
       } else if (event.key === "Enter" && this.senderWarehouse === "") {
         toast.info(`Debe seleccionar un almacén`, {
-          position: 'top-right',
+          position: "top-right",
           timeout: 2000,
           closeOnClick: true,
           pauseOnFocusLoss: true,
           pauseOnHover: true,
         });
       }
+    },
+    disableFields(id) {
+      console.log("Holaaa" + id);
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = true;
+      });
+    },
+    enableField(id) {
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = false;
+      });
     },
     calculateSaleUnits(item) {
       const storingUnits = parseFloat(item.storing_format_units);
@@ -331,7 +419,7 @@ export default {
             // Lógica de respuesta exitosa
             console.log(response);
             toast.success(`Transacción guardada`, {
-              position: 'top-right',
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
@@ -347,7 +435,7 @@ export default {
           .catch((error) => {
             // Lógica de error
             toast.error(`Error al guardar la transacción: ` + error.message, {
-              position: 'top-right',
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
@@ -355,13 +443,16 @@ export default {
             });
           });
       } else {
-        toast.info(`Debe llenar todos los campos en al menos una fila antes de guardar la transacción`, {
-          position: 'top-right',
-          timeout: 2000,
-          closeOnClick: true,
-          pauseOnFocusLoss: true,
-          pauseOnHover: true,
-        });
+        toast.info(
+          `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+          {
+            position: "top-right",
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+          }
+        );
       }
       this.inventory_items = [];
     },
@@ -379,7 +470,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -396,6 +487,8 @@ export default {
 .table-container {
   overflow-x: auto;
   max-width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .table {
