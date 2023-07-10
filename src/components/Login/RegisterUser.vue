@@ -90,6 +90,7 @@ export default {
           });
         })
         .catch((error) => {
+          console.log(error);
           Swal.fire({
             title: 'Error',
             text: error.response.data.message,
