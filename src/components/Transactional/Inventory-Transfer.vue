@@ -168,7 +168,7 @@
             <td>
               <button
                 class="btn btn-danger"
-                @click="removeItem(index), enableField('ID' + index)"
+                @click="removeItem(index), enableField('ID' + (tableData.length - 1))"
               >
                 Eliminar
               </button>
@@ -222,7 +222,7 @@ export default {
     };
   },
   mounted() {
-    this.$state.navbarTitle = "Salidas de inventario";
+    this.$state.navbarTitle = "Transferencia de inventario";
     document.addEventListener("keydown", this.handleKeyDown);
     axios
       .get(`${API_URL}/warehouses/`)

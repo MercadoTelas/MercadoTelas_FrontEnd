@@ -140,7 +140,7 @@
             <td>
               <button
                 class="btn btn-danger"
-                @click="removeItem(index), enableField('ID' + index)"
+                @click="removeItem(index), enableField('ID' + (tableData.length - 1))"
               >
                 Eliminar
               </button>
