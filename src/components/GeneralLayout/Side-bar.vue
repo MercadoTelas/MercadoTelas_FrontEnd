@@ -252,17 +252,17 @@ export default {
           };
 
           axios
-            .delete(`${API_URL}/users/sign_out`, config)
-            .then((response) => {
-              console.log(response);
-              localStorage.removeItem("token");
-              this.$store.commit("setLoggedIn", false);
-              this.$router.push("/login");
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+              .delete(`${API_URL}/users/sign_out`, config)
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
         }
+        localStorage.removeItem("token");
+        this.$store.commit("setLoggedIn", false);
+        this.$router.push("/login");
       });
     },
 
