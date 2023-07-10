@@ -114,7 +114,7 @@
                     type="number"
                     v-model="item.transferring_format_units"
                     @input="
-                      onCellInput(item, 'sale_units', $event, 'ID' + index)
+                      onCellInput(item, 'sale_units', $event, index)
                     "
                     class="input"
                   />
