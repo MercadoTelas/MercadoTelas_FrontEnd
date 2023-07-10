@@ -12,13 +12,13 @@
 
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="email" class="form-control" required/>
+            <input type="email" id="email" class="form-control" required />
             <label class="form-label" for="email">Correo electrónico</label>
           </div>
 
           <!-- Password input -->
           <div class="form-outline mb-4">
-            <input type="password" id="password" class="form-control" required/>
+            <input type="password" id="password" class="form-control" required />
             <label class="form-label" for="password">Contraseña</label>
           </div>
 
@@ -27,7 +27,7 @@
             <div class="col d-flex justify-content-center">
               <!-- Checkbox -->
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="remind_me" checked/>
+                <input class="form-check-input" type="checkbox" value="" id="remind_me" checked />
                 <label class="form-check-label" for="remind_me">Recordarme</label>
               </div>
             </div>
@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import Swal from 'sweetalert2';
 import axios from "axios";
-import {API_URL} from "@/config";
+import { API_URL } from "@/config";
+import Swal from 'sweetalert2';
 
 export default {
   methods: {
@@ -67,28 +67,22 @@ export default {
       };
 
       axios.post(`${API_URL}/users/sign_in`, user)
-          .then(response => {
-            const headers = response.headers;
-            const token = headers['authorization'];
-            console.log(response);
-            user = response.data.data;
-            if (response.data.status === 'success') {
-              Swal.fire({
-                icon: 'success',
-                title: '¡Inicio de sesión exitoso!',
-                text: 'Bienvenido',
-                showConfirmButton: false,
-                timer: 1500
-              });
+        .then(response => {
+          const headers = response.headers;
+          const token = headers['authorization'];
+          console.log(response);
+          user = response.data.data;
+          if (response.data.status === 'success') {
 
-              this.$store.commit('setLoggedIn', true);
-              this.$store.commit('setUser', user);
-              this.$store.commit('setSessionToken', token);
-              this.$router.push('/home');
-            }
-          }).catch(
+            this.$store.commit('setLoggedIn', true);
+            //this.$store.commit('incrementLogAttempts');
+            this.$store.commit('setUser', user);
+            this.$store.commit('setSessionToken', token);
+            this.$router.push('/home');
+          }
+        }).catch(
           error => {
-            const {response} = error;
+            const { response } = error;
             console.log(response);
             Swal.fire({
               icon: 'error',
@@ -100,9 +94,9 @@ export default {
     }
   },
   mounted() {
-    console.log('logged false');
     this.$store.commit('setCheck', false);
     this.$store.commit('setLoggedIn', false);
+    this.$store.commit('setLogAttempt', false);
   },
 };
 </script>

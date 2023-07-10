@@ -122,7 +122,6 @@ app.use(router);
 // Agregar un guardia de navegación para verificar la autenticación en las rutas con requiresAuth: true
 router.beforeResolve((to, from, next) => {
     const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-    console.log(store.state.isLoggedIn);
 
     if (!store.state.isLoggedIn && requiresAuth) {
         next('/login');

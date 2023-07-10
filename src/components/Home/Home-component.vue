@@ -39,9 +39,9 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-//import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import Swal from "sweetalert2";
+import { useStore } from "vuex";
 
 export default {
   name: "MovementTable",
@@ -87,13 +87,18 @@ export default {
     this.$router.push("/home");
     this.sortedMovements = this.sortMovements();
     this.$state.navbarTitle = "Inicio";
-    const user = this.$store.state.user;
-    Swal.fire({
-      title: "Bienvenido",
-      text: "Hola " + user.name + " bienvenido al sistema de inventario del Mercado de las Telas",
-      icon: "success",
-      confirmButtonText: "Ok",
+    const store = useStore();
+    const user = store.state.user;
+    if (store.state.LogAttempts == 0) {
+      toast.success(`Hola ${user.name}, bienvenido al sistema de inventario del Mercado de las Telas`, {
+      position: 'top-right',
+      timeout: 2500,
+      closeOnClick: true,
+      pauseOnFocusLoss: true,
+      pauseOnHover: true,
     });
+    store.commit('setLogAttempt', true);
+    }
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),

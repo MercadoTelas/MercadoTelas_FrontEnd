@@ -9,7 +9,6 @@
 <script>
 import sidebar from "./components/GeneralLayout/Side-bar.vue";
 import navbar from "./components/GeneralLayout/Nav-bar.vue";
-import { useStore } from "vuex";
 
 export default {
   name: "App",
@@ -25,8 +24,6 @@ export default {
     };
   },
   mounted() {
-    const store = useStore();
-    console.log(store.state.isLoggedIn); // Ejemplo de uso de la variable store
   },
   computed: {
     isLoggedIn() {
