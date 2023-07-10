@@ -11,7 +11,7 @@
       <div class="col-lg-6 mb-4">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-title text-primary">Top 10 productos con más envíos a tienda</h4>
+            <h4 class="card-title text-success">Top 10 productos con más envíos a tienda</h4>
             <div class="chart-container">
               <canvas ref="chartCanvas"></canvas>
             </div>

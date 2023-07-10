@@ -1,7 +1,7 @@
 <template>
   <div class="password-reset-form background-image">
     <div class="card text-center overlay">
-      <div class="card-header h2 text-white bg-primary">Restablecimiento de Contraseña</div>
+      <div class="card-header h4 text-white bg-primary">Restablecimiento de Contraseña</div>
       <div class="card-body">
         <p class="card-text py-3">
           Ingrese su dirección de correo electrónico y le enviaremos un correo electrónico con las instrucciones para
@@ -15,7 +15,7 @@
           <button type="submit" class="btn btn-primary w-100 mt-3">Restablecer contraseña</button>
         </form>
         <div class="d-flex justify-content-between mt-4">
-          <a class="text-decoration-none" href="" @click="goToLogin">Iniciar sesión</a>
+          <a class="text-decoration-none" href="" @click="goToLogin">O Inicia sesión</a>
         </div>
       </div>
     </div>
