@@ -198,16 +198,18 @@ export default {
         }
       });
     },
-    hacerEntrada(index) {
+    hacerEntrada() {
       // Lógica para realizar una entrada en el producto seleccionado
-      // Implementar aquí tu código para hacer las modificaciones necesarias en el stock del producto
-      toast.success(`Haciendo entrada para el producto con índice: ${index}`, {
-        position: 'top-right',
-        timeout: 2500,
-        closeOnClick: true,
-        pauseOnFocusLoss: true,
-        pauseOnHover: true,
-      });
+      const code = 'HBT123';
+      const name = 'Tela brush';
+      this.$router.push({
+      name: 'EntryMin',
+      params: {
+        code: code,
+        name: name
+      }
+    });
+      
     },
     sortMovements() {
       return [...this.movementsData].sort(
