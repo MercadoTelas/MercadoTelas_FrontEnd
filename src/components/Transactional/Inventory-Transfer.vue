@@ -274,12 +274,12 @@ export default {
             })
             .catch((error) => {
               console.error(error);
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "No se encontró el artículo",
-                showConfirmButton: true,
-                timer: 1500,
+              toast.error(`No se encontró el artículo`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
               });
             });
         }
@@ -400,7 +400,7 @@ export default {
   margin-bottom: 20px;
 }
 
-..table-container {
+.table-container {
   overflow-x: auto;
   max-width: 100%;
   max-height: 300px;

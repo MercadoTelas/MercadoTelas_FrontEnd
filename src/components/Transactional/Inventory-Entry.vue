@@ -227,7 +227,7 @@ export default {
       this.tableData.push(newItem);
     },
     removeItem(index) {
-      if (index != this.tableData.length - 1) {
+      if (index !== this.tableData.length - 1) {
         if (this.tableData.length > 1) {
           this.tableData.splice(index, 1);
         }
@@ -300,12 +300,12 @@ export default {
             })
             .catch((error) => {
               console.error(error);
-              Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "No se encontró el artículo",
-                showConfirmButton: true,
-                timer: 1500,
+              toast.error(`No se encontró el artículo`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
               });
             });
         }
