@@ -45,7 +45,7 @@
               </tbody>
             </table>
           </div>
-          <button @click="closeModal">Cerrar</button>
+          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
         </div>
       </div>
     </div>
@@ -316,9 +316,9 @@ export default {
         const itemName = item.name.trim();
         if (itemId !== "" || itemName !== "") {
           let url = `${API_URL}/search_inventory_item?`;
-          if (itemId !== "" && itemName === "") {
+          if (itemId !== "" && itemName === "" && this.senderWarehouse !== "" && this.recieverWarehouse !== "") {
             url += `item_id=${itemId}&warehouse_id=${this.senderWarehouse.id}`;
-          } else if (itemId === "" && itemName !== "") {
+          } else if (itemId === "" && itemName !== "" && this.senderWarehouse !== "" && this.recieverWarehouse !== "") {
             url += `name=${itemName}&warehouse_id=${this.senderWarehouse.id}`;
           }
           axios
@@ -342,6 +342,13 @@ export default {
             })
             .catch((error) => {
               console.error(error);
+              toast.error(`No se encontró el artículo`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
             });
         }
       } else if (
@@ -480,6 +487,8 @@ export default {
 .table-container {
   overflow-x: auto;
   max-width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .table {

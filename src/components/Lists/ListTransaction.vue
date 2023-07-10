@@ -9,7 +9,7 @@
     <div class="row">
       <div class="mt-3 mb-4">
         <h3>Salidas</h3>
-        <div class="table-responsive">
+        <div class="table-container">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -47,7 +47,7 @@
 
       <div class="mt-3 mb-4">
         <h3>Entradas</h3>
-        <div class="table-responsive">
+        <div class="table-container">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -84,7 +84,7 @@
       </div>
       <div class="mt-3 mb-4">
         <h3>Transferencias</h3>
-        <div class="table-responsive">
+        <div class="table-container">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -211,7 +211,11 @@ export default {
   background-color: #f2f2f2;
 }
 
-.table-responsive {
+.table-container {
   overflow-x: auto;
+  max-width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
 }
+
 </style>
