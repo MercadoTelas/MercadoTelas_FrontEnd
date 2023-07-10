@@ -1,22 +1,11 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
           <label for="search" class="form-label">Buscar diseño:</label>
-          <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por nombre"
-          />
+          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre" />
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -58,6 +47,9 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "DesignList",
@@ -108,14 +100,12 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar el diseño aquí
-          // ...
-
-          Swal.fire({
-            title: "Eliminado",
-            text: "El diseño ha sido eliminado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
+          toast.success(`Se ha eliminado el diseño correctamente`, {
+            position: 'top-right',
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
           });
         }
       });
@@ -137,7 +127,7 @@ export default {
 </script>
 
 <style>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }

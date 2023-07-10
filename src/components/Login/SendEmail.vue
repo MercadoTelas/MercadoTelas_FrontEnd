@@ -1,7 +1,7 @@
 <template>
   <div class="password-reset-form background-image">
     <div class="card text-center overlay">
-      <div class="card-header h2 text-white bg-primary">Restablecimiento de Contraseña</div>
+      <div class="card-header h4 text-white bg-primary">Restablecimiento de Contraseña</div>
       <div class="card-body">
         <p class="card-text py-3">
           Ingrese su dirección de correo electrónico y le enviaremos un correo electrónico con las instrucciones para
@@ -10,12 +10,12 @@
         <form @submit.prevent="resetPassword" class="text-center">
           <div class="form-group">
             <label class="form-label" for="typeEmail">Correo electrónico</label>
-            <input type="email" id="typeEmail" class="form-control" v-model="email"/>
+            <input type="email" id="typeEmail" class="form-control" v-model="email" />
           </div>
           <button type="submit" class="btn btn-primary w-100 mt-3">Restablecer contraseña</button>
         </form>
         <div class="d-flex justify-content-between mt-4">
-          <a class="text-decoration-none" href="" @click="goToLogin">Iniciar sesión</a>
+          <a class="text-decoration-none" href="" @click="goToLogin">O Inicia sesión</a>
         </div>
       </div>
     </div>
@@ -25,7 +25,8 @@
 <script>
 import axios from "axios";
 import { API_URL } from "@/config";
-import Swal from 'sweetalert2';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -41,22 +42,26 @@ export default {
         }
       };
       axios.post(`${API_URL}/users/password/`, user)
-          .then((response) => {
-            console.log(response);
-            Swal.fire({
-              icon: 'success',
-              title: 'Restablecimiento de contraseña',
-              text: 'Se ha enviado un correo electrónico con las instrucciones para restablecer su contraseña.',
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error en el restablecimiento de contraseña',
-              text: 'Ocurrió un error al enviar el correo electrónico de restablecimiento de contraseña. Por favor, inténtelo nuevamente.',
-            });
+        .then((response) => {
+          console.log(response);
+          toast.success(`Se ha enviado un correo electrónico con las instrucciones para restablecer su contraseña`, {
+            position: 'bottom-right',
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
           });
+        })
+        .catch((error) => {
+          console.log(error);
+          toast.error(`Error en el restablecimiento de contraseña`, {
+            position: 'bottom-right',
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+          });
+        });
     },
     goToLogin() {
       this.$router.push('/login');

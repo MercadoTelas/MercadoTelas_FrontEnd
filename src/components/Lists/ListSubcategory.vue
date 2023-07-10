@@ -71,6 +71,9 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "SubcategoryList",
@@ -134,13 +137,13 @@ export default {
           this.subcategories = this.subcategories.filter(
             (s) => s.id !== subcategory.id
           );
-
-          Swal.fire({
-            title: "Eliminada",
-            text: "La subcategoría ha sido eliminada correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          });
+          toast.success(`Se ha eliminado la subcategoría correctamente`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
         }
       });
     },

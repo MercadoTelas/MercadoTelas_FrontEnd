@@ -69,6 +69,9 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "WarehouseList",
@@ -115,15 +118,14 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar la bodega aquí
-          // ...
+          toast.success(`Se ha eliminado la bodega correctamente`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
 
-          Swal.fire({
-            title: "Eliminada",
-            text: "La bodega ha sido eliminada correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          });
         }
       });
     },

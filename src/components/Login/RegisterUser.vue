@@ -41,9 +41,10 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import Swal from 'sweetalert2';
 import { API_URL } from '@/config';
 import axios from 'axios';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -77,12 +78,13 @@ export default {
       };
       axios.post(`${API_URL}/users`, {user, creator_user_id: this.current_user_id})
         .then(() => {
-          Swal.fire({
-            title: 'Usuario registrado',
-            text: 'El usuario ha sido registrado exitosamente',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-          }).then(() => {
+          toast.success(`El usuario ha sido registrado exitosamente`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            }).then(() => {
             this.name = '';
             this.idCard = '';
             this.email ='';
@@ -91,12 +93,13 @@ export default {
         })
         .catch((error) => {
           console.log(error);
-          Swal.fire({
-            title: 'Error',
-            text: error.response.data.message,
-            icon: 'error',
-            confirmButtonText: 'Aceptar',
-          });
+          toast.error(`Error al registrar el usuario`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
         });
     },
   },
