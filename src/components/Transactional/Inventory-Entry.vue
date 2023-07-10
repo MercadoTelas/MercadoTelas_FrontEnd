@@ -202,7 +202,7 @@ export default {
       this.tableData.push(newItem);
     },
     removeItem(index) {
-      if (index != this.tableData.length - 1) {
+      if (index !== this.tableData.length - 1) {
         if (this.tableData.length > 1) {
           this.tableData.splice(index, 1);
         }
@@ -320,7 +320,7 @@ export default {
       });
 
       // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0 && this.selectedWarehouse === "") {
+      if (this.inventory_items.length > 0 && this.selectedWarehouse !== "") {
         const url = `${API_URL}/inventories/insert_items`;
         console.log(this.$store.state.user.id);
         const data = {

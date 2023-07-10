@@ -310,7 +310,7 @@ export default {
       if (
         event.key === "Enter" &&
         (field === "item_id" || field === "name") &&
-        this.senderWarehouse !== ""
+        this.senderWarehouse !== "" && this.recieverWarehouse !== ""
       ) {
         const itemId = item.item_id.trim();
         const itemName = item.name.trim();
@@ -357,7 +357,7 @@ export default {
       ) {
         // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
         this.calculateSaleUnits(item);
-      } else if (event.key === "Enter" && this.senderWarehouse === "") {
+      } else if (event.key === "Enter" && this.senderWarehouse !== "" && this.recieverWarehouse === "") {
         toast.info(`Debe seleccionar un almacén`, {
           position: "top-right",
           timeout: 2000,
@@ -400,7 +400,7 @@ export default {
       });
 
       // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0) {
+      if (this.inventory_items.length > 0 && this.senderWarehouse !== "" && this.recieverWarehouse !== "") {
         const url = `${API_URL}/inventories/transfer_items`;
         console.log(this.$store.state.user.id);
         const data = {

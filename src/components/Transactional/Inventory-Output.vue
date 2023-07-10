@@ -370,7 +370,7 @@ export default {
       });
 
       // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0) {
+      if (this.inventory_items.length > 0 && this.selectedWarehouse !== "") {
         const url = `${API_URL}/inventories/remove_items`;
         console.log(this.$store.state.user.id);
         const data = {
