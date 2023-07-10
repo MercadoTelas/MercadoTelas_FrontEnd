@@ -470,3 +470,180 @@ export default {
   margin-right: 10px;
 }
 </style>
+
+<!--
+
+  Componente para manejar las transferencias de inventario
+
+Estructura del Template
+-----------------------
+
+El bloque `<template>` define la estructura del componente utilizando elementos HTML y directivas de Vue.js. A continuación se explica cada elemento y directiva del componente:
+
+- `<input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />`: Representa un checkbox que permite a los usuarios activar o desactivar una opción. Utiliza la directiva `v-model` para enlazar su estado al valor de la propiedad `checked` en los datos del componente. También tiene un listener `@change` que invoca el método `handleCheckboxChange` cuando el estado del checkbox cambia.
+
+- `<div class="container">`: Actúa como un contenedor principal para el componente.
+
+- `<div>`: Contenedor anidado utilizado para agrupar elementos.
+
+- `<div v-if="modalVisible">`: Este bloque de código se muestra solo si la propiedad `modalVisible` en los datos del componente es verdadera. Contiene el modal para la búsqueda de artículos.
+
+- `<div class="modal-background"></div>`: Representa el fondo oscuro del modal.
+
+- `<div class="modal-content container-md">`: Representa el contenido del modal. Tiene una clase `container-md` que establece su ancho.
+
+- `<h2>Búsqueda de artículos</h2>`: Título del modal.
+
+- `<div class="search-container">`: Contenedor para el formulario de búsqueda. Contiene una etiqueta, un campo de entrada de texto y un botón de búsqueda.
+
+- `<label for="searchInput">Buscar por Nombre o Código:</label>`: Etiqueta para el campo de entrada de búsqueda.
+
+- `<input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field" />`: Campo de entrada de texto para la búsqueda de artículos. Utiliza la directiva `v-model` para enlazar su valor a la propiedad `searchQuery` en los datos del componente. También tiene un listener `@keydown.enter` que invoca el método `searchItem` cuando se presiona la tecla Enter.
+
+- `<button @click="searchItem" class="btn btn-success">Buscar</button>`: Botón de búsqueda. Invoca el método `searchItem` cuando se hace clic en él.
+
+- `<div class="table-container">`: Contenedor para la tabla que muestra los resultados de búsqueda.
+
+- `<table class="table table-responsive-lg text-center">`: Tabla para mostrar los resultados de búsqueda. Tiene clases de CSS para aplicar estilos de tabla responsiva y centrar el texto.
+
+- `<thead>`: Encabezado de la tabla.
+
+- `<tr>`: Fila de encabezado de la tabla.
+
+- `<th class="text-center">Código del artículo</th>`: Celda de encabezado para el código del artículo.
+
+- `<th class="text-center">Nombre del artículo</th>`: Celda de encabezado para el nombre del artículo.
+
+- `<tbody>`: Cuerpo de la tabla.
+
+- `<tr v-for="item in filteredItems" :key="item.id">`: Ciclo `v-for` que itera sobre los elementos filtrados y crea una fila en la tabla para cada elemento. Utiliza la propiedad especial `:key` para asignar una clave única a cada fila.
+
+- `<td>{{ item.id }}</td>`: Celda que muestra el ID del artículo.
+
+- `<td>{{ item.name }}</td>`: Celda que muestra el nombre del artículo.
+
+- `<button @click="closeModal" class="btn btn-danger">Cerrar</button>`: Botón para cerrar el modal. Invoca el método `closeModal` cuando se hace clic en él.
+
+- `<div class="document-header">`: Encabezado del documento.
+
+- `<div class="row">`: Fila de encabezado del documento.
+
+- `<h1>Lista de Artículos</h1>`: Título principal del documento.
+
+- `<div class="form-group ms-0">`: Contenedor para el campo de selección de bodega. Utiliza la clase de CSS `ms-0` para eliminar el margen derecho.
+
+- `<label for="senderWarehouse">Bodega de origen:</label>`: Etiqueta para el campo de selección de bodega de origen.
+
+- `<select id="senderWarehouse" class="form-select ms-2" v-model="senderWarehouse">`: Campo de selección de bodega de origen. Utiliza la directiva `v-model` para enlazar su valor a la propiedad `senderWarehouse` en los datos del componente.
+
+- `<option value="" disabled selected>Seleccionar</option>`: Opción desactivada y seleccionada por defecto.
+
+- `<option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>`: Ciclo `v-for` que itera sobre el array `warehouses` y crea una opción para cada bodega. Utiliza las propiedades `value` y `key` para establecer los valores y claves correspondientes.
+
+- `<div class="form-group ms-0">`: Contenedor para el campo de selección de bodega de destino. Utiliza la clase de CSS `ms-0` para eliminar el margen derecho.
+
+- `<label for="senderWarehouse">Bodega de destino:</label>`: Etiqueta para el campo de selección de bodega de destino.
+
+- `<select id="senderWarehouse" class="form-select ms-2" v-model="recieverWarehouse">`: Campo de selección de bodega de destino. Utiliza la directiva `v-model` para enlazar su valor a la propiedad `recieverWarehouse` en los datos del componente.
+
+- `<option value="" disabled selected>Seleccionar</option>`: Opción desactivada y seleccionada por defecto.
+
+- `<option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">{{ warehouse.name }}</option>`: Ciclo `v-for` que itera sobre el array `warehouses` y crea una opción para cada bodega. Utiliza las propiedades `value` y `key` para establecer los valores y claves correspondientes.
+
+- `<p>Fecha: {{ getCurrentDate() }}</p>`: Párrafo que muestra la fecha actual utilizando la interpolación de Vue.js y el método `getCurrentDate`.
+
+- `<div class="table-container">`: Contenedor para la tabla de artículos.
+
+- `<table class="table table-responsive-lg text-center">`: Tabla de artículos. Tiene clases de CSS para aplicar estilos de tabla responsiva y centrar el texto.
+
+- `<thead>`: Encabezado de la tabla.
+
+- `<tr>`: Fila de encabezado de la tabla.
+
+- `<th class="text-center">Código del artículo</th>`: Celda de encabezado para el código del artículo.
+
+- `<th class="text-center">Nombre del artículo</th>`: Celda de encabezado para el nombre del artículo.
+
+- `<th class="text-center">Cantidad en unidades
+
+de inventario a transferir</th>`: Celda de encabezado para la cantidad de unidades de inventario a transferir.
+
+- `<th class="text-center">Cantidad en unidades de venta a transferir</th>`: Celda de encabezado para la cantidad de unidades de venta a transferir.
+
+- `<th class="text-center">Acciones</th>`: Celda de encabezado para las acciones.
+
+- `<tbody>`: Cuerpo de la tabla.
+
+- `<tr v-for="(item, index) in tableData" :key="index">`: Ciclo `v-for` que itera sobre el array `tableData` y crea una fila en la tabla para cada elemento. Utiliza la propiedad especial `:key` para asignar una clave única a cada fila.
+
+- `<td>`: Celda para el campo "Código del artículo". Contiene un campo de entrada de texto enlazado a la propiedad `item.item_id`. Utiliza la directiva `v-model` para enlazar su valor al dato del componente.
+
+- `<td>`: Celda para el campo "Nombre del artículo". Contiene un campo de entrada de texto enlazado a la propiedad `item.name`. Utiliza la directiva `v-model` para enlazar su valor al dato del componente.
+
+- `<td>`: Celda para el campo "Cantidad en unidades de inventario a transferir". Contiene una fila con dos columnas. La columna izquierda contiene un campo de entrada numérico enlazado a la propiedad `item.storing_format_units`. La columna derecha muestra el nombre del formato de unidad de almacenamiento.
+
+- `<td>`: Celda para el campo "Cantidad en unidades de venta a transferir". Contiene una fila con dos columnas. La columna izquierda contiene un campo de entrada numérico enlazado a la propiedad `item.transferring_format_units`. La columna derecha muestra el nombre del formato de unidad de transferencia.
+
+- `<td>`: Celda para las acciones. Contiene un botón "Eliminar" que invoca el método `removeItem`.
+
+- `<button class="btn btn-danger" @click="removeItem(index)">Eliminar</button>`: Botón para eliminar el artículo de la tabla. Invoca el método `removeItem` cuando se hace clic en él.
+
+- `<div class="observations-section mt-4">`: Sección para las observaciones.
+
+- `<h3>Observaciones</h3>`: Título de la sección de observaciones.
+
+- `<textarea class="form-control" v-model="notes"></textarea>`: Campo de texto de varias líneas para las observaciones. Utiliza la directiva `v-model` para enlazar su valor a la propiedad `notes` en los datos del componente.
+
+- `<div class="form-footer text-center">`: Pie de formulario.
+
+- `<button class="btn btn-success" type="submit" @click="saveTransaction">Guardar transacción</button>`: Botón para guardar la transacción. Invoca el método `saveTransaction` cuando se hace clic en él.
+
+Estructura del Script
+---------------------
+
+El bloque `<script>` contiene la lógica del componente y define los datos, métodos y propiedades computadas utilizados en el template. A continuación se explica cada sección del script:
+
+- `data()`: Método que devuelve un objeto que contiene los datos del componente. Inicializa los valores iniciales de los diferentes campos y propiedades utilizadas en el componente.
+
+- `mounted()`: Gancho de ciclo de vida que se ejecuta después de que el componente se ha montado en el DOM. Realiza una solicitud HTTP para obtener las bodegas y asigna la respuesta a la propiedad `warehouses`.
+
+- `beforeUnmount()`: Gancho de ciclo de vida que se ejecuta antes de que el componente sea desmontado del DOM. Elimina el evento de escucha del teclado.
+
+- `computed`: Sección que contiene propiedades computadas que realizan cálculos basados en los datos del componente. En este caso, utiliza la propiedad computada `checked` para obtener el valor de la propiedad `checkboxValue` en los datos del componente.
+
+- `methods`: Sección que contiene los métodos utilizados en el componente. Incluye métodos para manejar cambios en el checkbox, actualizar la bodega seleccionada, mostrar y cerrar el modal, agregar y eliminar artículos, buscar artículos, manejar eventos de entrada en las celdas de la tabla, calcular la cantidad de venta, guardar la transacción y obtener la fecha actual.
+
+- `handleCheckboxChange`: Método que se invoca cuando cambia el estado del checkbox. Invoca la mutación `toggleCheckboxValue` para actualizar la propiedad `checkboxValue` en el estado de Vuex.
+
+Estilos CSS
+-----------
+
+El bloque `<style scoped>` contiene estilos CSS para dar formato al componente. Los estilos están definidos dentro del atributo `scoped`, lo que significa que solo se aplican al componente actual y no se propagan a otros componentes. A continuación se explica cada estilo:
+
+- `#check:checked~.container`: Establece el relleno izquierdo y el ancho máximo del contenedor principal cuando el checkbox `#check` está marcado.
+
+- `.container`: Define el ancho máximo y el margen automático para el contenedor principal.
+
+- `.modal-background`: Define la posición fija y los estilos de fondo para el fondo del modal.
+
+- `.modal-content`: Define la posición fija, los estilos de fondo y el relleno para el contenido del modal.
+
+- `.search-container`: Define la visualización en línea y el margen inferior para el contenedor de búsqueda.
+
+- `.search-container label`: Define el margen derecho para la etiqueta de búsqueda.
+
+- `.search-container input`: Define el margen derecho para el campo de entrada de búsqueda.
+
+- `.table-container`: Define el desplazamiento horizontal y vertical para el contenedor de la tabla.
+
+- `.table`: Define el ancho de la tabla, el colapso de bordes y el margen interno para las celdas.
+
+- `.input`: Define el ancho, el relleno, el borde y el color de fondo para los campos de entrada de texto en la tabla.
+
+- `.form-footer`: Define el margen superior para el pie de formulario.
+
+- `.form-group`: Define la visualización en línea y el relleno para los grupos de formulario.
+
+- `.modal-background`, `.modal-content`, `.search-container label`, `.search-container input`: Estilos específicos para el modal de búsqueda.
+
+-->
