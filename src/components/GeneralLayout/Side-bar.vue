@@ -2,10 +2,10 @@ import { container } from 'webpack';
 <template>
   <!--Sidebar Prinicipal-->
   <input
-      type="checkbox"
-      id="check"
-      v-model="checked"
-      @change="handleCheckboxChange"
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
   />
   <label for="check">
     <i class="fas fa-bars" id="btn">
@@ -17,17 +17,17 @@ import { container } from 'webpack';
   </label>
   <div class="sidebar">
     <a
-        v-for="(page, index) in pages"
-        :id="page.link.id"
-        :key="index"
-        :class="{ active: activePage === index }"
-        :href="`./${page.link.linkTo}`"
-        :title="`Ir a la página de ${page.link.title}`"
-        @click="manageClick(page.link.id, page.link.linkTo)"
-        @click.prevent="activePage = index"
+      v-for="(page, index) in pages"
+      :id="page.link.id"
+      :key="index"
+      :class="{ active: activePage === index }"
+      :href="`./${page.link.linkTo}`"
+      :title="`Ir a la página de ${page.link.title}`"
+      @click="manageClick(page.link.id, page.link.linkTo)"
+      @click.prevent="activePage = index"
     >
       <i id="mobileIcon" :class="page.link.bootstrapIcon.class"
-      ><span>{{ page.link.text }}</span></i
+        ><span>{{ page.link.text }}</span></i
       >
       <span id="desktopText">
         <i id="desktopIcon" :class="page.link.bootstrapIcon.class"></i>
@@ -37,7 +37,7 @@ import { container } from 'webpack';
   </div>
 
   <!--Sidebar Elementos-->
-  <input type="checkbox" id="checkElements"/>
+  <input type="checkbox" id="checkElements" />
   <label for="checkElements">
     <i class="fas fa-times" id="cancelElements">
       <i class="bi bi-arrow-return-left"></i>
@@ -46,12 +46,12 @@ import { container } from 'webpack';
 
   <div id="sidebarElements" class="sidebarElements">
     <a
-        v-for="(option, index) in adminElementsList"
-        :id="option.element"
-        :key="index"
-        :class="{ active: activePage === index }"
-        @click="performElementsAction(option.urlParam)"
-        @click.prevent="activePage = index"
+      v-for="(option, index) in adminElementsList"
+      :id="option.element"
+      :key="index"
+      :class="{ active: activePage === index }"
+      @click="performElementsAction(option.urlParam)"
+      @click.prevent="activePage = index"
     >
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
@@ -62,16 +62,15 @@ import { container } from 'webpack';
 </template>
 
 <script>
-import {mapState, mapMutations} from "vuex";
+import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import {API_URL} from "@/config";
-
+import { API_URL } from "@/config";
 
 export default {
   data() {
     return {
-      token : "",
+      token: "",
       limit: 700,
       screenWidth: 0,
       screenHeight: 0,
@@ -136,9 +135,9 @@ export default {
         {
           link: {
             id: "usuarios",
-            text: "Registrar usuarios",
-            title: "registrar usuarios",
-            linkTo: "userRegister",
+            text: "Administrar usuarios",
+            title: "administrar usuarios",
+            linkTo: "users",
             bootstrapIcon: {
               class: "bi bi-people-fill",
             },
@@ -209,11 +208,6 @@ export default {
           bootstrapIconClass: "bi bi-buildings-fill",
           urlParam: "warehouses",
         },
-        {
-          element: "Usuarios",
-          bootstrapIconClass: "bi bi-person-circle",
-          urlParam: "users",
-        },
       ],
     };
   },
@@ -258,16 +252,16 @@ export default {
           };
 
           axios
-              .delete(`${API_URL}/users/sign_out`, config)
-              .then((response) => {
-                console.log(response);
-                localStorage.removeItem("token");
-                this.$store.commit("setLoggedIn", false);
-                this.$router.push("/login");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            .delete(`${API_URL}/users/sign_out`, config)
+            .then((response) => {
+              console.log(response);
+              localStorage.removeItem("token");
+              this.$store.commit("setLoggedIn", false);
+              this.$router.push("/login");
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
       });
     },
