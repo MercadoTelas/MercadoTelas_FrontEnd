@@ -1,22 +1,12 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
           <label for="search" class="form-label">Buscar usuario:</label>
-          <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por nombre o cédula"
-          />
+          <input type="text" id="search" class="form-control" v-model="searchQuery"
+            placeholder="Buscar por nombre o cédula" />
         </div>
 
         <div class="row">
@@ -72,6 +62,9 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "UserList",
@@ -131,11 +124,14 @@ export default {
                 creator_user_id: this.current_user_id,
               })
               .then((response) => {
-                Swal.fire(
-                  "Usuario desactivado",
-                  "El usuario ha sido desactivado exitosamente",
-                  "success"
-                );
+                toast.success(`Usuario desactivado correctamente`, {
+                  position: 'bottom-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
                 console.log(response.data);
                 this.users = this.users.map((u) => {
                   if (u.id === user.id) {
@@ -167,11 +163,14 @@ export default {
                 creator_user_id: this.current_user_id,
               })
               .then((response) => {
-                Swal.fire(
-                  "Usuario activado",
-                  "El usuario ha sido activado exitosamente",
-                  "success"
-                );
+                toast.success(`Usuario activado correctamente`, {
+                  position: 'bottom-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
                 console.log(response.data);
                 this.users = this.users.map((u) => {
                   if (u.id === user.id) {
@@ -205,7 +204,7 @@ export default {
 </script>
 
 <style>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }

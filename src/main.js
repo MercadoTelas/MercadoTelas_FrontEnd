@@ -6,7 +6,6 @@ import store from './store';
 
 //--Inicio--
 import Home from './components/Home/Home-component.vue';
-import KPIs from './components/Home/KPIs.vue';
 
 //Vistas del diseño
 import UserProfile from './components/GeneralLayout/UserProfile.vue';
@@ -72,13 +71,6 @@ const router = createRouter({
       path: '/home',
       component: Home,
       meta: { requiresAuth: true },
-      children: [
-        {
-          path: '/home',
-          component: KPIs,
-          meta: { requiresAuth: true },
-        },
-            ]
         },
         {path: '/userProfile', component: UserProfile, meta: {requiresAuth: true},},
         {path: '/entry', component: Entry, meta: {requiresAuth: true}},

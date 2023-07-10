@@ -89,6 +89,9 @@
 import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 import { API_URL } from "@/config";
 
 export default {
@@ -172,15 +175,13 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar el artículo aquí
-          // ...
-
-          Swal.fire({
-            title: "Eliminado",
-            text: "El artículo ha sido eliminado correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
-          });
+          toast.success(`Se ha eliminado el artículo correctamente`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
         }
       });
     },

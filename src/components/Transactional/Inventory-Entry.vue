@@ -1,10 +1,5 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
 
   <div class="container">
     <div>
@@ -14,13 +9,7 @@
           <h2>Búsqueda de artículos</h2>
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
-            <input
-              type="text"
-              id="searchInput"
-              v-model="searchQuery"
-              @keydown.enter="searchItem"
-              class="input-field"
-            />
+            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field" />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
@@ -48,17 +37,9 @@
         <h1>Lista de Artículos</h1>
         <div class="form-group ms-0">
           <label for="warehouseSelect">Bodega:</label>
-          <select
-            id="warehouseSelect"
-            class="form-select ms-2"
-            v-model="selectedWarehouse"
-          >
+          <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
             <option value="" disabled selected>Seleccionar</option>
-            <option
-              v-for="warehouse in warehouses"
-              :value="warehouse"
-              :key="warehouse.id"
-            >
+            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
               {{ warehouse.name }}
             </option>
           </select>
@@ -82,30 +63,17 @@
         <tbody>
           <tr v-for="(item, index) in tableData" :key="index">
             <td>
-              <input
-                type="text"
-                v-model="item.item_id"
-                @keydown.enter="onCellInput(item, 'item_id', $event)"
-                class="input"
-              />
+              <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
+                class="input" />
             </td>
             <td>
-              <input
-                type="text"
-                v-model="item.name"
-                @keydown.enter="onCellInput(item, 'name', $event)"
-                class="input"
-              />
+              <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input" />
             </td>
             <td>
               <div class="row align-items-center">
                 <div class="col-8">
-                  <input
-                    type="number"
-                    v-model="item.storing_format_units"
-                    @input="onCellInput(item, 'storing_format_units', $event)"
-                    class="input"
-                  />
+                  <input type="number" v-model="item.storing_format_units"
+                    @input="onCellInput(item, 'storing_format_units', $event)" class="input" />
                 </div>
                 <div class="col-4">
                   {{ item.storing_unit_format_name }}
@@ -115,12 +83,8 @@
             <td>
               <div class="row align-items-center">
                 <div class="col-8">
-                  <input
-                    type="number"
-                    v-model="item.transferring_format_units"
-                    @input="onCellInput(item, 'sale_units', $event)"
-                    class="input"
-                  />
+                  <input type="number" v-model="item.transferring_format_units"
+                    @input="onCellInput(item, 'sale_units', $event)" class="input" />
                 </div>
                 <div class="col-4">
                   {{ item.transferring_unit_format_name }}
@@ -154,7 +118,8 @@
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import { API_URL } from "@/config";
-import Swal from "sweetalert2";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -305,12 +270,12 @@ export default {
         // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
         this.calculateSaleUnits(item);
       } else if (event.key === "Enter" && this.selectedWarehouse === "") {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Debe seleccionar un almacén",
-          showConfirmButton: true,
-          timer: 1500,
+        toast.info(`Debe seleccionar un almacén`, {
+          position: 'top-right',
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
         });
       }
     },
@@ -350,35 +315,38 @@ export default {
           .then((response) => {
             // Lógica de respuesta exitosa
             console.log(response);
-            Swal.fire({
-              icon: "success",
-              title: "Transacción guardada",
-              showConfirmButton: true,
-              timer: 1500,
+            toast.success(`Transacción guardada`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
             });
+
             this.tableData = [];
             this.addItem();
             this.notes = "";
             this.selectedWarehouse = "";
           })
           .catch((error) => {
-            // Lógica de error
-            Swal.fire({
-              icon: "error",
-              title: "Error al guardar la transacción",
-              text: error.message,
-              showConfirmButton: true,
-              timer: 1500,
+            toast.error (`Error al guardar la transacción: ` + error.message, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
             });
+
           });
       } else {
-        Swal.fire({
-          icon: "info",
-          title: "No hay filas válidas",
-          text: "Debe llenar todos los campos en al menos una fila antes de guardar la transacción.",
-          showConfirmButton: true,
-          timer: 1500,
+        toast.info(`Debe llenar todos los campos en al menos una fila antes de guardar la transacción`, {
+          position: 'top-right',
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
         });
+
       }
       this.inventory_items = [];
     },
@@ -396,7 +364,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -476,5 +444,4 @@ export default {
 
 .search-container input {
   margin-right: 10px;
-}
-</style>
+}</style>

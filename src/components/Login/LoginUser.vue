@@ -49,7 +49,8 @@
 <script>
 import axios from "axios";
 import { API_URL } from "@/config";
-import Swal from 'sweetalert2';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   methods: {
@@ -73,7 +74,6 @@ export default {
           console.log(response);
           user = response.data.data;
           if (response.data.status === 'success') {
-
             this.$store.commit('setLoggedIn', true);
             //this.$store.commit('incrementLogAttempts');
             this.$store.commit('setUser', user);
@@ -84,10 +84,12 @@ export default {
           error => {
             const { response } = error;
             console.log(response);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error de inicio de sesión',
-              text: response.data.message,
+            toast.error(`Error al iniciar sesión`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
             });
           });
 

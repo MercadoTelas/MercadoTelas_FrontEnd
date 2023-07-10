@@ -6,7 +6,7 @@
           <div class="mb-4">
             <div class="logo-container">
               <img src="../../assets/logo_telas.jpg" alt="Logo" class="logo">
-              <h2 class="h2">Restablecimiento de Contraseña</h2>
+              <h3 class="h3">Restablecimiento de Contraseña</h3>
             </div>
           </div>
 
@@ -18,7 +18,8 @@
 
           <!-- Confirmar contraseña input -->
           <div class="form-outline mb-4">
-            <input type="password" id="confirm-password" class="form-control" v-model="new_password_confirmation" required>
+            <input type="password" id="confirm-password" class="form-control" v-model="new_password_confirmation"
+              required>
             <label class="form-label" for="confirm-password">Confirmar Contraseña</label>
           </div>
 
@@ -32,8 +33,9 @@
 
 <script>
 import axios from "axios";
-import {API_URL} from "@/config";
-import Swal from "sweetalert2";
+import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   data() {
@@ -52,32 +54,35 @@ export default {
           reset_password_token: this.token
         };
         axios
-            .put(`${API_URL}/users/password`, data)
-            .then(response => {
-              Swal.fire({
-                title: "Contraseña actualizada",
-                icon: "success",
-                confirmButtonText: "Aceptar",
-                timer: 3000
-              });
-              console.log(response);
-              this.$router.push('/login');
-            })
-            .catch(error => {
-              Swal.fire({
-                title: "Error",
-                text: "No se pudo actualizar la contraseña",
-                icon: "error",
-                confirmButtonText: "Aceptar"
-              });
-              console.log(error);
+          .put(`${API_URL}/users/password`, data)
+          .then(response => {
+            toast.success(`Contraseña actualizada`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
             });
+            console.log(response);
+            this.$router.push('/login');
+          })
+          .catch(error => {
+            toast.error(`No se pudo actualizar la contraseña`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+            console.log(error);
+          });
       } else {
-        Swal.fire({
-          title: "Error",
-          text: "Las contraseñas no coinciden",
-          icon: "error",
-          confirmButtonText: "Ok"
+        toast.error(`Las contraseñas no coinciden`, {
+          position: 'bottom-right',
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
         });
       }
     },

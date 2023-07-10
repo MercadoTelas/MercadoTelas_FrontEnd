@@ -1,22 +1,11 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
           <label for="search" class="form-label">Buscar marca:</label>
-          <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por nombre"
-          />
+          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre" />
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -37,11 +26,8 @@
               <tr v-for="brand in filteredBrands" :key="brand.name">
                 <td class="text-center">{{ brand.name }}</td>
                 <td class="text-center">
-                  <router-link
-                    :to="{ name: 'EditBrand', params: { id: brand.id } }"
-                    class="btn btn-secondary"
-                    >Editar</router-link
-                  >
+                  <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }"
+                    class="btn btn-secondary">Editar</router-link>
                   <button @click="deleteBrand(brand)" class="btn btn-danger">
                     Eliminar
                   </button>
@@ -60,6 +46,9 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "BrandList",
@@ -106,14 +95,12 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar la marca aquí
-          // ...
-
-          Swal.fire({
-            title: "Eliminada",
-            text: "La marca ha sido eliminada correctamente.",
-            icon: "success",
-            confirmButtonText: "Aceptar",
+          toast.success(`Se ha eliminado la marca correctamente`, {
+            position: 'top-right',
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
           });
         }
       });
@@ -135,7 +122,7 @@ export default {
 </script>
 
 <style>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }

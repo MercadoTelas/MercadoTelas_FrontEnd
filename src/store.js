@@ -7,7 +7,7 @@ const store = createStore({
         const currentWarehouseLoggedId = localStorage.getItem("current_warehouse_logged_id") || "";
         const sessionTimeout = 600000;
         const sessionToken = localStorage.getItem("sessionToken") || "";
-        const LogAttempts = localStorage.getItem("LogAttempts") === "1";
+        const LogAttempts = localStorage.getItem("LogAttempts") === "true";
         let user = null;
 
         try {

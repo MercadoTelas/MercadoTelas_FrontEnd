@@ -85,9 +85,11 @@
 
 <script>
 import {mapState, mapMutations} from "vuex";
-import Swal from "sweetalert2";
 import axios from "axios";
 import {API_URL} from "@/config";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "Perfil-Component",
@@ -131,29 +133,36 @@ export default {
         axios
             .put(`${API_URL}/users/password`, data, config)
             .then(response => {
-              Swal.fire({
-                title: "Contraseña actualizada",
-                icon: "success",
-                confirmButtonText: "Aceptar"
-              });
+              toast.success(`Contraseña actualizada`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+
               console.log(response);
             })
             .catch(error => {
-              Swal.fire({
-                title: "Error",
-                text: "No se pudo actualizar la contraseña",
-                icon: "error",
-                confirmButtonText: "Aceptar"
-              });
+              toast.error(`No se pudo actualizar la contraseña`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+
               console.log(error);
             });
       } else {
-        Swal.fire({
-          title: "Error",
-          text: "Las contraseñas no coinciden",
-          icon: "error",
-          confirmButtonText: "Ok"
-        });
+        toast.success(`Las contraseñas no coinciden`, {
+              position: 'top-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+
       }
     }
   }
