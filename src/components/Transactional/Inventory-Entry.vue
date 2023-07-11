@@ -25,11 +25,8 @@
                 <tr v-for="item in filteredItems" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
-                  <td style="width: 10px">
-                    <button @click="addItemToTable" class="btn btn-success">
-                      <i class="bi bi-plus-circle"></i>
-                    </button>
-                  </td>
+                  <td style="width: 10px;"><button @click="addItemToTable" class="btn btn-success"><i
+                        class="bi bi-plus-circle"></i></button></td>
                 </tr>
               </tbody>
             </table>
@@ -68,13 +65,17 @@
         </thead>
         <tbody>
           <tr id="transactionList" v-for="(item, index) in tableData" :key="index">
+          <tr v-for="(item, index) in tableData" :key="index">
             <td>
               <input :id="'ID' + index" type="text" v-model="item.item_id"
                 @keydown.enter="onCellInput(item, 'item_id', $event, index)" class="input" />
+              <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
+                class="input" />
             </td>
             <td>
               <input :id="'ID' + index" type="text" v-model="item.name"
                 @keydown.enter="onCellInput(item, 'name', $event, index)" class="input" />
+              <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input" />
             </td>
             <td>
               <div class="row align-items-center">
@@ -82,6 +83,8 @@
                   <input type="number" v-model="item.storing_format_units" @input="
                     onCellInput(item, 'storing_format_units', $event, index)
                     " class="input" />
+                  <input type="number" v-model="item.storing_format_units"
+                    @input="onCellInput(item, 'storing_format_units', $event)" class="input" />
                 </div>
                 <div class="col-4">
                   {{ item.storing_unit_format_name }}
@@ -222,7 +225,7 @@ export default {
           });
       }
     },
-    onCellInput(item, field, event, index) {
+    onCellInput(item, field, event) {
       event.stopPropagation();
       event.preventDefault();
       // Actualizar el valor del campo en el objeto item
@@ -245,7 +248,8 @@ export default {
       ) {
         const itemId = item.item_id.trim();
         const itemName = item.name.trim();
-        if (itemId !== "" || itemName !== "" && this.selectedWarehouse !== "") {
+
+        if (itemId !== "" || itemName !== "") {
           let url = `${API_URL}/search_inventory_item?`;
           if (itemId !== "" && itemName === "" && this.selectedWarehouse !== "") {
             url += `item_id=${itemId}&warehouse_id=${this.selectedWarehouse.id}`;
@@ -269,7 +273,6 @@ export default {
 
               // Realizar el cálculo de la cantidad de venta
               this.calculateSaleUnits(item);
-              this.disableFields("ID" + index);
             })
             .catch((error) => {
               console.error(error);
@@ -306,18 +309,6 @@ export default {
         item.transferring_format_units = saleUnits.toFixed(2);
       }
     },
-    disableFields(id) {
-      var elements = document.querySelectorAll("#" + id);
-      elements.forEach(function (element) {
-        element.disabled = true;
-      });
-    },
-    enableField(id) {
-      var elements = document.querySelectorAll("#" + id);
-      elements.forEach(function (element) {
-        element.disabled = false;
-      });
-    },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
       this.inventory_items = this.tableData.filter((item) => {
@@ -330,7 +321,7 @@ export default {
       });
 
       // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0 && this.selectedWarehouse === "") {
+      if (this.inventory_items.length > 0 && this.selectedWarehouse !== "") {
         const url = `${API_URL}/inventories/insert_items`;
         console.log(this.$store.state.user.id);
         const data = {

@@ -157,6 +157,7 @@ export default {
   },
   mounted() {
     this.fetchTransactions();
+    this.$state.navbarTitle = "Registro de movimientos";
   },
 };
 </script>

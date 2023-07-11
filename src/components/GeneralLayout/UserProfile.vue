@@ -7,7 +7,7 @@
         <div class="card" style="border-radius: 15px">
           <div class="card-body text-center">
             <div class="logo-container">
-              <img src="../../assets/informacion.png" alt="Logo" class="logo">
+              <img src="../../assets/usuario.png" alt="Logo" class="logo">
             </div>
             <h4 class="mb-3">Hola de nuevo, {{ user.name }} </h4>
             <form @submit.prevent="changePassword">
