@@ -2,19 +2,21 @@
   <div>
     <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
     <div class="container-fluid">
-      <div class="filter-row">
-        <label for="bodega">Bodega:</label>
-        <select id="bodega" v-model="selectedBodega" @change="filterProductos">
-          <option value="">Todas las bodegas</option>
-          <option v-for="bodega in bodegas" :key="bodega" :value="bodega">{{ bodega }}</option>
-        </select>
-      </div>
-      <div class="filter-row">
-        <label for="tipo">Tipo de artículo:</label>
-        <select id="tipo" v-model="selectedTipo" @change="filterProductos">
-          <option value="">Todos los tipos</option>
-          <option v-for="tipo in tipos" :key="tipo" :value="tipo">{{ tipo }}</option>
-        </select>
+      <div class="button-container">
+        <div class="filter-row">
+          <label for="bodega">Bodega:</label>
+          <select id="bodega" v-model="selectedBodega" @change="filterProductos">
+            <option value="">Todas las bodegas</option>
+            <option v-for="bodega in bodegas" :key="bodega" :value="bodega">{{ bodega }}</option>
+          </select>
+        </div>
+        <div class="filter-row">
+          <label for="tipo">Tipo de artículo:</label>
+          <select id="tipo" v-model="selectedTipo" @change="filterProductos">
+            <option value="">Todos los tipos</option>
+            <option v-for="tipo in tipos" :key="tipo" :value="tipo">{{ tipo }}</option>
+          </select>
+        </div>
       </div>
       <div class="row">
         <div class="col-lg-6 mb-4">
@@ -118,10 +120,10 @@ import { mapState, mapMutations } from 'vuex';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useStore } from "vuex";
+import { shallowRef } from 'vue';
 
 
 export default {
-  name: 'CombinedComponent',
   data() {
     return {
       sortedMovements: [],
@@ -297,6 +299,8 @@ export default {
       selectedTipo: '', // Valor seleccionado en el dropdown de tipo de artículo
       bodegas: ['Bodega 1', 'Bodega 2', 'Bodega 3'], // Valores posibles para el dropdown de bodega
       tipos: ['Tipo 1', 'Tipo 2', 'Tipo 3'], // Valores posibles para el dropdown de tipo de artículo
+      chartTop10: null,
+      chartLow: null,
     };
   },
   computed: {
@@ -339,7 +343,7 @@ export default {
       let tiposTelas = sortedProductos.map((producto) => producto.nombre);
       let inventario = sortedProductos.map((producto) => producto.stock);
 
-      return new Chart(ctx, {
+      this.chartTop10 = shallowRef(new Chart(ctx, {
         type: 'bar',
         data: {
           labels: tiposTelas,
@@ -357,6 +361,11 @@ export default {
           indexAxis: 'y', // Rotate the chart by 90 degrees
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
           scales: {
             x: {
               beginAtZero: true,
@@ -371,8 +380,9 @@ export default {
             },
           },
         },
-      });
+      }));
     },
+
     createChartLow() {
       const canvas = this.$refs.chartLow;
       const ctx = canvas.getContext('2d');
@@ -382,7 +392,7 @@ export default {
       const inventario = sortedProductosLow.map((producto) => producto.stock);
       const nivelDeseado = sortedProductosLow.map((producto) => producto.minStock);
 
-      return new Chart(ctx, {
+      this.chartLow = shallowRef (new Chart(ctx, {
         type: 'bar',
         data: {
           labels: tiposTelas,
@@ -406,6 +416,11 @@ export default {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false,
+            },
+          },
           scales: {
             x: {
               grid: {
@@ -420,7 +435,7 @@ export default {
             },
           },
         },
-      });
+      }));
     },
     filterProductos() {
       this.productos = this.productosClone;
@@ -446,11 +461,11 @@ export default {
 
       this.productos = productosFiltrados;
       this.productosLow = productosLowFiltrados;
-     
+
+      this.updateChartLow();
+      this.updateChartTop10();
+
     }
-
-
-
     ,
     hacerEntrada(index) {
       const code = this.productosLow[index].codigo;
@@ -463,6 +478,32 @@ export default {
         },
       });
     },
+    updateChartTop10() {
+      if (this.chartTop10) {
+        const sortedProductos = [...this.productos].sort((a, b) => b.stock - a.stock);
+        const tiposTelas = sortedProductos.map((producto) => producto.nombre);
+        const inventario = sortedProductos.map((producto) => producto.stock);
+
+        this.chartTop10.data.labels = tiposTelas;
+        this.chartTop10.data.datasets[0].data = inventario;
+        this.chartTop10.update();
+      }
+    },
+
+    updateChartLow() {
+      if (this.chartLow) {
+        const sortedProductosLow = [...this.productosLow].sort((a, b) => a.stock - b.stock);
+        const tiposTelas = sortedProductosLow.map((producto) => producto.nombre);
+        const inventario = sortedProductosLow.map((producto) => producto.stock);
+        const nivelDeseado = sortedProductosLow.map((producto) => producto.minStock);
+
+        this.chartLow.data.labels = tiposTelas;
+        this.chartLow.data.datasets[0].data = inventario;
+        this.chartLow.data.datasets[1].data = nivelDeseado;
+        this.chartLow.update();
+      }
+    },
+
   },
 };
 </script>
@@ -471,6 +512,11 @@ export default {
 .container-fluid {
   margin-top: 20px;
   margin-left: auto;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
 }
 
 .centered-div {

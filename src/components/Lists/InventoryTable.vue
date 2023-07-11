@@ -69,7 +69,7 @@
             </div>
 
           </div>
-          <button class="btn btn-secondary" style="width: 200px;margin: 10px;" @click="resetFilter('all')">Limpiar</button>
+          <button class="btn btn-secondary" style="width: 200px;margin: 10px;" @click="resetFilter('all')">Limpiar filtros</button>
         </div>
 
         <h2 class="filter-title text-center">Tabla de Inventario</h2>
