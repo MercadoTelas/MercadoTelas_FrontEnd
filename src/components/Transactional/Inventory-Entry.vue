@@ -1,5 +1,10 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
 
   <div class="container">
     <div>
@@ -9,7 +14,13 @@
           <h2>Búsqueda de artículos</h2>
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
-            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="input-field" />
+            <input
+              type="text"
+              id="searchInput"
+              v-model="searchQuery"
+              @keydown.enter="searchItem"
+              class="input-field"
+            />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
@@ -25,7 +36,14 @@
                 <tr v-for="item in filteredItems" :key="item.id">
                   <td>{{ item.id }}</td>
                   <td>{{ item.name }}</td>
-                  <td style="width: 10px;"><button @click="addItemToTable" class="btn btn-success"><i class="bi bi-plus-circle"></i></button></td>
+                  <td style="width: 10px">
+                    <button
+                      @click="onCellInput(item, 'item_id', simulateEnterKey(), (this.tableData.length - 1))"
+                      class="btn btn-success"
+                    >
+                      <i class="bi bi-plus-circle"></i>
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -39,9 +57,17 @@
         <h1>Lista de Artículos</h1>
         <div class="form-group ms-0">
           <label for="warehouseSelect">Bodega:</label>
-          <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
+          <select
+            id="warehouseSelect"
+            class="form-select ms-2"
+            v-model="selectedWarehouse"
+          >
             <option value="" disabled selected>Seleccionar</option>
-            <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
+            <option
+              v-for="warehouse in warehouses"
+              :value="warehouse"
+              :key="warehouse.id"
+            >
               {{ warehouse.name }}
             </option>
           </select>
@@ -65,17 +91,32 @@
         <tbody>
           <tr v-for="(item, index) in tableData" :key="index">
             <td>
-              <input type="text" v-model="item.item_id" @keydown.enter="onCellInput(item, 'item_id', $event)"
-                class="input" />
+              <input
+                :id="'ID' + index"
+                type="text"
+                v-model="item.item_id"
+                @keydown.enter="onCellInput(item, 'item_id', $event, index)"
+                class="input"
+              />
             </td>
             <td>
-              <input type="text" v-model="item.name" @keydown.enter="onCellInput(item, 'name', $event)" class="input" />
+              <input
+                :id="'ID' + index"
+                type="text"
+                v-model="item.name"
+                @keydown.enter="onCellInput(item, 'name', $event, index)"
+                class="input"
+              />
             </td>
             <td>
               <div class="row align-items-center">
                 <div class="col-8">
-                  <input type="number" v-model="item.storing_format_units"
-                    @input="onCellInput(item, 'storing_format_units', $event)" class="input" />
+                  <input
+                    type="number"
+                    v-model="item.storing_format_units"
+                    @input="onCellInput(item, 'storing_format_units', $event, index)"
+                    class="input"
+                  />
                 </div>
                 <div class="col-4">
                   {{ item.storing_unit_format_name }}
@@ -88,9 +129,7 @@
                   <input
                     type="number"
                     v-model="item.transferring_format_units"
-                    @input="
-                      onCellInput(item, 'sale_units', $event, index)
-                    "
+                    @input="onCellInput(item, 'sale_units', $event, index)"
                     class="input"
                   />
                 </div>
@@ -102,7 +141,9 @@
             <td>
               <button
                 class="btn btn-danger"
-                @click="removeItem(index), enableField('ID' + index)"
+                @click="
+                  removeItem(index), enableField('ID' + (tableData.length - 1))
+                "
               >
                 Eliminar
               </button>
@@ -129,8 +170,8 @@
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
@@ -224,7 +265,17 @@ export default {
           });
       }
     },
-    onCellInput(item, field, event) {
+    simulateEnterKey() {
+      var event = new KeyboardEvent("keypress", {
+        key: "Enter",
+        keyCode: 13,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      return event;
+    },
+    onCellInput(item, field, event, index) {
       event.stopPropagation();
       event.preventDefault();
       // Actualizar el valor del campo en el objeto item
@@ -250,9 +301,17 @@ export default {
 
         if (itemId !== "" || itemName !== "") {
           let url = `${API_URL}/search_inventory_item?`;
-          if (itemId !== "" && itemName === "" && this.selectedWarehouse !== "") {
+          if (
+            itemId !== "" &&
+            itemName === "" &&
+            this.selectedWarehouse !== ""
+          ) {
             url += `item_id=${itemId}&warehouse_id=${this.selectedWarehouse.id}`;
-          } else if (itemId === "" && itemName !== "" && this.selectedWarehouse !== "") {
+          } else if (
+            itemId === "" &&
+            itemName !== "" &&
+            this.selectedWarehouse !== ""
+          ) {
             url += `name=${itemName}&warehouse_id=${this.selectedWarehouse.id}`;
           }
           axios
@@ -272,11 +331,12 @@ export default {
 
               // Realizar el cálculo de la cantidad de venta
               this.calculateSaleUnits(item);
+              this.disableFields("ID" + index);
             })
             .catch((error) => {
               console.error(error);
               toast.error(`No se encontró el artículo`, {
-                position: 'top-right',
+                position: "top-right",
                 timeout: 2000,
                 closeOnClick: true,
                 pauseOnFocusLoss: true,
@@ -292,13 +352,26 @@ export default {
         this.calculateSaleUnits(item);
       } else if (event.key === "Enter" && this.selectedWarehouse === "") {
         toast.info(`Debe seleccionar un almacén`, {
-          position: 'top-right',
+          position: "top-right",
           timeout: 2000,
           closeOnClick: true,
           pauseOnFocusLoss: true,
           pauseOnHover: true,
         });
       }
+    },
+    disableFields(id) {
+      console.log("Holaaa" + id);
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = true;
+      });
+    },
+    enableField(id) {
+      var elements = document.querySelectorAll("#" + id);
+      elements.forEach(function (element) {
+        element.disabled = false;
+      });
     },
     calculateSaleUnits(item) {
       const storingUnits = parseFloat(item.storing_format_units);
@@ -337,7 +410,7 @@ export default {
             // Lógica de respuesta exitosa
             console.log(response);
             toast.success(`Transacción guardada`, {
-              position: 'top-right',
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
@@ -350,24 +423,25 @@ export default {
             this.selectedWarehouse = "";
           })
           .catch((error) => {
-            toast.error (`Error al guardar la transacción: ` + error.message, {
-              position: 'top-right',
+            toast.error(`Error al guardar la transacción: ` + error.message, {
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
               pauseOnHover: true,
             });
-
           });
       } else {
-        toast.info(`Debe llenar todos los campos en al menos una fila antes de guardar la transacción`, {
-          position: 'top-right',
-          timeout: 2000,
-          closeOnClick: true,
-          pauseOnFocusLoss: true,
-          pauseOnHover: true,
-        });
-
+        toast.info(
+          `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+          {
+            position: "top-right",
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+          }
+        );
       }
       this.inventory_items = [];
     },
@@ -385,7 +459,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -467,4 +541,5 @@ export default {
 
 .search-container input {
   margin-right: 10px;
-}</style>
+}
+</style>

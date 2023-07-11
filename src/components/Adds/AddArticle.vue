@@ -111,15 +111,6 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="table-label">Imagen:</td>
-            <td class="table-input" colspan="5">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-card-image"></i></span>
-                <input type="file" id="image" class="form-control" accept="image/*" @change="handleImageChange">
-              </div>
-            </td>
-          </tr>
           </tbody>
         </table>
       </div>
