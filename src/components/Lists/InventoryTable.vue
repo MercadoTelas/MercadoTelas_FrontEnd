@@ -20,7 +20,6 @@
                   {{ category.name }}
                 </option>
               </select>
-              <button class="btn btn-sm btn-secondary" @click="resetFilter('category')">Limpiar</button>
             </div>
           </div>
           <div class="col-md-2">
@@ -34,7 +33,6 @@
                   {{ subcategory.name }}
                 </option>
               </select>
-              <button class="btn btn-sm btn-secondary" @click="resetFilter('subcategory')">Limpiar</button>
             </div>
           </div>
           <div class="col-md-2">
@@ -46,7 +44,6 @@
                   {{ design.name }}
                 </option>
               </select>
-              <button class="btn btn-sm btn-secondary" @click="resetFilter('design')">Limpiar</button>
             </div>
           </div>
           <div class="col-md-2">
@@ -58,7 +55,6 @@
                   {{ brand.name }}
                 </option>
               </select>
-              <button class="btn btn-sm btn-secondary" @click="resetFilter('brand')">Limpiar</button>
             </div>
           </div>
           <div class="col-md-2">
@@ -70,10 +66,13 @@
                   {{ warehouse.name }}
                 </option>
               </select>
-              <button class="btn btn-sm btn-secondary" @click="resetFilter('warehouse')">Limpiar</button>
             </div>
+
           </div>
+          <button class="btn btn-secondary" style="width: 200px;margin: 10px;" @click="resetFilter('all')">Limpiar filtros</button>
         </div>
+
+        <h2 class="filter-title text-center">Tabla de Inventario</h2>
 
         <div class="table-responsive table-scroll">
 
@@ -191,29 +190,19 @@ export default {
       this.filter.subcategory = "";
     },
     resetFilter(filterName) {
-    switch (filterName) {
-      case 'codigo':
-        this.filter.codigo = '';
-        break;
-      case 'category':
-        this.filter.category = '';
-        this.filter.subcategory = '';
-        break;
-      case 'subcategory':
-        this.filter.subcategory = '';
-        break;
-      case 'design':
-        this.filter.design = '';
-        break;
-      case 'brand':
-        this.filter.brand = '';
-        break;
-      case 'warehouse':
-        this.filter.warehouse = '';
-        break;
-      default:
-        break;
-    }}
+      switch (filterName) {
+        case 'all':
+          this.filter.codigo = '';
+          this.filter.category = '';
+          this.filter.subcategory = '';
+          this.filter.design = '';
+          this.filter.brand = '';
+          this.filter.warehouse = '';
+          break;
+        default:
+          break;
+      }
+    }
   },
 };
 </script>
@@ -226,10 +215,6 @@ export default {
 #check:checked~#contentDiv {
   height: auto;
   display: block;
-}
-
-.code {
-  margin-bottom: 37px;
 }
 
 .container-fluid div {

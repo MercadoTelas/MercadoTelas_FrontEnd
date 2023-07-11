@@ -111,21 +111,12 @@
               </div>
             </td>
           </tr>
-          <tr>
-            <td class="table-label">Imagen:</td>
-            <td class="table-input" colspan="5">
-              <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-card-image"></i></span>
-                <input type="file" id="image" class="form-control" accept="image/*" @change="handleImageChange">
-              </div>
-            </td>
-          </tr>
           </tbody>
         </table>
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-primary btn-save" v-if="!isReadOnly">Guardar</button>
-        <router-link to="/items" type="button" class="btn btn-danger btn-save" v-if="isReadOnly">Volver</router-link>
+        <router-link to="/items" type="button" class="btn btn-danger btn-save" >Volver</router-link>
       </div>
     </form>
   </div>
@@ -310,9 +301,9 @@ export default {
 }
 
 .btn-save {
-  display: block;
   margin-top: 20px;
   margin-left: auto;
   margin-right: 0;
+  margin: 5px;
 }
 </style>
