@@ -1,12 +1,7 @@
 import { container } from 'webpack';
 <template>
   <!--Sidebar Prinicipal-->
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <label for="check">
     <i class="fas fa-bars" id="btn">
       <i class="bi bi-list"></i>
@@ -16,19 +11,10 @@ import { container } from 'webpack';
     </i>
   </label>
   <div class="sidebar">
-    <a
-      v-for="(page, index) in pages"
-      :id="page.link.id"
-      :key="index"
-      :class="{ active: activePage === index }"
-      :href="`./${page.link.linkTo}`"
-      :title="`Ir a la página de ${page.link.title}`"
-      @click="manageClick(page.link.id, page.link.linkTo)"
-      @click.prevent="activePage = index"
-    >
-      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"
-        ><span>{{ page.link.text }}</span></i
-      >
+    <a v-for="(page, index) in pages" :id="page.link.id" :key="index" :class="{ active: activePage === index }"
+      :href="`./${page.link.linkTo}`" :title="`Ir a la página de ${page.link.title}`"
+      @click="manageClick(page.link.id, page.link.linkTo)" @click.prevent="activePage = index">
+      <i id="mobileIcon" :class="page.link.bootstrapIcon.class"><span>{{ page.link.text }}</span></i>
       <span id="desktopText">
         <i id="desktopIcon" :class="page.link.bootstrapIcon.class"></i>
         {{ page.link.text }}
@@ -45,14 +31,9 @@ import { container } from 'webpack';
   </label>
 
   <div id="sidebarElements" class="sidebarElements">
-    <a
-      v-for="(option, index) in adminElementsList"
-      :id="option.element"
-      :key="index"
-      :class="{ active: activePage === index }"
-      @click="performElementsAction(option.urlParam)"
-      @click.prevent="activePage = index"
-    >
+    <a v-for="(option, index) in adminElementsList" :id="option.element" :key="index"
+      :class="{ active: activePage === index }" @click="performElementsAction(option.urlParam)"
+      @click.prevent="activePage = index">
       <span id="option">
         <i :class="option.bootstrapIconClass"></i>
         {{ option.element }}
@@ -252,13 +233,13 @@ export default {
           };
 
           axios
-              .delete(`${API_URL}/users/sign_out`, config)
-              .then((response) => {
-                console.log(response);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            .delete(`${API_URL}/users/sign_out`, config)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
         localStorage.removeItem("token");
         this.$store.commit("setLoggedIn", false);
@@ -425,28 +406,28 @@ label #cancelElements {
   visibility: hidden;
 }
 
-#check:checked ~ .sidebar {
+#check:checked~.sidebar {
   left: 0;
 }
 
-#checkElements:checked ~ .sidebarElements {
+#checkElements:checked~.sidebarElements {
   left: 0;
 }
 
-#check:checked ~ label #btn {
+#check:checked~label #btn {
   margin-left: 245px;
   opacity: 0;
   visibility: hidden;
 }
 
 //Boton de cancelar activado
-#check:checked ~ label #cancel {
+#check:checked~label #cancel {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
 }
 
-#checkElements:checked ~ label #cancelElements {
+#checkElements:checked~label #cancelElements {
   margin-left: 350px;
   opacity: 1;
   visibility: visible;
@@ -529,3 +510,73 @@ label #cancelElements {
   }
 }
 </style>
+
+<!--
+Componente de barra de navegación vertical SIDEBAR
+
+**Template:**
+
+- `<input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange">`: Es un checkbox que se utiliza para controlar el estado del menú desplegable principal. Su estado está vinculado a la propiedad `checked` utilizando `v-model`, y cuando cambia, se invoca el método `handleCheckboxChange`.
+
+- `<label for="check">`: Es una etiqueta que se utiliza como botón para abrir y cerrar el menú desplegable principal. Está asociada al checkbox mediante el atributo `for` que tiene el mismo valor que el atributo `id` del checkbox.
+
+- `<i class="fas fa-bars" id="btn">`: Es un icono que se muestra cuando el menú está cerrado. Al hacer clic en este icono, se activa el menú desplegable.
+
+- `<i class="fas fa-times" id="cancel">`: Es un icono que se muestra cuando el menú está abierto. Al hacer clic en este icono, se cierra el menú desplegable.
+
+- `<div class="sidebar">`: Es el contenedor del menú desplegable principal.
+
+- `<a v-for="(page, index) in pages" ... >`: Se utiliza para iterar sobre el array `pages` y mostrar los enlaces del menú. Cada enlace se representa como un elemento `<a>`. Los atributos y eventos se establecen dinámicamente utilizando `v-bind` y `v-on`. Se muestra un ícono y un texto para cada enlace.
+
+- `<input type="checkbox" id="checkElements" />`: Es otro checkbox que se utiliza para controlar el estado del menú desplegable de elementos. Su estado está vinculado a la propiedad `checked` utilizando `v-model`.
+
+- `<label for="checkElements">`: Es una etiqueta que se utiliza como botón para abrir y cerrar el menú desplegable de elementos. Está asociada al checkbox mediante el atributo `for` que tiene el mismo valor que el atributo `id` del checkbox.
+
+- `<i class="fas fa-times" id="cancelElements">`: Es un icono que se muestra cuando el menú de elementos está abierto. Al hacer clic en este icono, se cierra el menú desplegable de elementos.
+
+- `<div id="sidebarElements" class="sidebarElements">`: Es el contenedor del menú desplegable de elementos.
+
+- `<a v-for="(option, index) in adminElementsList" ... >`: Se utiliza para iterar sobre el array `adminElementsList` y mostrar los enlaces del menú de elementos. Cada enlace se representa como un elemento `<a>`. Se muestra un ícono y un texto para cada enlace.
+
+**Script:**
+
+- `import { mapState, mapMutations } from "vuex";`: Importa las funciones `mapState` y `mapMutations` de Vuex para mapear el estado y las mutaciones del store a las propiedades y métodos del componente.
+
+- `import Swal from "sweetalert2";`: Importa SweetAlert2, una biblioteca para mostrar mensajes de alerta.
+
+- `import axios from "axios";`: Importa Axios, una biblioteca para realizar solicitudes HTTP.
+
+- `import { API_URL } from "@/config";`: Importa la URL de la API desde el archivo de configuración.
+
+- `data() { return { ... } }`: Define los datos del componente. Inicializa las propiedades `token` con una cadena vacía, `limit` con el valor 700, `screenWidth` y `screenHeight` con 0, `isDesktop` con `false`, `activePage` con 0, `pages` con un array de objetos que representan los enlaces del menú principal, y `adminElementsList` con un array de objetos que representan los enlaces del menú de elementos.
+
+- `mounted() { ... }`: Se ejecuta después de que el componente se haya montado en el DOM. Obtiene el token de sesión del almacenamiento local.
+
+- `computed: { ... }`: Define las propiedades computadas del componente. Incluye la propiedad `checked` que obtiene y
+establece el valor del checkbox principal utilizando `mapState`.
+
+- `created() { ... }`: Se ejecuta cuando se crea el componente. Registra un evento de cambio de tamaño de ventana y lo asocia al método `updateScreenSize`.
+
+- `unmounted() { ... }`: Se ejecuta antes de que el componente se desmonte. Elimina el evento de cambio de tamaño de ventana para evitar posibles fugas de memoria.
+
+- `methods: { ... }`: Define los métodos del componente. El método `manageClick` se utiliza para controlar el clic en los enlaces del menú. Si el enlace es "Cerrar sesión", se muestra una confirmación utilizando SweetAlert2 y se realiza una solicitud HTTP para cerrar la sesión del usuario. El método `logout` se utiliza para cerrar la sesión del usuario y redirigirlo a la página de inicio de sesión.
+
+- `...mapMutations(["toggleCheckboxValue"])`: Mapea la mutación `toggleCheckboxValue` del store a la propiedad `toggleCheckboxValue` del componente.
+
+- `handleCheckboxChange()`: Invoca la mutación
+`toggleCheckboxValue` cuando el estado del checkbox principal cambia.
+
+- `updateScreenSize()`: Actualiza el tamaño de la pantalla y establece la propiedad `isDesktop` en función del ancho de la pantalla. Este método se invoca cuando cambia el tamaño de la ventana.
+
+- `Desktop()`: Comprueba si la pantalla es de escritorio según el valor de `screenWidth` y `limit`, y establece la propiedad `isDesktop` en consecuencia.
+
+- `action(param)`: Realiza una acción según el parámetro proporcionado. Si el parámetro es "adminElementos", se marca el checkbox del menú de elementos. De lo contrario, se redirige al usuario a la página correspondiente utilizando `this.$router.push`.
+
+- `performElementsAction(param)`: Redirige al usuario a la página correspondiente según el parámetro proporcionado y cierra el menú desplegable de elementos.
+
+**Estilos:**
+
+- Se definen varios estilos para los elementos del menú desplegable principal y el menú de elementos. Los estilos incluyen la posición fija, el ancho, el color de fondo, los colores de texto y de borde, la transición, el espaciado, el tamaño de fuente y la visibilidad.
+
+- Se utilizan media queries para estilos específicos en dispositivos móviles con un ancho máximo de 860px. Los estilos incluyen cambios en la posición, el ancho y la visibilidad de los elementos del menú en dispositivos móviles.
+-->
