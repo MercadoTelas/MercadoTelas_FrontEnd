@@ -125,7 +125,7 @@
       </div>
       <div class="text-center">
         <button type="submit" class="btn btn-primary btn-save" v-if="!isReadOnly">Guardar</button>
-        <router-link to="/items" type="button" class="btn btn-danger btn-save" v-if="isReadOnly">Volver</router-link>
+        <router-link to="/items" type="button" class="btn btn-danger btn-save" >Volver</router-link>
       </div>
     </form>
   </div>
@@ -310,9 +310,9 @@ export default {
 }
 
 .btn-save {
-  display: block;
   margin-top: 20px;
   margin-left: auto;
   margin-right: 0;
+  margin: 5px;
 }
 </style>

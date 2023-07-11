@@ -119,7 +119,7 @@
 
     <div class="form-footer text-center">
       <button class="btn btn-success" type="submit" @click="saveTransaction">
-        Guardar transacción
+        Guardar
       </button>
     </div>
   </div>
