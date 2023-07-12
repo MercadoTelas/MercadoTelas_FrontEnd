@@ -47,7 +47,7 @@
                       <th>Nombre</th>
                       <th>Cantidad de stock</th>
                       <th>Bodega</th>
-                      <th>Acciones</th>
+                      <th>Marcar para hacer entrada</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -57,10 +57,19 @@
                       <td>{{ producto.storing_format_units }}</td>
                       <td>{{ producto.warehouse }}</td>
                       <td>
-                        <button @click="hacerEntrada(index)" class="btn btn-success">Hacer entrada</button>
+                        <input type="checkbox" :value="producto" v-model="selectedProductos" />
                       </td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="5" class="text-end">
+                        <button @click="hacerEntrada" class="btn btn-success"
+                          :disabled="selectedProductos.length === 0 || !mismaBodega(selectedProductos)">Hacer
+                          entrada</button>
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -123,7 +132,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useStore } from "vuex";
 import { shallowRef } from 'vue';
-
+import moment from "moment";
 
 export default {
   data() {
@@ -133,32 +142,10 @@ export default {
       productos: [],
       productosLowClone: [],
       productosClone: [],
-      movementsData: [
-        {
-          id: 1,
-          date: '2023-06-01',
-          description: '5 entradas de tela Brush Azul',
-          warehouse: 'Bodega 1',
-          responsible: 'Andrés Méndez'
-        },
-        {
-          id: 2,
-          date: '2023-06-02',
-          description: '5 salidas de tela Brush Negra',
-          warehouse: 'Bodega 2',
-          responsible: 'Jane Alfaro'
-        },
-        {
-          id: 3,
-          date: '2023-06-03',
-          description: '3 entradas de rollos de hilo Blanco',
-          warehouse: 'Bodega 3',
-          responsible: 'Silvia Castro'
-        }
-        // Agrega más objetos de movimiento según tu estructura de datos
-      ],
+      movementsData: [],
       selectedBodega: '', // Valor seleccionado en el dropdown de bodega
       selectedTipo: '', // Valor seleccionado en el dropdown de tipo de artículo
+      selectedProductos: [], //Articulos seleccionados en la tabla de stock minimo
       bodegas: [], // Valores posibles para el dropdown de bodega
       tipos: [], // Valores posibles para el dropdown de tipo de artículo
       chartTop10: null,
@@ -174,9 +161,8 @@ export default {
     },
   },
   mounted() {
-    this.sortedMovements = this.sortMovements();
     const store = useStore();
-    store.commit('setNavbarTitle', 'Inicio');
+    this.$state.navbarTitle = "Inicio";
     const user = store.state.user;
     if (!store.state.LogAttempts) {
       toast.success(`Hola ${user.name}, bienvenido al sistema de inventario del Mercado de las Telas`, {
@@ -209,6 +195,26 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+
+      // Obtener el registro de movimientos más removidos 
+    axios
+      .get(API_URL + "/movement_logs")
+      .then((response) => {
+        console.log(response.data);
+        this.movementsData = response.data.movements_log.map((movement) => {
+          return {
+            item_id: movement.id,
+            description: movement.description,
+            date: moment(movement.created_at).format("DD/MM/YYYY"), // Cambia el formato de la fecha utilizando moment.js
+            warehouse: movement.origin_warehouse.name,
+            responsible: movement.user.name
+          };
+        });
+        this.sortedMovements = this.sortMovements();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     // Obtener los artículos más removidos o con más salidas de inventario desde la API
     axios
       .get(API_URL + "/most_removed_items")
@@ -218,7 +224,7 @@ export default {
           return {
             item_id: item.id,
             name: item.name,
-            removals: item.removals,
+            removals: item.quantity_removed,
             category: item.category_name
           };
         });
@@ -230,6 +236,7 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+      
 
     // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
     axios
@@ -386,15 +393,31 @@ export default {
       this.updateChartLow();
       this.updateChartTop10();
 
-    }
-    ,
-    hacerEntrada(index) {
-      const item_id = this.productosLow[index].item_id;
+    },
+    mismaBodega(productos) {
+      if (productos.length === 0) {
+        return false; // Si no hay productos seleccionados, no están en la misma bodega
+      }
+
+      const primeraBodega = productos[0].warehouse; // Suponiendo que la bodega está almacenada en la propiedad "bodega" del producto
+
+      for (let i = 1; i < productos.length; i++) {
+        if (productos[i].warehouse !== primeraBodega) {
+          return false; // Si encuentra un producto con una bodega diferente, no están en la misma bodega
+        }
+      }
+      return true; // Si no se encontraron productos con bodegas diferentes, están en la misma bodega
+    },
+    hacerEntrada() {
+      const selectedItems = this.selectedProductos.map((producto) => producto.item_id);
+      this.$store.commit('setSelectedItems', selectedItems);
+      //Enrrutar con la bodega de hacer entrada
+      const warehouse = this.selectedProductos[0].warehouse;
       this.$router.push({
-        name: 'EntryMin',
+        name: 'Entry-from-home',
         params: {
-          item_id: item_id,
-        },
+          warehouse: warehouse
+        }
       });
     },
     updateChartTop10() {

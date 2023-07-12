@@ -23,7 +23,8 @@ const store = createStore({
             sessionTimeout,
             sessionToken,
             LogAttempts,
-            user
+            user,
+            selectedItems: [],
         };
     },
     mutations: {
@@ -43,7 +44,7 @@ const store = createStore({
             localStorage.setItem("sessionToken", value.toString());
         },
         setLogAttempt(state, value) {
-            state.LogAttempts = value; 
+            state.LogAttempts = value;
         },
         setUser(state, value) {
             state.user = value;
@@ -52,7 +53,10 @@ const store = createStore({
         setCurrentWarehouseLoggedId(state, value) {
             state.currentWarehouseLoggedId = value;
             localStorage.setItem("current_warehouse_logged_id", value);
-        }
+        },
+        setSelectedItems(state, items) {
+            state.selectedItems = items;
+        },
     }
 });
 
