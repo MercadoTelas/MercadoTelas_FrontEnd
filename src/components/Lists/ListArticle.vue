@@ -1,12 +1,22 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="container">
     <div class="row">
       <div class="col-md-12 mb-3 me-1 d-flex align-items-center">
         <div class="col-md-10 me-2">
           <label for="search" class="form-label">Buscar artículo:</label>
-          <input type="text" id="search" class="form-control" v-model="searchQuery"
-            placeholder="Buscar por cualquier característica" />
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            v-model="searchQuery"
+            placeholder="Buscar por cualquier característica"
+          />
         </div>
         <div class="col-md-2 ms-2 align-self-center">
           <br />
@@ -17,8 +27,8 @@
       </div>
     </div>
     <div class="row">
-      <div class="table-responsive">
-        <table class="table table-bordered ">
+      <div class="table-responsive-lg">
+        <table class="table table-bordered">
           <thead>
             <tr>
               <th scope="col">Código</th>
@@ -51,10 +61,16 @@
                 {{ item.design_id !== null ? item.design_name : "No posee" }}
               </td>
               <td class="text-center">
-                <router-link :to="{ name: 'ArticleDetails', params: { id: item.id } }"
-                  class="btn btn-primary">Detalles</router-link>
-                <router-link :to="{ name: 'EditArticle', params: { id: item.id } }"
-                  class="btn btn-secondary">Editar</router-link>
+                <router-link
+                  :to="{ name: 'ArticleDetails', params: { id: item.id } }"
+                  class="btn btn-primary"
+                  >Detalles</router-link
+                >
+                <router-link
+                  :to="{ name: 'EditArticle', params: { id: item.id } }"
+                  class="btn btn-secondary"
+                  >Editar</router-link
+                >
                 <button @click="deleteArticle(item)" class="btn btn-danger">
                   Eliminar
                 </button>
@@ -71,8 +87,8 @@
 import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 import { API_URL } from "@/config";
 
@@ -80,8 +96,7 @@ export default {
   name: "ArticleList",
   data() {
     return {
-      items: [
-      ],
+      items: [],
       searchQuery: "",
     };
   },
@@ -134,7 +149,7 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           toast.success(`Se ha eliminado el artículo correctamente`, {
-            position: 'top-right',
+            position: "top-right",
             timeout: 2000,
             closeOnClick: true,
             pauseOnFocusLoss: true,
@@ -160,7 +175,7 @@ export default {
 </script>
 
 <style>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -169,6 +184,16 @@ export default {
   padding-top: 20px;
   padding-bottom: 20px;
   max-width: 90%;
+  height: fit-content;
+}
+
+.table-responsive-lg {
+  height: 700px; /* Adjust the desired height */
+  overflow-y: auto;
+}
+
+.table-responsive-lg .table {
+  margin-bottom: 0;
 }
 
 .table-hover tbody tr:hover td {

@@ -1,5 +1,10 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
 
   <div class="add-item container">
     <form class="form-estilo" @submit.prevent="onSubmit">
@@ -13,8 +18,16 @@
               <td class="table-label">Código:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-123"></i></span>
-                  <input type="text" id="id" class="form-control" :readonly="isReadOnly" v-model="id" />
+                  <span class="input-group-text"
+                    ><i class="bi bi-123"></i
+                  ></span>
+                  <input
+                    type="text"
+                    id="id"
+                    class="form-control"
+                    :readonly="isReadOnly"
+                    v-model="id"
+                  />
                 </div>
               </td>
             </tr>
@@ -22,8 +35,16 @@
               <td class="table-label">Nombre:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-person-badge-fill"></i></span>
-                  <input type="text" id="name" class="form-control" :readonly="isReadOnly" v-model="name" />
+                  <span class="input-group-text"
+                    ><i class="bi bi-person-badge-fill"></i
+                  ></span>
+                  <input
+                    type="text"
+                    id="name"
+                    class="form-control"
+                    :readonly="isReadOnly"
+                    v-model="name"
+                  />
                 </div>
               </td>
             </tr>
@@ -31,35 +52,75 @@
               <td class="table-label">Stock Mínimo:</td>
               <td class="table-input" colspan="2">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-dash-square-fill"></i></span>
-                  <input type="number" id="minimal_stock" class="form-control" v-model="minimal_stock"
-                    :readonly="isReadOnly" />
+                  <span class="input-group-text"
+                    ><i class="bi bi-dash-square-fill"></i
+                  ></span>
+                  <input
+                    type="number"
+                    id="minimal_stock"
+                    class="form-control"
+                    v-model="minimal_stock"
+                    :readonly="isReadOnly"
+                  />
                 </div>
               </td>
               <td class="table-label">Factor de Conversión:</td>
               <td class="table-input" colspan="2">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-input-cursor"></i></span>
-                  <input type="number" id="conversion_factor" class="form-control" v-model="conversion_factor"
-                    :readonly="isReadOnly" />
+                  <div
+                    class="item"
+                    style="margin-right: 8px; margin-top: 6px; height: 15px"
+                  >
+                    <i class="bi bi-info-circle" style="font-size: 15px"></i>
+                    <div class="text-area">
+                      <span class="text"
+                        >Factor de conversión corresponde a cuántas unidades de
+                        venta equivalen a 1 unidad de inventario</span
+                      >
+                    </div>
+                  </div>
+                  <span class="input-group-text"
+                    ><i class="bi bi-input-cursor"></i
+                  ></span>
+                  <input
+                    type="number"
+                    id="conversion_factor"
+                    class="form-control"
+                    v-model="conversion_factor"
+                    :readonly="isReadOnly"
+                  />
                 </div>
               </td>
             </tr>
             <tr>
-              <td class="table-label">Unidades de Almacenamiento:</td>
+              <td class="table-label">Unidades de Inventario:</td>
               <td class="table-input" colspan="2">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-postcard"></i></span>
-                  <input type="text" id="storing_format_units_name" class="form-control"
-                    v-model="storing_format_units_name" :readonly="isReadOnly" />
+                  <span class="input-group-text"
+                    ><i class="bi bi-postcard"></i
+                  ></span>
+                  <input
+                    type="text"
+                    id="storing_format_units_name"
+                    class="form-control"
+                    v-model="storing_format_units_name"
+                    :readonly="isReadOnly"
+                  />
                 </div>
               </td>
               <td class="table-label">Unidades de Venta:</td>
               <td class="table-input" colspan="2">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-postcard"></i></span>
-                  <input type="text" id="transferring_format_units_name" class="form-control"
-                    v-model="transferring_format_units_name" :readonly="isReadOnly" />
+                  <span class="input-group-text"
+                    ><i class="bi bi-postcard"></i
+                  ></span>
+                  <input
+                    type="text"
+                    id="transferring_format_units_name"
+                    class="form-control"
+                    v-model="transferring_format_units_name"
+                    :readonly="isReadOnly"
+                  />
                 </div>
               </td>
             </tr>
@@ -67,11 +128,22 @@
               <td class="table-label">Categoría:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-tag-fill"></i></span>
-                  <select id="category" class="form-select" v-model="filter.category" @change="onCategoryChange"
-                    :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-tag-fill"></i
+                  ></span>
+                  <select
+                    id="category"
+                    class="form-select"
+                    v-model="filter.category"
+                    @change="onCategoryChange"
+                    :disabled="isReadOnly"
+                  >
                     <option value="" disabled>Seleccionar categoría</option>
-                    <option v-for="category in categories" :value="category.name" :key="category.name">
+                    <option
+                      v-for="category in categories"
+                      :value="category.name"
+                      :key="category.name"
+                    >
                       {{ category.name }}
                     </option>
                   </select>
@@ -82,12 +154,23 @@
               <td class="table-label">Subcategoría:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-tags"></i></span>
-                  <select id="subcategory" class="form-select" v-model="subcategory_id" :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-tags"></i
+                  ></span>
+                  <select
+                    id="subcategory"
+                    class="form-select"
+                    v-model="subcategory_id"
+                    :disabled="isReadOnly"
+                  >
                     <option value="" disabled selected>
                       Seleccionar subcategoría
                     </option>
-                    <option v-for="subcategory in filteredSubcategories" :value="subcategory.id" :key="subcategory.name">
+                    <option
+                      v-for="subcategory in filteredSubcategories"
+                      :value="subcategory.id"
+                      :key="subcategory.name"
+                    >
                       {{ subcategory.name }}
                     </option>
                   </select>
@@ -98,10 +181,21 @@
               <td class="table-label">Diseño:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-x-diamond-fill"></i></span>
-                  <select id="design" class="form-select" v-model="design_id" :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-x-diamond-fill"></i
+                  ></span>
+                  <select
+                    id="design"
+                    class="form-select"
+                    v-model="design_id"
+                    :disabled="isReadOnly"
+                  >
                     <option value="">No posee</option>
-                    <option v-for="design in designs" :value="design.id" :key="design.id">
+                    <option
+                      v-for="design in designs"
+                      :value="design.id"
+                      :key="design.id"
+                    >
                       {{ design.name }}
                     </option>
                   </select>
@@ -112,10 +206,21 @@
               <td class="table-label">Marca:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-medium"></i></span>
-                  <select id="brand" class="form-select" v-model="brand_id" :disabled="isReadOnly">
+                  <span class="input-group-text"
+                    ><i class="bi bi-medium"></i
+                  ></span>
+                  <select
+                    id="brand"
+                    class="form-select"
+                    v-model="brand_id"
+                    :disabled="isReadOnly"
+                  >
                     <option value="">No posee</option>
-                    <option v-for="brand in brands" :value="brand.id" :key="brand.id">
+                    <option
+                      v-for="brand in brands"
+                      :value="brand.id"
+                      :key="brand.id"
+                    >
                       {{ brand.name }}
                     </option>
                   </select>
@@ -131,7 +236,9 @@
             <h4>Inventario en bodegas</h4>
           </div>
           <div class="mt-lg-1">
-            <table class="table table-responsive-lg table-hover table-secondary table-striped">
+            <table
+              class="table table-responsive-lg table-hover table-secondary table-striped"
+            >
               <thead>
                 <tr>
                   <th class="text-center">Bodega</th>
@@ -139,25 +246,41 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="inventory_item in inventory_items" :key="inventory_item.id">
+                <tr
+                  v-for="inventory_item in inventory_items"
+                  :key="inventory_item.id"
+                >
                   <td class="text-center">{{ inventory_item.warehouse }}</td>
-                  <td class="text-center">{{ inventory_item.storing_format_units }} {{ storing_format_units_name }}</td>
+                  <td class="text-center">
+                    {{ inventory_item.storing_format_units }}
+                    {{ storing_format_units_name }}
+                  </td>
                 </tr>
                 <tr>
                   <td class="text-center fw-bold">Total</td>
-                  <td class="text-center fw-bold">{{ calculateStockUnits() }} {{ storing_format_units_name }}</td>
+                  <td class="text-center fw-bold">
+                    {{ calculateStockUnits() }} {{ storing_format_units_name }}
+                  </td>
                 </tr>
               </tbody>
             </table>
-
           </div>
         </div>
       </div>
       <div class="text-center mt-lg-4">
-        <button type="submit" class="btn btn-primary btn-save" v-if="!isReadOnly">
+        <button
+          type="submit"
+          class="btn btn-primary btn-save"
+          v-if="!isReadOnly"
+        >
           Guardar
         </button>
-        <router-link to="#" @click="goToPreviousPage()" type="button" class="btn btn-danger btn-save">Volver
+        <router-link
+          to="#"
+          @click="goToPreviousPage()"
+          type="button"
+          class="btn btn-danger btn-save"
+          >Volver
         </router-link>
       </div>
     </form>
@@ -191,7 +314,7 @@ export default {
       brands: [],
       inventory_items: [],
       isReadOnly: false,
-      mode: ""
+      mode: "",
     };
   },
   computed: {
@@ -278,8 +401,10 @@ export default {
           this.id = itemData.item.id;
           this.name = itemData.item.name;
           this.minimal_stock = itemData.item.minimal_stock;
-          this.storing_format_units_name = itemData.item.storing_format_units_name;
-          this.transferring_format_units_name = itemData.item.transferring_format_units_name;
+          this.storing_format_units_name =
+            itemData.item.storing_format_units_name;
+          this.transferring_format_units_name =
+            itemData.item.transferring_format_units_name;
           this.conversion_factor = itemData.item.conversion_factor;
           this.filter.category = itemData.item.category_name;
           this.subcategory_id = itemData.item.subcategory_id;
@@ -323,13 +448,13 @@ export default {
           console.log(response);
           toast.success("Artículo actualizado exitosamente", { timeout: 2000 });
           // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
           this.$router.push("/items");
         })
         .catch(async (error) => {
           console.log(error);
           // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
           toast.error("Error al actualizar artículo", { closeOnClick: false });
         });
     },
@@ -343,13 +468,13 @@ export default {
           console.log(response);
           toast.success("Artículo creado exitosamente", { timeout: 2000 });
           // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
           this.$router.push("/items");
         })
         .catch(async (error) => {
           console.log(error);
           // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000));
           toast.error("Error al crear artículo", { closeOnClick: false });
         });
     },
@@ -358,7 +483,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1000px;
 }
@@ -367,5 +492,60 @@ export default {
   max-width: 1000px;
   margin: 0 auto;
   padding: 20px;
+}
+
+.text-area {
+  position: absolute;
+  z-index: 1;
+  bottom: 110%;
+  left: 2%;
+  transform: translateX(-50%);
+  width: 250px;
+  height: 100px;
+  background-color: #15386e;
+  border-radius: 10px; /* Adjust the value to control the roundness of corners */
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.text {
+  font-size: 15px;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.item:hover .text-area {
+  opacity: 1;
+  animation: emerge 0.5s linear forwards;
+}
+
+.item:hover .text {
+  opacity: 1;
+  animation: fade-in 0.5s linear forwards;
+}
+
+@keyframes emerge {
+  0% {
+    transform: translateX(-50%) scale(0);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>
