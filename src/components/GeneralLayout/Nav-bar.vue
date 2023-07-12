@@ -2,6 +2,14 @@
 <template>
   <div class="nav-wrapper" style="height: 110px">
     <nav class="navbar navbar-expand-lg" :class="{ sticky: isSticky }">
+      <div class="burger-container">
+        <label for="check">
+          <i class="fas fa-bars" id="btn">
+            <i class="bi bi-list"></i>
+          </i>
+        </label>
+      </div>
+
       <div class="logo-container">
         <img
           id="logotelas"
@@ -27,6 +35,16 @@
 </template>
 
 <style lang="scss">
+label #btn {
+  position: fixed;
+  cursor: pointer;
+  color: white;
+  border: 1px solid #15386e;
+  background: #15386e;
+  text-align: center;
+  line-height: 45px;
+}
+
 .navbar.sticky {
   position: fixed;
   top: 0;
@@ -38,6 +56,19 @@
   background-color: #15386e;
   color: white;
   height: 110px;
+
+  .burger-container {
+    display: flexbox;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 40px;
+    height: 110px;
+
+    #btn {
+      font-size: 40px;
+      margin-top: 15px;
+    }
+  }
 
   .logo-container {
     margin-left: 15px;
@@ -52,7 +83,6 @@
       cursor: pointer;
     }
   }
-
 
   .title-wrapper {
     width: 100%;
