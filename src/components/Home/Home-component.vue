@@ -129,44 +129,10 @@ export default {
   data() {
     return {
       sortedMovements: [],
-      productosLow: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          minimal_stock: 20,
-          warehouse: 'Bodega 2',
-          category: 'Hilo'
-        },
-      ],
-      productos: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          warehouse: 'Bodega 1',
-          category_name: 'Tela'
-        },
-      ],
-      productosLowClone: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          minimal_stock: 20,
-          warehouse: 'Bodega 2',
-          category: 'Hilo'
-        },
-      ],
-      productosClone: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          warehouse: 'Bodega 1',
-          category_name: 'Tela'
-        },
-      ],
+      productosLow: [],
+      productos: [],
+      productosLowClone: [],
+      productosClone: [],
       movementsData: [
         {
           id: 1,
@@ -209,8 +175,6 @@ export default {
   },
   mounted() {
     this.sortedMovements = this.sortMovements();
-    this.createChartTop10();
-    this.createChartLow();
     const store = useStore();
     store.commit('setNavbarTitle', 'Inicio');
     const user = store.state.user;
@@ -224,27 +188,7 @@ export default {
       });
       store.commit('setLogAttempt', true);
     }
-    // Obtener los artículos más removidos o con más salidas de inventario desde la API
-    axios
-      .get(API_URL + "/most_removed_items")
-      .then((response) => {
-        console.log(response.data);
-        this.productosLow = response.data.items;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
-    // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
-    axios
-      .get(API_URL + "/low_stock_items")
-      .then((response) => {
-        console.log(response.data);
-        this.productos = response.data.items;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     // Obtener todas las categorías desde la API
     axios
@@ -256,11 +200,56 @@ export default {
         console.log(error);
       });
 
-      // Obtener todas las bodegas desde la API
+    // Obtener todas las bodegas desde la API
     axios
       .get(`${API_URL}/warehouses`)
       .then((response) => {
         this.bodegas = response.data.map((warehouse) => warehouse.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // Obtener los artículos más removidos o con más salidas de inventario desde la API
+    axios
+      .get(API_URL + "/most_removed_items")
+      .then((response) => {
+        console.log(response.data);
+        this.productos = response.data.map((item) => {
+          return {
+            item_id: item.id,
+            name: item.name,
+            removals: item.removals,
+            category: item.category_name
+          };
+        });
+        this.productosClone = this.productos;
+
+        this.createChartTop10();
+        this.filterProductos();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
+    axios
+      .get(API_URL + "/low_stock_items")
+      .then((response) => {
+        console.log(response.data);
+        this.productosLow = response.data.map((item) => {
+          return {
+            item_id: item.item_id,
+            name: item.name,
+            storing_format_units: item.storing_format_units,
+            warehouse: item.warehouse,
+            minimal_stock: item.minimal_stock,
+            category: item.category
+          };
+        });
+        this.productosLowClone = this.productosLow;
+
+        this.createChartLow();
+        this.filterProductos();
       })
       .catch((error) => {
         console.log(error);
@@ -275,9 +264,9 @@ export default {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext('2d');
 
-      let sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+      let sortedProductos = [...this.productos].sort((a, b) => b.removals - a.removals);
       let tiposTelas = sortedProductos.map((producto) => producto.name);
-      let inventario = sortedProductos.map((producto) => producto.storing_format_units);
+      let inventario = sortedProductos.map((producto) => producto.removals);
 
       this.chartTop10 = shallowRef(new Chart(ctx, {
         type: 'bar',
@@ -341,7 +330,7 @@ export default {
               borderWidth: 1,
             },
             {
-              label: 'Nivel Deseado',
+              label: 'Nivel deseado',
               data: nivelDeseado,
               backgroundColor: 'rgba(10, 10, 255, 0.5)',
               borderColor: 'rgba(70, 70, 70, 1)',
@@ -380,7 +369,7 @@ export default {
       let productosLowFiltrados = [...this.productosLow];
 
       if (this.selectedTipo) {
-        productosFiltrados = productosFiltrados.filter((producto) => producto.category_name === this.selectedTipo);
+        productosFiltrados = productosFiltrados.filter((producto) => producto.category === this.selectedTipo);
       }
 
       if (this.selectedBodega) {
@@ -410,9 +399,9 @@ export default {
     },
     updateChartTop10() {
       if (this.chartTop10) {
-        const sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+        const sortedProductos = [...this.productos].sort((a, b) => b.removals - a.removals);
         const tiposTelas = sortedProductos.map((producto) => producto.name);
-        const inventario = sortedProductos.map((producto) => producto.storing_format_units);
+        const inventario = sortedProductos.map((producto) => producto.removals);
 
         this.chartTop10.data.labels = tiposTelas;
         this.chartTop10.data.datasets[0].data = inventario;
@@ -439,13 +428,13 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container-fluid {
+#check:checked~.container-fluid {
   padding-left: 345px;
   max-width: 1800px;
 }
 
 .container-fluid {
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: auto;
 }
 
@@ -463,7 +452,7 @@ export default {
 
 .chart-container {
   width: 100%;
-  height: 300px;
+  height: 290px;
 }
 
 .kpi-table {
