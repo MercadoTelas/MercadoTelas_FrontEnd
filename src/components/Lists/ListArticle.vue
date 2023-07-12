@@ -99,26 +99,6 @@ export default {
   data() {
     return {
       items: [
-        {
-          id: "1",
-          name: "Artículo 1",
-          category_name: "Categoría 1",
-          subcategory_name: "Subcategoría 1",
-          minimal_stock: "10",
-          status: "active",
-          brand_name: "Marca 1",
-          design_name: "Diseño 1",
-        },
-        {
-          id: "2",
-          name: "Artículo 2",
-          category_name: "Categoría 2",
-          subcategory_name: "Subcategoría 2",
-          minimal_stock: "5",
-          status: "inactive",
-          brand_name: "Marca 2",
-          design_name: "Diseño 2",
-        },
       ],
       searchQuery: "",
     };
