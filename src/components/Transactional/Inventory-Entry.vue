@@ -47,22 +47,24 @@
           <p>Usuario: {{ this.$store.state.user.name }}</p>
           <div class="row mb-lg-5">
             <div class="col-1">
-              <label for="warehouseSelect">Bodega:</label>
+              <label for="warehouseSelect" :hidden="selectDisabled">Bodega:</label>
             </div>
-            <div class="col-11">
-              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
+            <div class="col-11" :hidden="selectDisabled">
+              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse" >
                 <option value="" disabled>Seleccionar</option>
                 <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
                   {{ warehouse.name }}
                 </option>
               </select>
             </div>
+            <div>
+              <label :hidden="!selectDisabled">Bodega seleccionada: {{ selectedWarehouse.name }}</label>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <h4>Lista de Artículos</h4>
-    <h5 selected>Bodega seleccionada: {{ selectedWarehouse.name }}</h5>
     <div class="table-container">
       <table class="table table-responsive-lg text-center">
         <thead>
@@ -162,17 +164,18 @@ export default {
       .catch((error) => {
         console.error(error);
       });
+
+    this.addItem();
     // Verificar si la URL contiene la palabra "details"
     if (window.location.href.includes("Entry-from-home")) {
       // Obtener el valor del parámetro warehouse
-      const warehouse = {};
-      warehouse.name = this.$route.params.warehouse;
-      this.selectedWarehouse = warehouse;
-      console.log(this.selectedWarehouse);
-
+      this.selectedWarehouse = this.$store.state.warehouseSend;
+      console.log();
+      this.selectDisabled = true;
 
       // Iterar sobre los productos en el store.js
       let selectedArticles = this.$store.state.selectedItems;
+      
       for (let i = 0; i < selectedArticles.length; i++) {
         let article = {};
         article.item_id = selectedArticles[i];

@@ -196,11 +196,10 @@ export default {
         console.log(error);
       });
 
-      // Obtener el registro de movimientos más removidos 
+    // Obtener el registro de movimientos más removidos 
     axios
       .get(API_URL + "/movement_logs")
       .then((response) => {
-        console.log(response.data);
         this.movementsData = response.data.movements_log.map((movement) => {
           return {
             item_id: movement.id,
@@ -236,19 +235,19 @@ export default {
       .catch((error) => {
         console.log(error);
       });
-      
+
 
     // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
     axios
       .get(API_URL + "/low_stock_items")
       .then((response) => {
-        console.log(response.data);
         this.productosLow = response.data.map((item) => {
           return {
             item_id: item.item_id,
             name: item.name,
             storing_format_units: item.storing_format_units,
-            warehouse: item.warehouse,
+            warehouse: item.warehouse.name,
+            warehouseComplete: item.warehouse,
             minimal_stock: item.minimal_stock,
             category: item.category
           };
@@ -411,6 +410,10 @@ export default {
     hacerEntrada() {
       const selectedItems = this.selectedProductos.map((producto) => producto.item_id);
       this.$store.commit('setSelectedItems', selectedItems);
+      this.$store.commit('setWarehouse', this.selectedProductos[0].warehouseComplete);
+
+      console.log(selectedItems);
+
       //Enrrutar con la bodega de hacer entrada
       const warehouse = this.selectedProductos[0].warehouse;
       this.$router.push({

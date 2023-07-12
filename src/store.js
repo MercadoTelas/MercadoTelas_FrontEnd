@@ -25,6 +25,7 @@ const store = createStore({
             LogAttempts,
             user,
             selectedItems: [],
+            warehouseSend: {},
         };
     },
     mutations: {
@@ -56,6 +57,9 @@ const store = createStore({
         },
         setSelectedItems(state, items) {
             state.selectedItems = items;
+        },
+        setWarehouse(state, warehouse) {
+            state.warehouseSend = warehouse;
         },
     }
 });
