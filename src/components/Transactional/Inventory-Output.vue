@@ -295,14 +295,18 @@ export default {
                 });
               })
               .catch((error) => {
-                console.error(error);
-                toast.error(`No se encontró el artículo`, {
-                  position: "top-right",
-                  timeout: 2000,
-                  closeOnClick: true,
-                  pauseOnFocusLoss: true,
-                  pauseOnHover: true,
-                });
+                const errorMessage = error.response.data.error;
+                if (error.response.status !== 500 && errorMessage) {
+                  toast.error(errorMessage, {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  });
+                } else {
+                  console.error(error);
+                }
               });
         }
       } else {

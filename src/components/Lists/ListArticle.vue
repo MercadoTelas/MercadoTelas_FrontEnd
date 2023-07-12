@@ -152,12 +152,22 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado el artículo correctamente`, {
-              position: 'top-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+          axios
+            .delete(API_URL + "/items/" + article.id)
+            .then((response) => {
+              console.log(response);
+              toast.success(`Se ha eliminado el artículo correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+              // Eliminar el artículo de la lista
+              this.items = this.items.filter((item) => item.id !== article.id);
+            })
+            .catch((error) => {
+              console.log(error);
             });
         }
       });
@@ -169,6 +179,7 @@ export default {
     axios
       .get(API_URL + "/items")
       .then((response) => {
+        console.log(response);
         this.items = response.data;
       })
       .catch((error) => {
