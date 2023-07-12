@@ -207,8 +207,8 @@ export default {
             item.id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
             (this.filter.category === "" || item.category === this.filter.category) &&
             (this.filter.subcategory === "" || item.subcategory === this.filter.subcategory) &&
-            (this.filter.design === "" || item.design === this.filter.design) &&
-            (this.filter.brand === "" || item.brand === this.filter.brand) &&
+            (this.filter.design === "" || (item.design && item.design.name === this.filter.design)) &&
+            (this.filter.brand === "" || (item.brand && item.brand.name === this.filter.brand)) &&
             (this.filter.warehouse === "" || item.warehouse === this.filter.warehouse)
         );
       }).sort((a, b) => a.category.localeCompare(b.category));

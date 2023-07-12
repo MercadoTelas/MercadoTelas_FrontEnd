@@ -101,32 +101,40 @@ export default {
     createCategory(category) {
       axios
         .post(`${API_URL}/categories`, category)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
-          toast.success("Categoría creada exitosamente", { timeout: 5000 });
+          toast.success("Categoría creada exitosamente", { timeout: 2000 });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/categories");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al crear la categoría", { closeOnClick: false });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     updateCategory(category) {
       const categoryId = this.$route.params.id;
       axios
         .put(`${API_URL}/categories/${categoryId}`, category)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Categoría actualizada exitosamente", {
             timeout: 5000,
           });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/categories");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al actualizar la categoría", {
             closeOnClick: false,
           });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     fetchCategoryData(categoryId) {

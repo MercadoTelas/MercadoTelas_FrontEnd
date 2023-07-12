@@ -27,21 +27,19 @@
       </div>
     </div>
     <div class="row">
-      <div class="table-responsive col-md-12">
-        <table
-          class="table table-hover table-bordered table-secondary"
-        >
+      <div class="table-responsive-lg">
+        <table class="table table-bordered">
           <thead>
             <tr>
-              <th class="text-center">Código</th>
-              <th class="text-center">Nombre</th>
-              <th class="text-center">Categoría</th>
-              <th class="text-center">Subcategoría</th>
-              <th class="text-center">Inventario Mínimo</th>
-              <th class="text-center">Estado</th>
-              <th class="text-center">Marca</th>
-              <th class="text-center">Diseño</th>
-              <th class="text-center">Acciones</th>
+              <th scope="col">Código</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Subcategoría</th>
+              <th scope="col">Inventario mínimo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Diseño</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -76,7 +74,6 @@
                 <button @click="deleteArticle(item)" class="btn btn-danger">
                   Eliminar
                 </button>
-              
               </td>
             </tr>
           </tbody>
@@ -90,8 +87,8 @@
 import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 import { API_URL } from "@/config";
 
@@ -99,8 +96,7 @@ export default {
   name: "ArticleList",
   data() {
     return {
-      items: [
-      ],
+      items: [],
       searchQuery: "",
     };
   },
@@ -198,6 +194,17 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+  max-width: 90%;
+  height: fit-content;
+}
+
+.table-responsive-lg {
+  height: 700px; /* Adjust the desired height */
+  overflow-y: auto;
+}
+
+.table-responsive-lg .table {
+  margin-bottom: 0;
 }
 
 .table-hover tbody tr:hover td {
@@ -208,14 +215,19 @@ export default {
   margin: 3px;
 }
 
+.table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 .table {
   margin-top: 20px;
 }
 
 .table th,
 .table td {
-  padding: 8px;
   vertical-align: middle;
+  padding-bottom: -10px;
 }
 
 .table th {

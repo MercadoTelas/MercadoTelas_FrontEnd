@@ -98,28 +98,36 @@ export default {
     createDesign(design) {
       axios
         .post(`${API_URL}/designs`, design)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Diseño creado exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/designs");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al crear el diseño");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     updateDesign(design) {
       const designId = this.$route.params.id;
       axios
         .put(`${API_URL}/designs/${designId}`, design)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Diseño actualizado exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/designs");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al actualizar el diseño");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     fetchDesignData(designId) {

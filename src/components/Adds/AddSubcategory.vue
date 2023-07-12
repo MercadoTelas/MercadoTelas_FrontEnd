@@ -133,28 +133,36 @@ export default {
     createSubcategory(subcategory) {
       axios
         .post(API_URL + "/subcategories", subcategory)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Subcategoría creada exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/subcategories");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al crear la subcategoría");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     updateSubcategory(subcategory) {
       const subcategoryId = this.$route.params.id;
       axios
         .put(`${API_URL}/subcategories/${subcategoryId}`, subcategory)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Subcategoría actualizada exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/subcategories");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al actualizar la subcategoría");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     fetchSubcategoryData(subcategoryId) {

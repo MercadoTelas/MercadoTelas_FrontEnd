@@ -47,7 +47,7 @@
                       <th>Nombre</th>
                       <th>Cantidad de stock</th>
                       <th>Bodega</th>
-                      <th>Acciones</th>
+                      <th>Marcar para hacer entrada</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -57,10 +57,19 @@
                       <td>{{ producto.storing_format_units }}</td>
                       <td>{{ producto.warehouse }}</td>
                       <td>
-                        <button @click="hacerEntrada(index)" class="btn btn-success">Hacer entrada</button>
+                        <input type="checkbox" :value="producto" v-model="selectedProductos" />
                       </td>
                     </tr>
                   </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="5" class="text-end">
+                        <button @click="hacerEntrada" class="btn btn-success"
+                          :disabled="selectedProductos.length === 0 || !mismaBodega(selectedProductos)">Hacer
+                          entrada</button>
+                      </td>
+                    </tr>
+                  </tfoot>
                 </table>
               </div>
             </div>
@@ -123,76 +132,20 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { useStore } from "vuex";
 import { shallowRef } from 'vue';
-
+import moment from "moment";
 
 export default {
   data() {
     return {
       sortedMovements: [],
-      productosLow: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          minimal_stock: 20,
-          warehouse: 'Bodega 2',
-          category: 'Hilo'
-        },
-      ],
-      productos: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          warehouse: 'Bodega 1',
-          category_name: 'Tela'
-        },
-      ],
-      productosLowClone: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          minimal_stock: 20,
-          warehouse: 'Bodega 2',
-          category: 'Hilo'
-        },
-      ],
-      productosClone: [
-        {
-          item_id: 'HL12345',
-          name: 'Producto 1',
-          storing_format_units: 10,
-          warehouse: 'Bodega 1',
-          category_name: 'Tela'
-        },
-      ],
-      movementsData: [
-        {
-          id: 1,
-          date: '2023-06-01',
-          description: '5 entradas de tela Brush Azul',
-          warehouse: 'Bodega 1',
-          responsible: 'Andrés Méndez'
-        },
-        {
-          id: 2,
-          date: '2023-06-02',
-          description: '5 salidas de tela Brush Negra',
-          warehouse: 'Bodega 2',
-          responsible: 'Jane Alfaro'
-        },
-        {
-          id: 3,
-          date: '2023-06-03',
-          description: '3 entradas de rollos de hilo Blanco',
-          warehouse: 'Bodega 3',
-          responsible: 'Silvia Castro'
-        }
-        // Agrega más objetos de movimiento según tu estructura de datos
-      ],
+      productosLow: [],
+      productos: [],
+      productosLowClone: [],
+      productosClone: [],
+      movementsData: [],
       selectedBodega: '', // Valor seleccionado en el dropdown de bodega
       selectedTipo: '', // Valor seleccionado en el dropdown de tipo de artículo
+      selectedProductos: [], //Articulos seleccionados en la tabla de stock minimo
       bodegas: [], // Valores posibles para el dropdown de bodega
       tipos: [], // Valores posibles para el dropdown de tipo de artículo
       chartTop10: null,
@@ -208,11 +161,8 @@ export default {
     },
   },
   mounted() {
-    this.sortedMovements = this.sortMovements();
-    this.createChartTop10();
-    this.createChartLow();
     const store = useStore();
-    store.commit('setNavbarTitle', 'Inicio');
+    this.$state.navbarTitle = "Inicio";
     const user = store.state.user;
     if (!store.state.LogAttempts) {
       toast.success(`Hola ${user.name}, bienvenido al sistema de inventario del Mercado de las Telas`, {
@@ -224,27 +174,7 @@ export default {
       });
       store.commit('setLogAttempt', true);
     }
-    // Obtener los artículos más removidos o con más salidas de inventario desde la API
-    axios
-      .get(API_URL + "/most_removed_items")
-      .then((response) => {
-        console.log(response.data);
-        this.productosLow = response.data.items;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
-    // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
-    axios
-      .get(API_URL + "/low_stock_items")
-      .then((response) => {
-        console.log(response.data);
-        this.productos = response.data.items;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
 
     // Obtener todas las categorías desde la API
     axios
@@ -256,11 +186,76 @@ export default {
         console.log(error);
       });
 
-      // Obtener todas las bodegas desde la API
+    // Obtener todas las bodegas desde la API
     axios
       .get(`${API_URL}/warehouses`)
       .then((response) => {
         this.bodegas = response.data.map((warehouse) => warehouse.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // Obtener el registro de movimientos más removidos 
+    axios
+      .get(API_URL + "/movement_logs")
+      .then((response) => {
+        this.movementsData = response.data.movements_log.map((movement) => {
+          return {
+            item_id: movement.id,
+            description: movement.description,
+            date: moment(movement.created_at).format("DD/MM/YYYY"), // Cambia el formato de la fecha utilizando moment.js
+            warehouse: movement.origin_warehouse.name,
+            responsible: movement.user.name
+          };
+        });
+        this.sortedMovements = this.sortMovements();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    // Obtener los artículos más removidos o con más salidas de inventario desde la API
+    axios
+      .get(API_URL + "/most_removed_items")
+      .then((response) => {
+        console.log(response.data);
+        this.productos = response.data.map((item) => {
+          return {
+            item_id: item.id,
+            name: item.name,
+            removals: item.quantity_removed,
+            category: item.category_name
+          };
+        });
+        this.productosClone = this.productos;
+
+        this.createChartTop10();
+        this.filterProductos();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+
+    // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
+    axios
+      .get(API_URL + "/low_stock_items")
+      .then((response) => {
+        this.productosLow = response.data.map((item) => {
+          return {
+            item_id: item.item_id,
+            name: item.name,
+            storing_format_units: item.storing_format_units,
+            warehouse: item.warehouse.name,
+            warehouseComplete: item.warehouse,
+            minimal_stock: item.minimal_stock,
+            category: item.category
+          };
+        });
+        this.productosLowClone = this.productosLow;
+
+        this.createChartLow();
+        this.filterProductos();
       })
       .catch((error) => {
         console.log(error);
@@ -275,9 +270,9 @@ export default {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext('2d');
 
-      let sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+      let sortedProductos = [...this.productos].sort((a, b) => b.removals - a.removals);
       let tiposTelas = sortedProductos.map((producto) => producto.name);
-      let inventario = sortedProductos.map((producto) => producto.storing_format_units);
+      let inventario = sortedProductos.map((producto) => producto.removals);
 
       this.chartTop10 = shallowRef(new Chart(ctx, {
         type: 'bar',
@@ -341,7 +336,7 @@ export default {
               borderWidth: 1,
             },
             {
-              label: 'Nivel Deseado',
+              label: 'Nivel deseado',
               data: nivelDeseado,
               backgroundColor: 'rgba(10, 10, 255, 0.5)',
               borderColor: 'rgba(70, 70, 70, 1)',
@@ -380,7 +375,7 @@ export default {
       let productosLowFiltrados = [...this.productosLow];
 
       if (this.selectedTipo) {
-        productosFiltrados = productosFiltrados.filter((producto) => producto.category_name === this.selectedTipo);
+        productosFiltrados = productosFiltrados.filter((producto) => producto.category === this.selectedTipo);
       }
 
       if (this.selectedBodega) {
@@ -397,22 +392,42 @@ export default {
       this.updateChartLow();
       this.updateChartTop10();
 
-    }
-    ,
-    hacerEntrada(index) {
-      const item_id = this.productosLow[index].item_id;
+    },
+    mismaBodega(productos) {
+      if (productos.length === 0) {
+        return false; // Si no hay productos seleccionados, no están en la misma bodega
+      }
+
+      const primeraBodega = productos[0].warehouse; // Suponiendo que la bodega está almacenada en la propiedad "bodega" del producto
+
+      for (let i = 1; i < productos.length; i++) {
+        if (productos[i].warehouse !== primeraBodega) {
+          return false; // Si encuentra un producto con una bodega diferente, no están en la misma bodega
+        }
+      }
+      return true; // Si no se encontraron productos con bodegas diferentes, están en la misma bodega
+    },
+    hacerEntrada() {
+      const selectedItems = this.selectedProductos.map((producto) => producto.item_id);
+      this.$store.commit('setSelectedItems', selectedItems);
+      this.$store.commit('setWarehouse', this.selectedProductos[0].warehouseComplete);
+
+      console.log(selectedItems);
+
+      //Enrrutar con la bodega de hacer entrada
+      const warehouse = this.selectedProductos[0].warehouse;
       this.$router.push({
-        name: 'EntryMin',
+        name: 'Entry-from-home',
         params: {
-          item_id: item_id,
-        },
+          warehouse: warehouse
+        }
       });
     },
     updateChartTop10() {
       if (this.chartTop10) {
-        const sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+        const sortedProductos = [...this.productos].sort((a, b) => b.removals - a.removals);
         const tiposTelas = sortedProductos.map((producto) => producto.name);
-        const inventario = sortedProductos.map((producto) => producto.storing_format_units);
+        const inventario = sortedProductos.map((producto) => producto.removals);
 
         this.chartTop10.data.labels = tiposTelas;
         this.chartTop10.data.datasets[0].data = inventario;
@@ -439,13 +454,13 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container-fluid {
+#check:checked~.container-fluid {
   padding-left: 345px;
-  max-width: 1800px;
+  max-width: 1600px;
 }
 
 .container-fluid {
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: auto;
 }
 
@@ -463,7 +478,7 @@ export default {
 
 .chart-container {
   width: 100%;
-  height: 300px;
+  height: 290px;
 }
 
 .kpi-table {
