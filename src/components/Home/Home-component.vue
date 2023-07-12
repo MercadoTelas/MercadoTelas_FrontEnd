@@ -441,6 +441,11 @@ export default {
 </script>
 
 <style scoped>
+#check:checked ~ .container-fluid {
+  padding-left: 345px;
+  max-width: 1800px;
+}
+
 .container-fluid {
   margin-top: 20px;
   margin-left: auto;

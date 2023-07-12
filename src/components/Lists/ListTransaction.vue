@@ -15,7 +15,7 @@
               <tr>
                 <th>Código</th>
                 <th>Usuario</th>
-                <th>Artículos ingresados</th>
+                <th>Artículos removidos</th>
                 <th>Bodega</th>
                 <th>Fecha</th>
                 <th>Acciones</th>
@@ -53,7 +53,7 @@
               <tr>
                 <th>Código</th>
                 <th>Usuario</th>
-                <th>Artículos removidos</th>
+                <th>Artículos ingresados</th>
                 <th>Bodega</th>
                 <th>Fecha</th>
                 <th>Acciones</th>

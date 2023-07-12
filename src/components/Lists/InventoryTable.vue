@@ -1,22 +1,42 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="container-fluid">
     <div class="row">
       <div id="contentDiv" class="col-lg-10 col-md-12">
-        <h2 class="filter-title">Filtros</h2>
+        <h4 class="filter-title">Filtros</h4>
         <div class="filters-container row">
           <div class="col-md-2">
             <div class="form-group code">
               <label for="codigo">Código de Artículo:</label>
-              <input type="text" id="codigo" class="form-control" v-model="filter.id" placeholder="Código" />
+              <input
+                type="text"
+                id="codigo"
+                class="form-control"
+                v-model="filter.id"
+                placeholder="Código"
+              />
             </div>
           </div>
           <div class="col-md-2">
             <div class="form-group">
               <label for="category">Categoría:</label>
-              <select id="category" class="form-control" v-model="filter.category" @change="resetSubcategory()">
+              <select
+                id="category"
+                class="form-control"
+                v-model="filter.category"
+                @change="resetSubcategory()"
+              >
                 <option value="" disabled>Seleccionar categoría</option>
-                <option v-for="category in categories" :value="category.name" :key="category.name">
+                <option
+                  v-for="category in categories"
+                  :value="category.name"
+                  :key="category.name"
+                >
                   {{ category.name }}
                 </option>
               </select>
@@ -25,11 +45,19 @@
           <div class="col-md-2">
             <div class="form-group">
               <label for="subcategory">Subcategoría:</label>
-              <select id="subcategory" class="form-control" v-model="filter.subcategory">
+              <select
+                id="subcategory"
+                class="form-control"
+                v-model="filter.subcategory"
+              >
                 <option value="" disabled selected>
                   Seleccionar subcategoría
                 </option>
-                <option v-for="subcategory in filteredSubcategories" :value="subcategory.name" :key="subcategory.name">
+                <option
+                  v-for="subcategory in filteredSubcategories"
+                  :value="subcategory.name"
+                  :key="subcategory.name"
+                >
                   {{ subcategory.name }}
                 </option>
               </select>
@@ -40,7 +68,11 @@
               <label for="design">Diseño:</label>
               <select id="design" class="form-control" v-model="filter.design">
                 <option value="" disabled selected>Seleccionar diseño</option>
-                <option v-for="design in designs" :value="design.name" :key="design.name">
+                <option
+                  v-for="design in designs"
+                  :value="design.name"
+                  :key="design.name"
+                >
                   {{ design.name }}
                 </option>
               </select>
@@ -51,7 +83,11 @@
               <label for="brand">Marca:</label>
               <select id="brand" class="form-control" v-model="filter.brand">
                 <option value="" selected disabled>Seleccionar marca</option>
-                <option v-for="brand in brands" :value="brand.name" :key="brand.name">
+                <option
+                  v-for="brand in brands"
+                  :value="brand.name"
+                  :key="brand.name"
+                >
                   {{ brand.name }}
                 </option>
               </select>
@@ -60,35 +96,64 @@
           <div class="col-md-2">
             <div class="form-group">
               <label for="warehouse">Bodega:</label>
-              <select id="warehouse" class="form-control" v-model="filter.warehouse">
+              <select
+                id="warehouse"
+                class="form-control"
+                v-model="filter.warehouse"
+              >
                 <option value="" selected disabled>Seleccionar bodega</option>
-                <option v-for="warehouse in warehouses" :value="warehouse.name" :key="warehouse.name">
+                <option
+                  v-for="warehouse in warehouses"
+                  :value="warehouse.name"
+                  :key="warehouse.name"
+                >
                   {{ warehouse.name }}
                 </option>
               </select>
             </div>
-
           </div>
-          <button class="btn btn-secondary" style="width: 200px;margin: 10px;" @click="resetFilter('all')">Limpiar filtros</button>
+          <button
+            class="btn btn-secondary"
+            style="width: 200px; margin: 10px"
+            @click="resetFilter('all')"
+          >
+            Limpiar filtros
+          </button>
         </div>
 
         <h2 class="filter-title text-center">Tabla de Inventario</h2>
 
         <div class="table-responsive table-scroll">
-
           <table class="table table-bordered">
             <thead>
               <tr>
                 <th class="text-primary">Código</th>
                 <th class="text-primary">Nombre</th>
-                <th class="text-primary">Unidades de Entrada</th>
-                <th class="text-primary">Unidades de Salida</th>
+                <th class="text-primary">Unidades de Inventario</th>
+                <th class="text-primary">Unidades de Venta</th>
                 <th class="text-primary">Bodega</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in filteredItems" :key="item.id">
-                <td>{{ item.item_id }}</td>
+                <td>
+                  <i
+                    class="bi bi-caret-right-fill"
+                    style="margin-right: 2px"
+                  ></i>
+                  <router-link
+                    :to="{
+                      name: 'ArticleDetails',
+                      params: { id: item.item_id },
+                    }"
+                    style="
+                      background-color: transparent;
+                      color: black;
+                      text-decoration: none;
+                    "
+                    >{{ item.item_id }}
+                  </router-link>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>
                   {{ item.storing_format_units }}
@@ -166,7 +231,7 @@ export default {
     },
   },
   mounted() {
-    this.$state.navbarTitle = "Inventario";
+    this.$state.navbarTitle = "Consulta de inventario";
     //Gets the all elements from the API
     axios
       .get(API_URL + "/inventory_items")
@@ -181,6 +246,7 @@ export default {
         console.log(error);
       });
   },
+  redirectToArticleDetail() {},
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
     handleCheckboxChange() {
@@ -191,28 +257,28 @@ export default {
     },
     resetFilter(filterName) {
       switch (filterName) {
-        case 'all':
-          this.filter.codigo = '';
-          this.filter.category = '';
-          this.filter.subcategory = '';
-          this.filter.design = '';
-          this.filter.brand = '';
-          this.filter.warehouse = '';
+        case "all":
+          this.filter.id = "";
+          this.filter.category = "";
+          this.filter.subcategory = "";
+          this.filter.design = "";
+          this.filter.brand = "";
+          this.filter.warehouse = "";
           break;
         default:
           break;
       }
-    }
+    },
   },
 };
 </script>
 
 <style>
-#check:checked~.container-fluid {
+#check:checked ~ .container-fluid {
   padding-left: 345px;
 }
 
-#check:checked~#contentDiv {
+#check:checked ~ #contentDiv {
   height: auto;
   display: block;
 }
@@ -243,7 +309,6 @@ export default {
 .thead {
   background-color: #007bff;
 }
-
 
 .table th,
 .table td {
