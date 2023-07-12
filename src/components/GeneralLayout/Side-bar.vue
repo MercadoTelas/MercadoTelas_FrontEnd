@@ -91,8 +91,8 @@ export default {
         {
           link: {
             id: "inventario",
-            text: "Ver Inventario",
-            title: "articulos",
+            text: "Consulta de Inventario",
+            title: "consulta de inventario",
             linkTo: "inventory",
             bootstrapIcon: {
               class: "bi bi-box-seam",
