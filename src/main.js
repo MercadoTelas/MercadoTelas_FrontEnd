@@ -74,7 +74,7 @@ const router = createRouter({
         },
         {path: '/userProfile', component: UserProfile, meta: {requiresAuth: true},},
         {path: '/entry', name:'Entry', component: Entry, meta: {requiresAuth: true}},
-        {path: '/entryMin/:code/:name', name:'EntryMin', component: Entry, meta: {requiresAuth: true}},
+        {path: '/entryMin/:item_id', name:'EntryMin', component: Entry, meta: {requiresAuth: true}},
         {path: '/transfer', component: Transfer, meta: {requiresAuth: true}},
         {path: '/output', component: Output, meta: {requiresAuth: true}},
         { path: '/inventory', component: InventoryTable, meta: { requiresAuth: true }, },

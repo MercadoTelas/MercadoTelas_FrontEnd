@@ -29,7 +29,7 @@
     <div class="row">
       <div class="table-responsive col-md-12">
         <table
-          class="table table-hover table-responsive table-bordered table-secondary"
+          class="table table-hover table-bordered table-secondary"
         >
           <thead>
             <tr>
@@ -66,7 +66,7 @@
                 <router-link
                   :to="{ name: 'ArticleDetails', params: { id: item.id } }"
                   class="btn btn-primary"
-                  >Ver detalles</router-link
+                  >Detalles</router-link
                 >
                 <router-link
                   :to="{ name: 'EditArticle', params: { id: item.id } }"
@@ -76,6 +76,7 @@
                 <button @click="deleteArticle(item)" class="btn btn-danger">
                   Eliminar
                 </button>
+              
               </td>
             </tr>
           </tbody>
@@ -99,26 +100,6 @@ export default {
   data() {
     return {
       items: [
-        {
-          id: "1",
-          name: "Artículo 1",
-          category_name: "Categoría 1",
-          subcategory_name: "Subcategoría 1",
-          minimal_stock: "10",
-          status: "active",
-          brand_name: "Marca 1",
-          design_name: "Diseño 1",
-        },
-        {
-          id: "2",
-          name: "Artículo 2",
-          category_name: "Categoría 2",
-          subcategory_name: "Subcategoría 2",
-          minimal_stock: "5",
-          status: "inactive",
-          brand_name: "Marca 2",
-          design_name: "Diseño 2",
-        },
       ],
       searchQuery: "",
     };
@@ -157,10 +138,6 @@ export default {
     addArticle() {
       // Redireccionar a la vista de agregar artículo
       this.$router.push({ name: "AddArticle" });
-    },
-    viewItem(/*article*/) {
-      // Lógica para ver los detalles de un artículo
-      // ...
     },
     deleteArticle(article) {
       // Lógica para eliminar un artículo
@@ -211,6 +188,15 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table-hover tbody tr:hover td {
+  justify-content: center;
 }
 
 .text-primary {
