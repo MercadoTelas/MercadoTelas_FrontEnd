@@ -1,10 +1,5 @@
 <template>
-  <input
-      type="checkbox"
-      id="check"
-      v-model="checked"
-      @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
 
   <div class="container">
     <div>
@@ -14,43 +9,27 @@
           <h2>Búsqueda de artículos</h2>
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
-            <input
-                type="text"
-                id="searchInput"
-                v-model="searchQuery"
-                @keydown.enter="searchItem"
-                class="form-control"
-            />
+            <input type="text" id="searchInput" v-model="searchQuery" @keydown.enter="searchItem" class="form-control" />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
             <table class="table table-responsive-lg text-center">
               <thead>
-              <tr>
-                <th class="text-center">Código del artículo</th>
-                <th class="text-center">Nombre del artículo</th>
-                <th class="text-center"></th>
-              </tr>
+                <tr>
+                  <th class="text-center">Código del artículo</th>
+                  <th class="text-center">Nombre del artículo</th>
+                  <th class="text-center"></th>
+                </tr>
               </thead>
               <tbody>
-              <tr
-                  v-for="item in filteredItems"
-                  :key="item.id"
-                  :class="{'table-row-selected': item.isSelected}"
-              >
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td style="width: 10px">
-                  <input
-                      type="checkbox"
-                      :id="item.id"
-                      :value="item"
-                      v-model="selectedItems"
-                      class="form-check-input"
-                      @change="handleItemCheckboxChange(item)"
-                  />
-                </td>
-              </tr>
+                <tr v-for="item in filteredItems" :key="item.id" :class="{ 'table-row-selected': item.isSelected }">
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td style="width: 10px">
+                    <input type="checkbox" :id="item.id" :value="item" v-model="selectedItems" class="form-check-input"
+                      @change="handleItemCheckboxChange(item)" />
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -63,25 +42,17 @@
       <div class="header-row">
         <h1 class="text-center mb-5">Entrada</h1>
         <div class=" ms-0">
-            <p>Fecha: {{ getCurrentDate() }}</p>
-            <p>Hora: {{ getCurrentTime() }}</p>
-          <p>Usuario: {{this.$store.state.user.name}}</p>
+          <p>Fecha: {{ getCurrentDate() }}</p>
+          <p>Hora: {{ getCurrentTime() }}</p>
+          <p>Usuario: {{ this.$store.state.user.name }}</p>
           <div class="row mb-lg-5">
             <div class="col-1">
               <label for="warehouseSelect">Bodega:</label>
             </div>
             <div class="col-11">
-              <select
-                  id="warehouseSelect"
-                  class="form-select ms-2"
-                  v-model="selectedWarehouse"
-              >
+              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
                 <option value="" disabled>Seleccionar</option>
-                <option
-                    v-for="warehouse in warehouses"
-                    :value="warehouse"
-                    :key="warehouse.id"
-                >
+                <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
                   {{ warehouse.name }}
                 </option>
               </select>
@@ -95,75 +66,53 @@
     <div class="table-container">
       <table class="table table-responsive-lg text-center">
         <thead>
-        <tr>
-          <th class="text-center">Código del artículo</th>
-          <th class="text-center">Nombre del artículo</th>
-          <th class="text-center">Cantidad en unidades de inventario a agregar</th>
-          <th>Unidades</th>
-          <th class="text-center">Cantidad en unidades de venta a agregar</th>
-          <th>Unidades</th>
-          <th class="text-center">Acciones</th>
-        </tr>
+          <tr>
+            <th class="text-center">Código del artículo</th>
+            <th class="text-center">Nombre del artículo</th>
+            <th class="text-center">Cantidad en unidades de inventario a agregar</th>
+            <th>Unidades</th>
+            <th class="text-center">Cantidad en unidades de venta a agregar</th>
+            <th>Unidades</th>
+            <th class="text-center">Acciones</th>
+          </tr>
         </thead>
         <tbody>
-        <tr v-for="(item, index) in tableData" :key="index" :class="{ 'table-row-selected': item.selected }">
-          <td>
-            <input
-                :id="'ID' + index"
-                type="text"
-                v-model="item.item_id"
-                @keydown.tab="onCellInput(item, 'item_id', $event, index)"
-                class="form-control"
-            />
-          </td>
-          <td>
-            <input
-                type="text"
-                v-model="item.name"
-                class="form-control"
-                readonly
-            />
-          </td>
-          <td>
-            <div class="align-items-center">
-              <input
-                  type="number"
-                  :id="'SU' + index"
-                  v-model="item.storing_format_units"
-                  @input="onCellInput(item, 'storing_format_units', $event)"
-                  class="form-control"
-              />
-            </div>
-          </td>
-          <td>
-            <div class="align-items-center">
-              {{ item.storing_unit_format_name }}
-            </div>
-          </td>
-          <td>
-            <div class="align-items-center">
-              <input
-                  type="number"
-                  v-model="item.transferring_format_units"
-                  @input="onCellInput(item, 'transferring_format_units', $event)"
-                  class="form-control"
-              />
-            </div>
-          </td>
-          <td>
-            <div class="align-items-center">
-              {{ item.transferring_unit_format_name }}
-            </div>
-          </td>
-          <td>
-            <button
-                class="btn btn-danger"
-                @click="removeItem(index)"
-            >
-              Eliminar
-            </button>
-          </td>
-        </tr>
+          <tr v-for="(item, index) in tableData" :key="index" :class="{ 'table-row-selected': item.selected }">
+            <td>
+              <input :id="'ID' + index" type="text" v-model="item.item_id"
+                @keydown.tab="onCellInput(item, 'item_id', $event, index)" class="form-control" />
+            </td>
+            <td>
+              <input type="text" v-model="item.name" class="form-control" readonly />
+            </td>
+            <td>
+              <div class="align-items-center">
+                <input type="number" :id="'SU' + index" v-model="item.storing_format_units"
+                  @input="onCellInput(item, 'storing_format_units', $event)" class="form-control" />
+              </div>
+            </td>
+            <td>
+              <div class="align-items-center">
+                {{ item.storing_unit_format_name }}
+              </div>
+            </td>
+            <td>
+              <div class="align-items-center">
+                <input type="number" v-model="item.transferring_format_units"
+                  @input="onCellInput(item, 'transferring_format_units', $event)" class="form-control" />
+              </div>
+            </td>
+            <td>
+              <div class="align-items-center">
+                {{ item.transferring_unit_format_name }}
+              </div>
+            </td>
+            <td>
+              <button class="btn btn-danger" @click="removeItem(index)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -182,10 +131,10 @@
 </template>
 
 <script>
-import {mapState, mapMutations} from "vuex";
+import { mapState, mapMutations } from "vuex";
 import axios from "axios";
-import {API_URL} from "@/config";
-import {toast} from "vue3-toastify";
+import { API_URL } from "@/config";
+import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
 export default {
@@ -205,14 +154,25 @@ export default {
     this.$state.navbarTitle = "Entradas de inventario";
     document.addEventListener("keydown", this.handleKeyDown);
     axios
-        .get(`${API_URL}/warehouses/`)
-        .then((response) => {
-          this.warehouses = response.data;
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      .get(`${API_URL}/warehouses/`)
+      .then((response) => {
+        this.warehouses = response.data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
     this.addItem();
+    // Comprobar si el parámetro "item_id" está presente en la URL
+    if (this.$route.params.item_id) {
+      // El parámetro "item_id" está presente
+      const item_idValue = this.$route.params.item_id;
+      // Hacer algo con el valor del parámetro "item_id"
+      console.log("El parámetro 'item_id' está presente. Valor:", item_idValue);
+      const item = {
+        item_id: item_idValue
+      };
+      this.addItem(0, item);
+    }
   },
   beforeUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
@@ -249,6 +209,7 @@ export default {
       this.selectedItems = [];
       this.closeModal();
     },
+
     addItem(index, item) {
       if (item) {
         const itemId = item.item_id == null ? item.id : item.item_id.trim();
@@ -258,53 +219,53 @@ export default {
             url += `item_id=${itemId}`;
           }
           axios
-              .get(url)
-              .then((response) => {
-                const data = response.data;
+            .get(url)
+            .then((response) => {
+              const data = response.data;
 
-                // Actualizar los valores de la fila con los datos obtenidos de la API
-                item.item_id = data.item_id || "";
-                item.name = data.name || "";
-                item.storing_unit_format_name =
-                    data.storing_unit_format_name || "";
-                item.conversion_factor = data.conversion_factor || "";
-                item.transferring_unit_format_name =
-                    data.transferring_unit_format_name || "";
+              // Actualizar los valores de la fila con los datos obtenidos de la API
+              item.item_id = data.item_id || "";
+              item.name = data.name || "";
+              item.storing_unit_format_name =
+                data.storing_unit_format_name || "";
+              item.conversion_factor = data.conversion_factor || "";
+              item.transferring_unit_format_name =
+                data.transferring_unit_format_name || "";
 
-                // Realizar el cálculo de la cantidad de venta
-                this.calculateSaleUnits(item);
+              // Realizar el cálculo de la cantidad de venta
+              this.calculateSaleUnits(item);
 
-                // Insertar el elemento en la tabla
-                this.tableData.splice(1, 0, item);
+              // Insertar el elemento en la tabla
+              this.tableData.splice(1, 0, item);
 
-                // Limpiar los campos de la primera fila
-                this.tableData.splice(0, 1, {
-                  item_id: "",
-                  name: "",
-                  storing_format_units: "",
-                  storing_unit_format_name: "",
-                  transferring_format_units: "",
-                  transferring_unit_format_name: "",
-                });
-
-                // Focus en el campo de la cantidad de unidades de almacenamiento del elemento agregado
-                this.$nextTick(() => {
-                  const input = document.getElementById(`SU${index + 1}`);
-                  if (input) {
-                    input.focus();
-                  }
-                });
-              })
-              .catch((error) => {
-                console.error(error);
-                toast.error(`No se encontró el artículo`, {
-                  position: "top-right",
-                  timeout: 2000,
-                  closeOnClick: true,
-                  pauseOnFocusLoss: true,
-                  pauseOnHover: true,
-                });
+              // Limpiar los campos de la primera fila
+              this.tableData.splice(0, 1, {
+                item_id: "",
+                name: "",
+                storing_format_units: "",
+                storing_unit_format_name: "",
+                transferring_format_units: "",
+                transferring_unit_format_name: "",
               });
+
+              // Focus en el campo de la cantidad de unidades de almacenamiento del elemento agregado
+              this.$nextTick(() => {
+                const input = document.getElementById(`SU${index + 1}`);
+                if (input) {
+                  input.focus();
+                }
+              });
+            })
+            .catch((error) => {
+              console.error(error);
+              toast.error(`No se encontró el artículo`, {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       } else {
         this.tableData.unshift({
@@ -331,14 +292,14 @@ export default {
       if (query !== "") {
         const url = `${API_URL}/search_items/?data=${query}`;
         axios
-            .get(url)
-            .then((response) => {
-              console.log(response);
-              this.filteredItems = response.data;
-            })
-            .catch((error) => {
-              console.error(error);
-            });
+          .get(url)
+          .then((response) => {
+            console.log(response);
+            this.filteredItems = response.data;
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       }
     },
     onCellInput(item, field, event, index) {
@@ -349,13 +310,13 @@ export default {
 
       // Verificar si se presionó la tecla Tab en las celda de código
       if (
-          event.key === "Tab" &&
-          field === "item_id"
+        event.key === "Tab" &&
+        field === "item_id"
       ) {
         // Verificar si se está editando la última fila
         if (
-            item === this.tableData[0] &&
-            field === "item_id"
+          item === this.tableData[0] &&
+          field === "item_id"
         ) {
           // Verificar si el campo del código está lleno en la última fila
           if (item.item_id.trim() !== "") {
@@ -364,8 +325,8 @@ export default {
           }
         }
       } else if (
-          field === "storing_format_units" ||
-          field === "conversion_factor"
+        field === "storing_format_units" ||
+        field === "conversion_factor"
       ) {
         // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
         this.calculateSaleUnits(item);
@@ -394,10 +355,10 @@ export default {
       // Filtrar las filas que tienen todos los campos llenos
       this.inventory_items = this.tableData.filter((item) => {
         return (
-            item.item_id.trim() !== "" &&
-            item.name.trim() !== "" &&
-            item.storing_format_units !== "" &&
-            item.transferring_format_units !== ""
+          item.item_id.trim() !== "" &&
+          item.name.trim() !== "" &&
+          item.storing_format_units !== "" &&
+          item.transferring_format_units !== ""
         );
       });
 
@@ -413,42 +374,42 @@ export default {
         };
 
         axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-
-              this.tableData = [];
-              this.addItem();
-              this.notes = "";
-              this.selectedWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-            });
-      } else {
-        toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
+          .post(url, data)
+          .then((response) => {
+            // Lógica de respuesta exitosa
+            console.log(response);
+            toast.success(`Transacción guardada`, {
               position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
               pauseOnHover: true,
-            }
+            });
+
+            this.tableData = [];
+            this.addItem();
+            this.notes = "";
+            this.selectedWarehouse = "";
+          })
+          .catch((error) => {
+            toast.error(`Error al guardar la transacción: ` + error.message, {
+              position: "top-right",
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+          });
+      } else {
+        toast.info(
+          `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+          {
+            position: "top-right",
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+          }
         );
       }
       this.inventory_items = [];
@@ -474,7 +435,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -505,6 +466,7 @@ export default {
   border: 1px solid #ddd;
   padding: 8px;
 }
+
 .form-footer {
   margin-top: 16px;
 }

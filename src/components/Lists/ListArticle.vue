@@ -29,7 +29,7 @@
     <div class="row">
       <div class="table-responsive col-md-12">
         <table
-          class="table table-hover table-responsive table-bordered table-secondary"
+          class="table table-hover table-bordered table-secondary"
         >
           <thead>
             <tr>
@@ -66,7 +66,7 @@
                 <router-link
                   :to="{ name: 'ArticleDetails', params: { id: item.id } }"
                   class="btn btn-primary"
-                  >Ver detalles</router-link
+                  >Detalles</router-link
                 >
                 <router-link
                   :to="{ name: 'EditArticle', params: { id: item.id } }"
@@ -76,6 +76,7 @@
                 <button @click="deleteArticle(item)" class="btn btn-danger">
                   Eliminar
                 </button>
+              
               </td>
             </tr>
           </tbody>
@@ -138,10 +139,6 @@ export default {
       // Redireccionar a la vista de agregar artículo
       this.$router.push({ name: "AddArticle" });
     },
-    viewItem(/*article*/) {
-      // Lógica para ver los detalles de un artículo
-      // ...
-    },
     deleteArticle(article) {
       // Lógica para eliminar un artículo
       Swal.fire({
@@ -191,6 +188,15 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.table-hover tbody tr:hover td {
+  justify-content: center;
 }
 
 .text-primary {

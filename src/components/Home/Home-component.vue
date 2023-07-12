@@ -51,7 +51,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="producto in productosLow" :key="producto">
+                    <tr v-for="(producto, index) in productosLow" :key="index">
                       <td>{{ producto.item_id }}</td>
                       <td>{{ producto.name }}</td>
                       <td>{{ producto.storing_format_units }}</td>
@@ -131,7 +131,7 @@ export default {
       sortedMovements: [],
       productosLow: [
         {
-          item_id: '001',
+          item_id: 'HL12345',
           name: 'Producto 1',
           storing_format_units: 10,
           minimal_stock: 20,
@@ -141,7 +141,7 @@ export default {
       ],
       productos: [
         {
-          item_id: '001',
+          item_id: 'HL12345',
           name: 'Producto 1',
           storing_format_units: 10,
           warehouse: 'Bodega 1',
@@ -150,7 +150,7 @@ export default {
       ],
       productosLowClone: [
         {
-          item_id: '001',
+          item_id: 'HL12345',
           name: 'Producto 1',
           storing_format_units: 10,
           minimal_stock: 20,
@@ -160,7 +160,7 @@ export default {
       ],
       productosClone: [
         {
-          item_id: '001',
+          item_id: 'HL12345',
           name: 'Producto 1',
           storing_format_units: 10,
           warehouse: 'Bodega 1',
@@ -400,13 +400,11 @@ export default {
     }
     ,
     hacerEntrada(index) {
-      const code = this.productosLow[index].item_id;
-      const name = this.productosLow[index].name;
+      const item_id = this.productosLow[index].item_id;
       this.$router.push({
         name: 'EntryMin',
         params: {
-          code: code,
-          name: name,
+          item_id: item_id,
         },
       });
     },
