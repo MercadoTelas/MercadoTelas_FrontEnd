@@ -101,28 +101,36 @@ export default {
     createWarehouse(warehouse) {
       axios
         .post(`${API_URL}/warehouses`, warehouse)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Bodega creada exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/warehouses");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al crear la bodega");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     updateWarehouse(warehouse) {
       const warehouseId = this.$route.params.id;
       axios
         .put(`${API_URL}/warehouses/${warehouseId}`, warehouse)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Bodega actualizada exitosamente");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/warehouses");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           console.log(error);
           toast.error("Error al actualizar la bodega");
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
         });
     },
     fetchWarehouseData(warehouseId) {
