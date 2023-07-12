@@ -1,22 +1,12 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
   <div class="container">
     <div class="row">
       <div class="col-md-12 mb-3 me-1 d-flex align-items-center">
         <div class="col-md-10 me-2">
           <label for="search" class="form-label">Buscar artículo:</label>
-          <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por cualquier característica"
-          />
+          <input type="text" id="search" class="form-control" v-model="searchQuery"
+            placeholder="Buscar por cualquier característica" />
         </div>
         <div class="col-md-2 ms-2 align-self-center">
           <br />
@@ -27,21 +17,19 @@
       </div>
     </div>
     <div class="row">
-      <div class="table-responsive col-md-12">
-        <table
-          class="table table-hover table-bordered table-secondary"
-        >
+      <div class="table-responsive">
+        <table class="table table-bordered ">
           <thead>
             <tr>
-              <th class="text-center">Código</th>
-              <th class="text-center">Nombre</th>
-              <th class="text-center">Categoría</th>
-              <th class="text-center">Subcategoría</th>
-              <th class="text-center">Inventario Mínimo</th>
-              <th class="text-center">Estado</th>
-              <th class="text-center">Marca</th>
-              <th class="text-center">Diseño</th>
-              <th class="text-center">Acciones</th>
+              <th scope="col">Código</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Subcategoría</th>
+              <th scope="col">Inventario mínimo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Marca</th>
+              <th scope="col">Diseño</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
@@ -63,20 +51,13 @@
                 {{ item.design_id !== null ? item.design_name : "No posee" }}
               </td>
               <td class="text-center">
-                <router-link
-                  :to="{ name: 'ArticleDetails', params: { id: item.id } }"
-                  class="btn btn-primary"
-                  >Detalles</router-link
-                >
-                <router-link
-                  :to="{ name: 'EditArticle', params: { id: item.id } }"
-                  class="btn btn-secondary"
-                  >Editar</router-link
-                >
+                <router-link :to="{ name: 'ArticleDetails', params: { id: item.id } }"
+                  class="btn btn-primary">Detalles</router-link>
+                <router-link :to="{ name: 'EditArticle', params: { id: item.id } }"
+                  class="btn btn-secondary">Editar</router-link>
                 <button @click="deleteArticle(item)" class="btn btn-danger">
                   Eliminar
                 </button>
-              
               </td>
             </tr>
           </tbody>
@@ -153,12 +134,12 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           toast.success(`Se ha eliminado el artículo correctamente`, {
-              position: 'top-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
-            });
+            position: 'top-right',
+            timeout: 2000,
+            closeOnClick: true,
+            pauseOnFocusLoss: true,
+            pauseOnHover: true,
+          });
         }
       });
     },
@@ -179,7 +160,7 @@ export default {
 </script>
 
 <style>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -187,6 +168,7 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+  max-width: 90%;
 }
 
 .table-hover tbody tr:hover td {
@@ -197,14 +179,19 @@ export default {
   margin: 3px;
 }
 
+.table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
 .table {
   margin-top: 20px;
 }
 
 .table th,
 .table td {
-  padding: 8px;
   vertical-align: middle;
+  padding-bottom: -10px;
 }
 
 .table th {

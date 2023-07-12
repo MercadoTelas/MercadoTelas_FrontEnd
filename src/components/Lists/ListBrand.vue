@@ -14,7 +14,7 @@
             </button>
           </div>
         </div>
-        <div class="table-responsive">
+        <div class="table-container">
           <table class="table table-responsive table-bordered table-secondary">
             <thead>
               <tr>
@@ -140,6 +140,16 @@ export default {
 .table td {
   padding: 8px;
   vertical-align: middle;
+}
+
+.table-container {
+  height: 90vh; /* Establece la altura del contenedor al 90% del alto de la ventana */
+  overflow: auto; /* Agrega un scroll si el contenido excede la altura del contenedor */
+}
+
+table {
+  width: 100%; /* Opcional: ajusta el ancho de la tabla según tus necesidades */
+  table-layout: fixed; /* Fija el ancho de las columnas para evitar que se ajusten automáticamente */
 }
 
 .table th {
