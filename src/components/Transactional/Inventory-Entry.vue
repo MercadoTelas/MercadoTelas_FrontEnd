@@ -50,20 +50,19 @@
               <label for="warehouseSelect">Bodega:</label>
             </div>
             <div class="col-11">
-              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse" :value="warehouse">
+              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
                 <option value="" disabled>Seleccionar</option>
-                <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id"
-                  v-bind:selected="warehouse.id === selectedWarehouse.id">
+                <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
                   {{ warehouse.name }}
                 </option>
               </select>
             </div>
           </div>
-
         </div>
       </div>
     </div>
     <h4>Lista de Artículos</h4>
+    <h5 selected>Bodega seleccionada: {{ selectedWarehouse.name }}</h5>
     <div class="table-container">
       <table class="table table-responsive-lg text-center">
         <thead>
@@ -166,8 +165,11 @@ export default {
     // Verificar si la URL contiene la palabra "details"
     if (window.location.href.includes("Entry-from-home")) {
       // Obtener el valor del parámetro warehouse
-      const warehouse = this.$route.params.warehouse;
+      const warehouse = {};
+      warehouse.name = this.$route.params.warehouse;
       this.selectedWarehouse = warehouse;
+      console.log(this.selectedWarehouse);
+
 
       // Iterar sobre los productos en el store.js
       let selectedArticles = this.$store.state.selectedItems;

@@ -210,7 +210,6 @@ export default {
             responsible: movement.user.name
           };
         });
-        console.log(this.movementsData);
         this.sortedMovements = this.sortMovements();
       })
       .catch((error) => {
