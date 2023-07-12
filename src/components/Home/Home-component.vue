@@ -430,7 +430,7 @@ export default {
 <style scoped>
 #check:checked~.container-fluid {
   padding-left: 345px;
-  max-width: 1800px;
+  max-width: 1600px;
 }
 
 .container-fluid {
