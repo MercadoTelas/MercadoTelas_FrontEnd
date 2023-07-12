@@ -29,7 +29,7 @@
             </tr>
             <tr>
               <td class="table-label">Stock Mínimo:</td>
-              <td class="table-input">
+              <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-dash-square-fill"></i></span>
                   <input type="number" id="minimal_stock" class="form-control" v-model="minimal_stock"
@@ -37,7 +37,7 @@
                 </div>
               </td>
               <td class="table-label">Factor de Conversión:</td>
-              <td class="table-input">
+              <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-input-cursor"></i></span>
                   <input type="number" id="conversion_factor" class="form-control" v-model="conversion_factor"
@@ -47,7 +47,7 @@
             </tr>
             <tr>
               <td class="table-label">Unidades de Almacenamiento:</td>
-              <td class="table-input">
+              <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-postcard"></i></span>
                   <input type="text" id="storing_format_units_name" class="form-control"
@@ -55,7 +55,7 @@
                 </div>
               </td>
               <td class="table-label">Unidades de Venta:</td>
-              <td class="table-input">
+              <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-postcard"></i></span>
                   <input type="text" id="transferring_format_units_name" class="form-control"
