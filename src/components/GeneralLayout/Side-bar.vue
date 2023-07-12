@@ -110,7 +110,7 @@ export default {
             title: "salidas de inventario",
             linkTo: "output",
             bootstrapIcon: {
-              class: "bi bi-box-arrow-in-right",
+              class: "bi bi-box-arrow-right",
             },
           },
         },

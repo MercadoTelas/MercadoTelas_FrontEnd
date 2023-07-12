@@ -9,7 +9,7 @@
     <div class="row">
       <div id="contentDiv" class="col-lg-10 col-md-12">
         <div class="row mb-lg-5">
-          <h1> Constulta de inventario </h1>
+          <h1> Inventario en el Sistema </h1>
         </div>
         <div class="row border rounded-3 p-3 mb-lg-5">
           <h4 class="filter-title">Filtros</h4>
@@ -95,25 +95,6 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label for="warehouse">Bodega:</label>
-                <select
-                    id="warehouse"
-                    class="form-control"
-                    v-model="filter.warehouse"
-                >
-                  <option value="">Todas las bodegas</option>
-                  <option
-                      v-for="warehouse in warehouses"
-                      :value="warehouse.name"
-                      :key="warehouse.name"
-                  >
-                    {{ warehouse.name }}
-                  </option>
-                </select>
-              </div>
-            </div>
             <button
                 class="btn btn-secondary"
                 style="width: 200px; margin: 10px"
@@ -126,23 +107,24 @@
 
         <div class="mt-lg-4">
           <div class="row">
-            <h1 class="filter-title">Tabla de Inventario</h1>
+            <h3>Tabla de Inventario de Artículos</h3>
           </div>
           <div class="row">
-            <div class="table-responsive table-scroll">
-              <table class="table table-bordered">
+            <div class="table-responsive">
+              <table class="table table-responsive table-bordered table-secondary">
                 <thead>
                 <tr>
-                  <th class="text-primary">Código</th>
-                  <th class="text-primary">Nombre</th>
-                  <th class="text-primary">Unidades en stock</th>
-
-                  <th class="text-primary">Bodega</th>
+                  <th class="text-center">Código</th>
+                  <th class="text-center">Nombre</th>
+                  <th class="text-center">Stock Total</th>
+                  <th v-for="warehouse in warehouses" :key="warehouse.name" class="text-center">
+                    Stock {{ warehouse.name }}
+                  </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="item in filteredItems" :key="item.id">
-                  <td>
+                  <td class="text-center">
                     <i
                         class="bi bi-caret-right-fill"
                         style="margin-right: 2px"
@@ -150,22 +132,23 @@
                     <router-link
                         :to="{
                       name: 'ArticleDetails',
-                      params: { id: item.item_id },
+                      params: { id: item.id },
                     }"
                         style="
                       background-color: transparent;
                       color: black;
                       text-decoration: none;
                     "
-                    >{{ item.item_id }}
+                    >{{ item.id }}
                     </router-link>
                   </td>
-                  <td>{{ item.name }}</td>
-                  <td>
-                    {{ item.storing_format_units }}
-                    {{ item.storing_unit_format_name }}
+                  <td class="text-center">{{ item.name }}</td>
+                  <td :class="{'text-danger': calculateStockUnits(item) < item.minimal_stock}" class="text-center">
+                    {{ calculateStockUnits(item) }} {{ item.storing_format_units_name }}
                   </td>
-                  <td>{{ item.warehouse }}</td>
+                  <td v-for="inventory_item in item.inventory_items" :key="inventory_item.id" class="text-center">
+                    {{ inventory_item.storing_format_units }} {{ item.storing_format_units_name }}
+                  </td>
                 </tr>
                 </tbody>
               </table>
@@ -221,25 +204,23 @@ export default {
     filteredItems() {
       return this.items.filter((item) => {
         return (
-            item.item_id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
-            (this.filter.category === "" ||
-                item.category === this.filter.category) &&
-            (this.filter.subcategory === "" ||
-                item.subcategory === this.filter.subcategory) &&
+            item.id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
+            (this.filter.category === "" || item.category === this.filter.category) &&
+            (this.filter.subcategory === "" || item.subcategory === this.filter.subcategory) &&
             (this.filter.design === "" || item.design === this.filter.design) &&
             (this.filter.brand === "" || item.brand === this.filter.brand) &&
-            (this.filter.warehouse === "" ||
-                item.warehouse === this.filter.warehouse)
+            (this.filter.warehouse === "" || item.warehouse === this.filter.warehouse)
         );
-      });
+      }).sort((a, b) => a.category.localeCompare(b.category));
     },
   },
   mounted() {
     this.$state.navbarTitle = "Consulta de inventario";
     //Gets the all elements from the API
     axios
-        .get(API_URL + "/inventory_items")
+        .get(API_URL + "/stock")
         .then((response) => {
+          console.log(response.data);
           this.items = response.data.items;
           this.categories = response.data.categories;
           this.designs = response.data.designs;
@@ -257,6 +238,16 @@ export default {
     },
     resetSubcategory() {
       this.filter.subcategory = "";
+    },
+    calculateStockUnits(item) {
+      let totalUnits = 0;
+      item.inventory_items.forEach((inventoryItem) => {
+        const units = parseFloat(inventoryItem.storing_format_units);
+        if (!isNaN(units)) {
+          totalUnits += units;
+        }
+      });
+      return totalUnits;
     },
     resetFilter(filterName) {
       switch (filterName) {
@@ -296,11 +287,13 @@ export default {
 }
 
 .filters-container div {
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .table-responsive {
+  max-height: 400px;
   overflow-x: auto;
+  overflow-y: auto;
 }
 
 .table {
@@ -323,10 +316,6 @@ export default {
 .filter-title {
   margin-bottom: 20px;
   color: #0a4481;
-}
-
-.text-primary {
-  color: #1512de;
 }
 
 .container-fluid {
