@@ -50,9 +50,10 @@
               <label for="warehouseSelect">Bodega:</label>
             </div>
             <div class="col-11">
-              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
+              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse" :value="warehouse">
                 <option value="" disabled>Seleccionar</option>
-                <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
+                <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id"
+                  v-bind:selected="warehouse.id === selectedWarehouse.id">
                   {{ warehouse.name }}
                 </option>
               </select>
@@ -137,6 +138,7 @@ import { API_URL } from "@/config";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
+
 export default {
   data() {
     return {
@@ -161,18 +163,22 @@ export default {
       .catch((error) => {
         console.error(error);
       });
-    this.addItem();
-    // Comprobar si el parámetro "item_id" está presente en la URL
-    if (this.$route.params.item_id) {
-      // El parámetro "item_id" está presente
-      const item_idValue = this.$route.params.item_id;
-      // Hacer algo con el valor del parámetro "item_id"
-      console.log("El parámetro 'item_id' está presente. Valor:", item_idValue);
-      const item = {
-        item_id: item_idValue
-      };
-      this.addItem(0, item);
+    // Verificar si la URL contiene la palabra "details"
+    if (window.location.href.includes("Entry-from-home")) {
+      // Obtener el valor del parámetro warehouse
+      const warehouse = this.$route.params.warehouse;
+      this.selectedWarehouse = warehouse;
+
+      // Iterar sobre los productos en el store.js
+      let selectedArticles = this.$store.state.selectedItems;
+      for (let i = 0; i < selectedArticles.length; i++) {
+        let article = {};
+        article.item_id = selectedArticles[i];
+        this.addItem(0, article);
+      }
+      this.$store.commit('setSelectedItems', {});
     }
+
   },
   beforeUnmount() {
     document.removeEventListener("keydown", this.handleKeyDown);
