@@ -7,14 +7,7 @@ import { container } from 'webpack';
     v-model="checked"
     @change="handleCheckboxChange"
   />
-  <label for="check">
-    <i class="fas fa-bars" id="btn">
-      <i class="bi bi-list"></i>
-    </i>
-    <i class="fas fa-times" id="cancel">
-      <i class="bi bi-x-lg"></i>
-    </i>
-  </label>
+  
   <div class="sidebar">
     <a
       v-for="(page, index) in pages"
@@ -117,7 +110,7 @@ export default {
             title: "salidas de inventario",
             linkTo: "output",
             bootstrapIcon: {
-              class: "bi bi-trash2",
+              class: "bi bi-box-arrow-right",
             },
           },
         },
@@ -128,7 +121,7 @@ export default {
             title: "Transferencias de inventario",
             linkTo: "transfer",
             bootstrapIcon: {
-              class: "bi bi-box-arrow-in-right",
+              class: "bi bi-arrow-left-right",
             },
           },
         },
@@ -252,13 +245,13 @@ export default {
           };
 
           axios
-              .delete(`${API_URL}/users/sign_out`, config)
-              .then((response) => {
-                console.log(response);
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+            .delete(`${API_URL}/users/sign_out`, config)
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         }
         localStorage.removeItem("token");
         this.$store.commit("setLoggedIn", false);
@@ -400,8 +393,6 @@ a:active {
   display: none;
 }
 
-label #btn,
-label #cancel,
 label #cancelElements {
   position: fixed;
   cursor: pointer;
@@ -419,7 +410,6 @@ label #cancelElements {
   transition: all 0.5s ease;
 }
 
-label #cancel,
 label #cancelElements {
   opacity: 0;
   visibility: hidden;
@@ -433,19 +423,6 @@ label #cancelElements {
   left: 0;
 }
 
-#check:checked ~ label #btn {
-  margin-left: 245px;
-  opacity: 0;
-  visibility: hidden;
-}
-
-//Boton de cancelar activado
-#check:checked ~ label #cancel {
-  margin-left: 350px;
-  opacity: 1;
-  visibility: visible;
-}
-
 #checkElements:checked ~ label #cancelElements {
   margin-left: 350px;
   opacity: 1;
@@ -454,11 +431,28 @@ label #cancelElements {
 
 //Mobile
 @media (max-width: 860px) {
-  .sidebar {
-    height: auto;
-    width: 70px;
-    left: 0;
+  * {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+  }
+
+  .sticky {
+    position: fixed;
+    top: 0;
+  }
+
+  .sidebar,
+  .sidebarElements {
+    position: fixed;
+    width: 345px;
+    left: -345px;
+    height: 100%;
     top: 110px;
+
+    background: #15386e;
+    color: white;
+    transition: all 0.5s ease;
   }
 
   #inventario,
@@ -466,35 +460,6 @@ label #cancelElements {
   #movimientos,
   #administrarElementos {
     display: none;
-  }
-
-  a:hover {
-    width: 100vh;
-    background: inherit;
-  }
-
-  .sidebar a:hover span {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  label #btn,
-  label #cancel {
-    position: absolute;
-    cursor: pointer;
-    color: white;
-    border-radius: 5px;
-    border: 1px solid #15386e;
-    top: 98px;
-    left: -25px;
-    margin: 15px 30px;
-    font-size: 29px;
-    background: #15386e;
-    height: 45px;
-    width: 45px;
-    text-align: center;
-    line-height: 45px;
-    transition: all 0.5s ease;
   }
 
   .sidebar {

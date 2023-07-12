@@ -169,8 +169,7 @@ export default {
     axios
       .get(API_URL + "/items")
       .then((response) => {
-        console.log(response.data);
-        this.items = response.data.items;
+        this.items = response.data;
       })
       .catch((error) => {
         console.log(error);
@@ -190,17 +189,8 @@ export default {
   padding-bottom: 20px;
 }
 
-.table-container {
-  overflow-x: auto;
-  max-width: 100%;
-}
-
 .table-hover tbody tr:hover td {
   justify-content: center;
-}
-
-.text-primary {
-  color: #007bff;
 }
 
 .btn {

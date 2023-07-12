@@ -132,10 +132,6 @@ export default {
   padding-bottom: 20px;
 }
 
-.text-primary {
-  color: #007bff;
-}
-
 .table {
   margin-top: 20px;
 }
