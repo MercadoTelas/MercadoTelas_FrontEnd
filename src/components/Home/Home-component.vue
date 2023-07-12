@@ -7,14 +7,14 @@
           <label for="bodega">Bodega:</label>
           <select id="bodega" v-model="selectedBodega" @change="filterProductos">
             <option value="">Todas las bodegas</option>
-            <option v-for="bodega in bodegas" :key="bodega" :value="bodega">{{ bodega }}</option>
+            <option v-for="warehouse in bodegas" :key="warehouse" :value="warehouse">{{ warehouse }}</option>
           </select>
         </div>
         <div class="filter-row">
           <label for="tipo">Tipo de artículo:</label>
           <select id="tipo" v-model="selectedTipo" @change="filterProductos">
             <option value="">Todos los tipos</option>
-            <option v-for="tipo in tipos" :key="tipo" :value="tipo">{{ tipo }}</option>
+            <option v-for="category in tipos" :key="category" :value="category">{{ category }}</option>
           </select>
         </div>
       </div>
@@ -46,14 +46,16 @@
                       <th>Código de producto</th>
                       <th>Nombre</th>
                       <th>Cantidad de stock</th>
+                      <th>Bodega</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(producto, index) in productosLow" :key="index">
-                      <td>{{ producto.codigo }}</td>
-                      <td>{{ producto.nombre }}</td>
-                      <td>{{ producto.stock }}</td>
+                      <td>{{ producto.item_id }}</td>
+                      <td>{{ producto.name }}</td>
+                      <td>{{ producto.storing_format_units }}</td>
+                      <td>{{ producto.warehouse }}</td>
                       <td>
                         <button @click="hacerEntrada(index)" class="btn btn-success">Hacer entrada</button>
                       </td>
@@ -114,8 +116,8 @@
 
 <script>
 import Chart from 'chart.js/auto';
-//import axios from 'axios';
-//import { API_URL } from '@/config';
+import axios from 'axios';
+import { API_URL } from '@/config';
 import { mapState, mapMutations } from 'vuex';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -129,147 +131,41 @@ export default {
       sortedMovements: [],
       productosLow: [
         {
-          codigo: '001',
-          nombre: 'Producto 1',
-          stock: 10,
-          minStock: 20,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 1'
+          item_id: 'HL12345',
+          name: 'Producto 1',
+          storing_format_units: 10,
+          minimal_stock: 20,
+          warehouse: 'Bodega 2',
+          category: 'Hilo'
         },
-        {
-          codigo: '002',
-          nombre: 'Producto 2',
-          stock: 5,
-          minStock: 10,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '003',
-          nombre: 'Producto 3',
-          stock: 7,
-          minStock: 15,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
-        },
-        // Agrega más productos de prueba según tu estructura de datos
       ],
       productos: [
         {
-          codigo: '001',
-          nombre: 'Producto 1',
-          stock: 10,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
+          item_id: 'HL12345',
+          name: 'Producto 1',
+          storing_format_units: 10,
+          warehouse: 'Bodega 1',
+          category_name: 'Tela'
         },
-        {
-          codigo: '002',
-          nombre: 'Producto 2',
-          stock: 5,
-          bodega: 'Bodega 2',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '003',
-          nombre: 'Producto 3',
-          stock: 7,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
-        },
-        {
-          codigo: '004',
-          nombre: 'Producto 4',
-          stock: 12,
-          bodega: 'Bodega 2',
-          tipo: 'Tipo 3'
-        },
-        {
-          codigo: '005',
-          nombre: 'Producto 5',
-          stock: 45,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '006',
-          nombre: 'Producto 6',
-          stock: 12,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 1'
-        },
-        // Agrega más productos de prueba según tu estructura de datos
       ],
       productosLowClone: [
         {
-          codigo: '001',
-          nombre: 'Producto 1',
-          stock: 10,
-          minStock: 20,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 1'
+          item_id: 'HL12345',
+          name: 'Producto 1',
+          storing_format_units: 10,
+          minimal_stock: 20,
+          warehouse: 'Bodega 2',
+          category: 'Hilo'
         },
-        {
-          codigo: '002',
-          nombre: 'Producto 2',
-          stock: 5,
-          minStock: 10,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '003',
-          nombre: 'Producto 3',
-          stock: 7,
-          minStock: 15,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
-        },
-        // Agrega más productos de prueba según tu estructura de datos
       ],
       productosClone: [
         {
-          codigo: '001',
-          nombre: 'Producto 1',
-          stock: 10,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
+          item_id: 'HL12345',
+          name: 'Producto 1',
+          storing_format_units: 10,
+          warehouse: 'Bodega 1',
+          category_name: 'Tela'
         },
-        {
-          codigo: '002',
-          nombre: 'Producto 2',
-          stock: 5,
-          bodega: 'Bodega 2',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '003',
-          nombre: 'Producto 3',
-          stock: 7,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 1'
-        },
-        {
-          codigo: '004',
-          nombre: 'Producto 4',
-          stock: 12,
-          bodega: 'Bodega 2',
-          tipo: 'Tipo 3'
-        },
-        {
-          codigo: '005',
-          nombre: 'Producto 5',
-          stock: 45,
-          bodega: 'Bodega 1',
-          tipo: 'Tipo 2'
-        },
-        {
-          codigo: '006',
-          nombre: 'Producto 6',
-          stock: 12,
-          bodega: 'Bodega 3',
-          tipo: 'Tipo 1'
-        },
-        // Agrega más productos de prueba según tu estructura de datos
       ],
       movementsData: [
         {
@@ -297,10 +193,10 @@ export default {
       ],
       selectedBodega: '', // Valor seleccionado en el dropdown de bodega
       selectedTipo: '', // Valor seleccionado en el dropdown de tipo de artículo
-      bodegas: ['Bodega 1', 'Bodega 2', 'Bodega 3'], // Valores posibles para el dropdown de bodega
-      tipos: ['Tipo 1', 'Tipo 2', 'Tipo 3'], // Valores posibles para el dropdown de tipo de artículo
+      bodegas: [], // Valores posibles para el dropdown de bodega
+      tipos: [], // Valores posibles para el dropdown de tipo de artículo
       chartTop10: null,
-      chartLow: null,
+      chartLow: null
     };
   },
   computed: {
@@ -328,7 +224,47 @@ export default {
       });
       store.commit('setLogAttempt', true);
     }
+    // Obtener los artículos más removidos o con más salidas de inventario desde la API
+    axios
+      .get(API_URL + "/most_removed_items")
+      .then((response) => {
+        console.log(response.data);
+        this.productosLow = response.data.items;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
+    // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
+    axios
+      .get(API_URL + "/low_stock_items")
+      .then((response) => {
+        console.log(response.data);
+        this.productos = response.data.items;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // Obtener todas las categorías desde la API
+    axios
+      .get(API_URL + "/categories")
+      .then((response) => {
+        this.tipos = response.data.map((category) => category.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+      // Obtener todas las bodegas desde la API
+    axios
+      .get(`${API_URL}/warehouses`)
+      .then((response) => {
+        this.bodegas = response.data.map((warehouse) => warehouse.name);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   },
   methods: {
     ...mapMutations(['toggleCheckboxValue']),
@@ -339,9 +275,9 @@ export default {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext('2d');
 
-      let sortedProductos = [...this.productos].sort((a, b) => b.stock - a.stock);
-      let tiposTelas = sortedProductos.map((producto) => producto.nombre);
-      let inventario = sortedProductos.map((producto) => producto.stock);
+      let sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+      let tiposTelas = sortedProductos.map((producto) => producto.name);
+      let inventario = sortedProductos.map((producto) => producto.storing_format_units);
 
       this.chartTop10 = shallowRef(new Chart(ctx, {
         type: 'bar',
@@ -387,12 +323,12 @@ export default {
       const canvas = this.$refs.chartLow;
       const ctx = canvas.getContext('2d');
 
-      const sortedProductosLow = [...this.productosLow].sort((a, b) => a.stock - b.stock);
-      const tiposTelas = sortedProductosLow.map((producto) => producto.nombre);
-      const inventario = sortedProductosLow.map((producto) => producto.stock);
-      const nivelDeseado = sortedProductosLow.map((producto) => producto.minStock);
+      const sortedProductosLow = [...this.productosLow].sort((a, b) => a.storing_format_units - b.storing_format_units);
+      const tiposTelas = sortedProductosLow.map((producto) => producto.name);
+      const inventario = sortedProductosLow.map((producto) => producto.storing_format_units);
+      const nivelDeseado = sortedProductosLow.map((producto) => producto.minimal_stock);
 
-      this.chartLow = shallowRef (new Chart(ctx, {
+      this.chartLow = shallowRef(new Chart(ctx, {
         type: 'bar',
         data: {
           labels: tiposTelas,
@@ -443,20 +379,16 @@ export default {
       let productosFiltrados = [...this.productos];
       let productosLowFiltrados = [...this.productosLow];
 
-      if (this.selectedBodega) {
-        productosFiltrados = productosFiltrados.filter((producto) => producto.bodega === this.selectedBodega);
-      }
-
       if (this.selectedTipo) {
-        productosFiltrados = productosFiltrados.filter((producto) => producto.tipo === this.selectedTipo);
+        productosFiltrados = productosFiltrados.filter((producto) => producto.category_name === this.selectedTipo);
       }
 
       if (this.selectedBodega) {
-        productosLowFiltrados = productosLowFiltrados.filter((producto) => producto.bodega === this.selectedBodega);
+        productosLowFiltrados = productosLowFiltrados.filter((producto) => producto.warehouse === this.selectedBodega);
       }
 
       if (this.selectedTipo) {
-        productosLowFiltrados = productosLowFiltrados.filter((producto) => producto.tipo === this.selectedTipo);
+        productosLowFiltrados = productosLowFiltrados.filter((producto) => producto.category === this.selectedTipo);
       }
 
       this.productos = productosFiltrados;
@@ -468,21 +400,19 @@ export default {
     }
     ,
     hacerEntrada(index) {
-      const code = this.productosLow[index].codigo;
-      const name = this.productosLow[index].nombre;
+      const item_id = this.productosLow[index].item_id;
       this.$router.push({
         name: 'EntryMin',
         params: {
-          code: code,
-          name: name,
+          item_id: item_id,
         },
       });
     },
     updateChartTop10() {
       if (this.chartTop10) {
-        const sortedProductos = [...this.productos].sort((a, b) => b.stock - a.stock);
-        const tiposTelas = sortedProductos.map((producto) => producto.nombre);
-        const inventario = sortedProductos.map((producto) => producto.stock);
+        const sortedProductos = [...this.productos].sort((a, b) => b.storing_format_units - a.storing_format_units);
+        const tiposTelas = sortedProductos.map((producto) => producto.name);
+        const inventario = sortedProductos.map((producto) => producto.storing_format_units);
 
         this.chartTop10.data.labels = tiposTelas;
         this.chartTop10.data.datasets[0].data = inventario;
@@ -492,10 +422,10 @@ export default {
 
     updateChartLow() {
       if (this.chartLow) {
-        const sortedProductosLow = [...this.productosLow].sort((a, b) => a.stock - b.stock);
-        const tiposTelas = sortedProductosLow.map((producto) => producto.nombre);
-        const inventario = sortedProductosLow.map((producto) => producto.stock);
-        const nivelDeseado = sortedProductosLow.map((producto) => producto.minStock);
+        const sortedProductosLow = [...this.productosLow].sort((a, b) => a.storing_format_units - b.storing_format_units);
+        const tiposTelas = sortedProductosLow.map((producto) => producto.name);
+        const inventario = sortedProductosLow.map((producto) => producto.storing_format_units);
+        const nivelDeseado = sortedProductosLow.map((producto) => producto.minimal_stock);
 
         this.chartLow.data.labels = tiposTelas;
         this.chartLow.data.datasets[0].data = inventario;
