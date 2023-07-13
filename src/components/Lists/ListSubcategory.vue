@@ -1,9 +1,9 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
   <div class="container">
     <div class="row">
@@ -11,11 +11,11 @@
         <div class="mb-3">
           <label for="search" class="form-label">Buscar subcategoría:</label>
           <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por nombre o categoría"
+              type="text"
+              id="search"
+              class="form-control"
+              v-model="searchQuery"
+              placeholder="Buscar por nombre o categoría"
           />
         </div>
 
@@ -30,34 +30,34 @@
         <div>
           <table class="table">
             <thead>
-              <tr>
-                <th class="text-center">Nombre de Subcategoría</th>
-                <th class="text-center">Categoría asociada</th>
-                <th class="text-center">Acciones</th>
-              </tr>
+            <tr>
+              <th class="text-center">Nombre de Subcategoría</th>
+              <th class="text-center">Categoría asociada</th>
+              <th class="text-center">Acciones</th>
+            </tr>
             </thead>
             <tbody>
-              <tr
+            <tr
                 v-for="subcategory in filteredSubcategories"
                 :key="subcategory.id"
-              >
-                <td class="text-center">{{ subcategory.name }}</td>
-                <td class="text-center">{{ subcategory.category.name }}</td>
-                <td class="text-center">
-                  <button
+            >
+              <td class="text-center">{{ subcategory.name }}</td>
+              <td class="text-center">{{ subcategory.category.name }}</td>
+              <td class="text-center">
+                <button
                     @click="editSubcategory(subcategory)"
                     class="btn btn-secondary"
-                  >
-                    Editar subcategoría
-                  </button>
-                  <button
+                >
+                  Editar subcategoría
+                </button>
+                <button
                     @click="deleteSubcategory(subcategory)"
                     class="btn btn-danger"
-                  >
-                    Eliminar
-                  </button>
-                </td>
-              </tr>
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
@@ -67,11 +67,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
+import {API_URL} from "@/config";
+import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 
@@ -93,12 +93,12 @@ export default {
     filteredSubcategories() {
       return this.subcategories.filter((subcategory) => {
         return (
-          subcategory.name
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
-          subcategory.category.name
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase())
+            subcategory.name
+                .toLowerCase()
+                .includes(this.searchQuery.toLowerCase()) ||
+            subcategory.category.name
+                .toLowerCase()
+                .includes(this.searchQuery.toLowerCase())
         );
       });
     },
@@ -110,13 +110,13 @@ export default {
     },
     addSubcategory() {
       // Redirigir a la vista de agregar subcategoría
-      this.$router.push({ name: "AddSubcategory" });
+      this.$router.push({name: "AddSubcategory"});
     },
     editSubcategory(subcategory) {
       // Redirigir a la vista de editar subcategoría
       this.$router.push({
         name: "EditSubcategory",
-        params: { id: subcategory.id },
+        params: {id: subcategory.id},
       });
     },
     deleteSubcategory(subcategory) {
@@ -132,18 +132,31 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar la subcategoría aquí
-          // ...
-          this.subcategories = this.subcategories.filter(
-            (s) => s.id !== subcategory.id
-          );
-          toast.success(`Se ha eliminado la subcategoría correctamente`, {
-              position: 'top-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
-            });
+          axios
+              .delete(API_URL + "/subcategories/" + subcategory.id)
+              .then((response) => {
+                // Eliminar la subcategoría de la lista
+                this.subcategories = this.subcategories.filter(
+                    (subcategory) => subcategory.id !== response.data.id
+                );
+                toast.success(`Se ha eliminado la subcategoría correctamente`, {
+                  position: 'top-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              })
+              .catch((error) => {
+                console.log(error);
+                toast.error(`Ha ocurrido un error al eliminar la subcategoría, esto debido a que hay artículos asociados a esta subcategoría`, {
+                  position: 'top-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              });
         }
       });
     },
@@ -152,13 +165,13 @@ export default {
     this.$state.navbarTitle = "Lista de Subcategorías";
     // Obtener todas las subcategorías desde la API
     axios
-      .get(API_URL + "/subcategories")
-      .then((response) => {
-        this.subcategories = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .get(API_URL + "/subcategories")
+        .then((response) => {
+          this.subcategories = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
 };
 </script>

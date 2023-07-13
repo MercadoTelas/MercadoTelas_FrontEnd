@@ -72,8 +72,14 @@
             >Editar
             </router-link
             >
-            <button @click="deleteArticle(item)" class="btn btn-danger">
+            <button v-if="item.transfers <= 0 && item.insertions <= 0 && item.removals <= 0" @click="deleteArticle(item)" class="btn btn-danger">
               Eliminar
+            </button>
+            <button v-else-if="item.status == 'active'" @click="toggleItemStatus(item)" class="btn btn-warning">
+              Desactivar
+            </button>
+            <button v-else-if="item.status === 'inactive'" @click="toggleItemStatus(item)" class="btn btn-warning">
+              Activar
             </button>
           </td>
         </tr>
@@ -135,11 +141,11 @@ export default {
       // Redireccionar a la vista de agregar artículo
       this.$router.push({name: "AddArticle"});
     },
-    deleteArticle(article) {
+    deleteArticle(item) {
       // Lógica para eliminar un artículo
       Swal.fire({
         title: "¿Estás seguro?",
-        text: `Se eliminará el artículo ${article.name}. Esta acción no se puede deshacer.`,
+        text: `Se eliminará el artículo ${item.name}. Esta acción no se puede deshacer.`,
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#d33",
@@ -149,7 +155,7 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-              .delete(API_URL + "/items/" + article.id)
+              .delete(API_URL + "/items/?id=" + item.id + "&user=" + this.$store.state.user.id)
               .then((response) => {
                 console.log(response);
                 toast.success(`Se ha eliminado el artículo correctamente`, {
@@ -160,7 +166,40 @@ export default {
                   pauseOnHover: true,
                 });
                 // Eliminar el artículo de la lista
-                this.items = this.items.filter((item) => item.id !== article.id);
+                this.items = this.items.filter((article) => article.id !== item.id);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+        }
+      });
+    },
+    toggleItemStatus(item) {
+      console.log(item);
+      Swal.fire({
+        title: "¿Estás seguro?",
+        text: `Se ${item.status === "active" ? "desactivará" : "activará"} el artículo ${item.name}. ${item.status === "active" ? "No se podrá realizar ninguna operación con este artículo." : ""}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: `Sí, ${item.status === "active" ? "desactivarlo" : "activarlo"}`,
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+              .put(API_URL + "/items/" + item.id + "/toggle_status", {id: item.id, user: this.$store.state.user.id})
+              .then((response) => {
+                console.log(response);
+                toast.success(`Se ha ${item.status === "active" ? "desactivado" : "activado"} el artículo correctamente`, {
+                  position: 'top-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                // Cambiar el estado del artículo
+                item.status = item.status === "active" ? "inactive" : "active";
               })
               .catch((error) => {
                 console.log(error);
@@ -175,7 +214,7 @@ export default {
     axios
         .get(API_URL + "/items")
         .then((response) => {
-          console.log(response);
+          console.log(response)
           this.items = response.data;
         })
         .catch((error) => {

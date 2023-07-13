@@ -95,13 +95,30 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado la marca correctamente`, {
-            position: 'top-right',
-            timeout: 2000,
-            closeOnClick: true,
-            pauseOnFocusLoss: true,
-            pauseOnHover: true,
-          });
+          // Eliminar la marca
+          axios
+            .delete(API_URL + "/brands/" + brand.id)
+            .then((response) => {
+              console.log(response);
+              toast.success(`Se ha eliminado la marca correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+              this.brands = this.brands.filter((b) => b.id !== brand.id);
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`No se pudo eliminar, ya que posee artículos relacionados`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       });
     },

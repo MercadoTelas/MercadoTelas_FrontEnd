@@ -99,16 +99,31 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Lógica para eliminar la categoría aquí
-          // ...
-          this.categories = this.categories.filter((c) => c.id !== category.id);
-          toast.success(`Se ha eliminado la categoría correctamente`, {
-            position: 'top-right',
-            timeout: 2000,
-            closeOnClick: true,
-            pauseOnFocusLoss: true,
-            pauseOnHover: true,
-          });
+          axios
+            .delete(API_URL + "/categories/" + category.id)
+            .then((response) => {
+              console.log(response);
+              toast.success(`Se ha eliminado la categoría correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+              this.categories = this.categories.filter(
+                (c) => c.id !== category.id
+              );
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`Ha ocurrido un error al eliminar la categoría, esta posee al menos un artículo asociado`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       });
     },

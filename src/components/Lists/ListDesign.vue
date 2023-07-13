@@ -100,13 +100,32 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado el diseño correctamente`, {
-            position: 'top-right',
-            timeout: 2000,
-            closeOnClick: true,
-            pauseOnFocusLoss: true,
-            pauseOnHover: true,
-          });
+          axios
+            .delete(`${API_URL}/designs/${design.id}`)
+            .then((response) => {
+              console.log(response);
+              // Eliminar el diseño de la lista
+              this.designs = this.designs.filter(
+                (item) => item.id !== design.id
+              );
+              toast.success(`Se ha eliminado el diseño correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`Ha ocurrido un error al eliminar el diseño, esto debido a que hay artículos asociados a este diseño`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       });
     },

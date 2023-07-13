@@ -118,14 +118,32 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado la bodega correctamente`, {
-              position: 'top-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+          axios
+            .delete(`${API_URL}/warehouses/${warehouse.id}`)
+            .then((response) => {
+              console.log(response);
+              // Eliminar la bodega de la lista
+              this.warehouses = this.warehouses.filter(
+                (w) => w.id !== warehouse.id
+              );
+              toast.success(`Se ha eliminado la bodega correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`Ha ocurrido un error al eliminar la bodega`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
             });
-
         }
       });
     },
