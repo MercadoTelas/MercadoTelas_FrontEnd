@@ -1,10 +1,5 @@
 <template>
-  <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
-  />
+  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
 
   <div class="container">
     <form @submit.prevent="onSubmit">
@@ -15,17 +10,8 @@
               <td class="table-label">Marca:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
-                  <span class="input-group-text"
-                    ><i class="bi bi-medium"></i
-                  ></span>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="brand"
-                    name="brand"
-                    v-model="name"
-                    :disabled="isReadOnly"
-                  />
+                  <span class="input-group-text"><i class="bi bi-medium"></i></span>
+                  <input type="text" class="form-control" id="brand" name="brand" v-model="name" :disabled="isReadOnly" />
                 </div>
               </td>
             </tr>
@@ -99,12 +85,14 @@ export default {
         this.updateBrand(brand);
       }
     },
-    createBrand(brand) {
+    async createBrand(brand) {
       axios
         .post(`${API_URL}/brands`, brand)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
-          toast.success("Marca creada exitosamente", { timeout: 5000 });
+          toast.success("Marca creada exitosamente", { timeout: 2000 });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/brands");
         })
         .catch((error) => {
@@ -116,15 +104,19 @@ export default {
       const brandId = this.$route.params.id;
       axios
         .put(`${API_URL}/brands/${brandId}`, brand)
-        .then((response) => {
+        .then(async (response) => {
           console.log(response);
           toast.success("Marca actualizada exitosamente", {
             closeOnClick: false,
           });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           this.$router.push("/brands");
         })
-        .catch((error) => {
+        .catch(async (error) => {
           toast.error("Error al actualizar la marca", { closeOnClick: false });
+          // Esperar 2 segundos antes de redirigir a "/brands"
+          await new Promise(resolve => setTimeout(resolve, 2000));
           console.log(error);
         });
     },
@@ -144,7 +136,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container {
+#check:checked~.container {
   padding-left: 345px;
   max-width: 1000px;
 }

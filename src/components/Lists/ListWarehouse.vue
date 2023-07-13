@@ -29,7 +29,7 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Bodega</th>
@@ -43,7 +43,7 @@
                   <router-link
                     :to="{
                       name: 'EditWarehouse',
-                      params: { id: warehouse.id },
+                      params: { id: warehouse.id }
                     }"
                     class="btn btn-secondary"
                     >Editar</router-link
@@ -118,14 +118,32 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado la bodega correctamente`, {
-              position: 'top-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+          axios
+            .delete(`${API_URL}/warehouses/${warehouse.id}`)
+            .then((response) => {
+              console.log(response);
+              // Eliminar la bodega de la lista
+              this.warehouses = this.warehouses.filter(
+                (w) => w.id !== warehouse.id
+              );
+              toast.success(`Se ha eliminado la bodega correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`Ha ocurrido un error al eliminar la bodega`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
             });
-
         }
       });
     },
@@ -145,7 +163,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #check:checked ~ .container {
   padding-left: 345px;
   max-width: 1500px;
@@ -156,12 +174,11 @@ export default {
   padding-bottom: 20px;
 }
 
-.text-primary {
-  color: #007bff;
-}
-
 .table {
   margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table th,
@@ -174,8 +191,18 @@ export default {
   background-color: #f2f2f2;
 }
 
-@media (max-width: 576px) {
-  .table-responsive {
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
     overflow-x: auto;
   }
 }

@@ -14,8 +14,8 @@
             </button>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+        <div class="table-container">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Marca</th>
@@ -95,13 +95,30 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado la marca correctamente`, {
-            position: 'top-right',
-            timeout: 2000,
-            closeOnClick: true,
-            pauseOnFocusLoss: true,
-            pauseOnHover: true,
-          });
+          // Eliminar la marca
+          axios
+            .delete(API_URL + "/brands/" + brand.id)
+            .then((response) => {
+              console.log(response);
+              toast.success(`Se ha eliminado la marca correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+              this.brands = this.brands.filter((b) => b.id !== brand.id);
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`No se pudo eliminar, ya que posee artículos relacionados`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       });
     },
@@ -121,7 +138,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
@@ -130,10 +147,6 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.text-primary {
-  color: #007bff;
 }
 
 .table {
@@ -146,12 +159,32 @@ export default {
   vertical-align: middle;
 }
 
+.table-container {
+  height: 90vh;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
 .table th {
   background-color: #f2f2f2;
 }
 
-@media (max-width: 576px) {
-  .table-responsive {
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
     overflow-x: auto;
   }
 }

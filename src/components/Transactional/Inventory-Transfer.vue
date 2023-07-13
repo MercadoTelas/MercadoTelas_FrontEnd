@@ -11,7 +11,7 @@
       <div>
         <div v-if="modalVisible">
           <div class="modal-background"></div>
-          <div class="modal-content container-md">
+          <div class="modal-content container-md" style="z-index: 1;">
             <h2>Búsqueda de artículos</h2>
             <div class="search-container">
               <label for="searchInput">Buscar por Nombre o Código:</label>
@@ -25,7 +25,7 @@
               <button @click="searchItem" class="btn btn-success">Buscar</button>
             </div>
             <div class="table-container">
-              <table class="table table-responsive-lg text-center">
+              <table class="table">
                 <thead>
                 <tr>
                   <th class="text-center">Código del artículo</th>
@@ -99,15 +99,15 @@
       </div>
       <h4>Lista de Artículos</h4>
       <div class="table-container">
-        <table class="table table-responsive-lg text-center">
+        <table class="table  table-hover">
           <thead>
           <tr>
             <th class="text-center">Código del artículo</th>
             <th class="text-center">Nombre del artículo</th>
             <th class="text-center">Cantidad en unidades de inventario a transferir</th>
-            <th>Unidades</th>
+            <th class="text-center">Unidades</th>
             <th class="text-center">Cantidad en unidades de venta a transferir</th>
-            <th>Unidades</th>
+            <th class="text-center">Unidades</th>
             <th class="text-center">Acciones</th>
           </tr>
           </thead>
@@ -131,7 +131,7 @@
               />
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 <input
                     type="number"
                     :id="'SU' + index"
@@ -142,12 +142,12 @@
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 {{ item.storing_unit_format_name }}
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 <input
                     type="number"
                     v-model="item.transferring_format_units"
@@ -157,11 +157,11 @@
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 {{ item.transferring_unit_format_name }}
               </div>
             </td>
-            <td>
+            <td class="text-center">
               <button
                   class="btn btn-danger"
                   @click="removeItem(index)"
@@ -215,6 +215,7 @@ export default {
       senderWarehouse: "",
       receiverWarehouse: "",
       notes: "",
+      inventory_items: []
     };
   },
   computed: {
@@ -322,14 +323,18 @@ export default {
                 });
               })
               .catch((error) => {
-                console.error(error);
-                toast.error(`No se encontró el artículo`, {
-                  position: "top-right",
-                  timeout: 2000,
-                  closeOnClick: true,
-                  pauseOnFocusLoss: true,
-                  pauseOnHover: true,
-                });
+                const errorMessage = error.response.data.error;
+                if (error.response.status !== 500 && errorMessage) {
+                  toast.error(errorMessage, {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  });
+                } else {
+                  console.error(error);
+                }
               });
         }
       } else {
@@ -345,6 +350,9 @@ export default {
       if (this.modalVisible) {
         this.closeModal();
       }
+    },
+    checkUnits(item) {
+      return item.transferring_format_units !== "" || item.storing_format_units !== "";
     },
     removeItem(index) {
       if (index !== 0) {
@@ -418,7 +426,7 @@ export default {
     },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
-      const validRows = this.tableData.filter((item) => {
+      this.inventory_items = this.tableData.filter((item) => {
         return (
             item.item_id.trim() !== "" &&
             item.name.trim() !== "" &&
@@ -427,82 +435,112 @@ export default {
         );
       });
 
-      // Verificar si hay filas válidas
-      if (validRows.length > 0) {
-        const url = `${API_URL}/inventories/transfer_items`;
-        const currentDate = this.getCurrentDate();
-        const currentTime = this.getCurrentTime();
-        const userId = this.user.id;
-        const notes = this.notes;
-        const sourceWarehouseId = this.senderWarehouse.id;
-        const destinationWarehouseId = this.receiverWarehouse.id;
-
-        const inventoryItems = validRows.map((item) => ({
-          item_id: item.item_id,
-          name: item.name,
-          storing_format_units: item.storing_format_units,
-          storing_unit_format_name: item.storing_unit_format_name,
-          transferring_format_units: item.transferring_format_units,
-          transferring_unit_format_name: item.transferring_unit_format_name,
-        }));
-
-        const data = {
-          inventory_items: inventoryItems,
-          currentDate,
-          currentTime,
-          userId,
-          notes,
-          sourceWarehouse_Id: sourceWarehouseId,
-          destinationWarehouse_Id: destinationWarehouseId,
-        };
-
-        axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-
-              this.tableData = [
-                {
-                  item_id: "",
-                  name: "",
-                  storing_format_units: "",
-                  storing_unit_format_name: "",
-                  transferring_format_units: "",
-                  transferring_unit_format_name: "",
-                },
-              ];
-              this.notes = "";
-              this.receiverWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-            });
+      if (this.selectedWarehouse === "") {
+        toast.info(`Debe seleccionar un almacén`, {
+          position: "top-right",
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+        });
       } else {
-        toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
-              position: "top-right",
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+        // Verificar las filas que tienen todos los campos llenos
+        this.inventory_items.forEach(
+            (item) => {
+              if (!this.checkUnits(item)) {
+                toast.info(`Debe ingresar las unidades de almacenamiento a todos los artículos agregados`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                return "";
+              }
             }
-        );
+        )
+
+        // Verificar si hay filas válidas
+        if (this.inventory_items.length > 0) {
+          const url = `${API_URL}/inventories/transfer_items`;
+          const currentDate = this.getCurrentDate();
+          const currentTime = this.getCurrentTime();
+          const userId = this.user.id;
+          const notes = this.notes;
+          const sourceWarehouseId = this.senderWarehouse.id;
+          const destinationWarehouseId = this.receiverWarehouse.id;
+
+          const inventoryItems = this.inventory_items.map((item) => ({
+            item_id: item.item_id,
+            name: item.name,
+            storing_format_units: item.storing_format_units,
+            storing_unit_format_name: item.storing_unit_format_name,
+            transferring_format_units: item.transferring_format_units,
+            transferring_unit_format_name: item.transferring_unit_format_name,
+          }));
+
+          const data = {
+            inventory_items: inventoryItems,
+            currentDate,
+            currentTime,
+            userId,
+            notes,
+            sourceWarehouse_Id: sourceWarehouseId,
+            destinationWarehouse_Id: destinationWarehouseId,
+          };
+
+          axios
+              .post(url, data)
+              .then((response) => {
+                // Lógica de respuesta exitosa
+                console.log(response);
+                toast.success(`Transacción guardada`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
+                this.tableData = [
+                  {
+                    item_id: "",
+                    name: "",
+                    storing_format_units: "",
+                    storing_unit_format_name: "",
+                    transferring_format_units: "",
+                    transferring_unit_format_name: "",
+                  },
+                ];
+                this.tableData = [];
+                this.addItem();
+                this.notes = "";
+                this.receiverWarehouse = "";
+                this.senderWarehouse = "";
+              })
+              .catch((error) => {
+                toast.error(`Error al guardar la transacción: ` + error.message, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              });
+        } else {
+          toast.info(
+              `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+              {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              }
+          );
+        }
       }
+      this.inventory_items = [];
     },
     getCurrentDate() {
       const currentDate = new Date();
@@ -601,5 +639,21 @@ export default {
 
 .form-check-input {
   transform: scale(1.6);
+}
+
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>

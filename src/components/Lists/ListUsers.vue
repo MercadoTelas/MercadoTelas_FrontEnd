@@ -3,7 +3,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <div class="mb-3">
+        <h3>Usuarios en el sistema</h3>
+        <div class="mb-3 mt-3">
           <label for="search" class="form-label">Buscar usuario:</label>
           <input type="text" id="search" class="form-control" v-model="searchQuery"
             placeholder="Buscar por nombre o cédula" />
@@ -15,9 +16,8 @@
             </button>
           </div>
         
-
-        <div class="table-responsive">
-          <table class="table table-striped">
+        <div class="table-container" style="max-height: 650px !important;">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -195,7 +195,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
@@ -206,12 +206,11 @@ export default {
   padding-bottom: 20px;
 }
 
-.text-primary {
-  color: #007bff;
-}
-
 .table {
   margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  overflow: hidden;
 }
 
 .table th,
@@ -224,8 +223,18 @@ export default {
   background-color: #f2f2f2;
 }
 
-@media (max-width: 576px) {
-  .table-responsive {
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
     overflow-x: auto;
   }
 }

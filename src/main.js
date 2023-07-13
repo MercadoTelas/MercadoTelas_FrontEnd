@@ -18,7 +18,7 @@ import Transfer from './components/Transactional/Inventory-Transfer.vue';
 import Output from './components/Transactional/Inventory-Output.vue'
 
 //--Enlistar--
-import InventoryTable from './components/Lists/InventoryTable.vue';
+import InventoryTable from './components/Lists/ListInventory.vue';
 import ListCategory from './components/Lists/ListCategory.vue';
 import ListSubcategory from './components/Lists/ListSubcategory.vue';
 import ListBrand from './components/Lists/ListBrand.vue';
@@ -74,7 +74,7 @@ const router = createRouter({
         },
         {path: '/userProfile', component: UserProfile, meta: {requiresAuth: true},},
         {path: '/entry', name:'Entry', component: Entry, meta: {requiresAuth: true}},
-        {path: '/entryMin/:code/:name', name:'EntryMin', component: Entry, meta: {requiresAuth: true}},
+        {path: '/Entry-from-home/:warehouse', name:'Entry-from-home', component: Entry, meta: {requiresAuth: true}},
         {path: '/transfer', component: Transfer, meta: {requiresAuth: true}},
         {path: '/output', component: Output, meta: {requiresAuth: true}},
         { path: '/inventory', component: InventoryTable, meta: { requiresAuth: true }, },

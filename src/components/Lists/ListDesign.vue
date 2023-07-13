@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Diseño</th>
@@ -100,13 +100,32 @@ export default {
         cancelButtonText: "Cancelar",
       }).then((result) => {
         if (result.isConfirmed) {
-          toast.success(`Se ha eliminado el diseño correctamente`, {
-            position: 'top-right',
-            timeout: 2000,
-            closeOnClick: true,
-            pauseOnFocusLoss: true,
-            pauseOnHover: true,
-          });
+          axios
+            .delete(`${API_URL}/designs/${design.id}`)
+            .then((response) => {
+              console.log(response);
+              // Eliminar el diseño de la lista
+              this.designs = this.designs.filter(
+                (item) => item.id !== design.id
+              );
+              toast.success(`Se ha eliminado el diseño correctamente`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(`Ha ocurrido un error al eliminar el diseño, esto debido a que hay artículos asociados a este diseño`, {
+                position: 'top-right',
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              });
+            });
         }
       });
     },
@@ -126,7 +145,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
@@ -135,10 +154,6 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.text-primary {
-  color: #007bff;
 }
 
 .table {
@@ -155,8 +170,18 @@ export default {
   background-color: #f2f2f2;
 }
 
-@media (max-width: 576px) {
-  .table-responsive {
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
     overflow-x: auto;
   }
 }
