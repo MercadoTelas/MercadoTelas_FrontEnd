@@ -110,8 +110,8 @@
             <h3>Tabla de Inventario de Artículos</h3>
           </div>
           <div class="row">
-            <div>
-              <table class="table">
+            <div class="table-container" style="max-height: 600px !important;">
+              <table class="table table-bordered">
                 <thead>
                 <tr>
                   <th class="text-center">Código</th>

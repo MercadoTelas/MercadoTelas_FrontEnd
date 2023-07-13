@@ -311,6 +311,7 @@ export default {
 
 .table th {
   top: 0;
+  background-color: #f2f2f2 !important;
 }
 
 .table th::before {

@@ -15,9 +15,8 @@
             </button>
           </div>
         
-
-        <div class="table-responsive">
-          <table class="table">
+        <div class="table-container" style="max-height: 650px !important;">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th>Nombre</th>
