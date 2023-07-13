@@ -11,7 +11,7 @@
       <div>
         <div v-if="modalVisible">
           <div class="modal-background"></div>
-          <div class="modal-content container-md">
+          <div class="modal-content container-md" style="z-index: 1;">
             <h2>Búsqueda de artículos</h2>
             <div class="search-container">
               <label for="searchInput">Buscar por Nombre o Código:</label>

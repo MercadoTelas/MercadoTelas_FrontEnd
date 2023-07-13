@@ -301,7 +301,6 @@ export default {
 .table thead {
   position: sticky;
   top: 0;
-  background-color: #fff;
 }
 
 .table th,
@@ -311,9 +310,7 @@ export default {
 }
 
 .table th {
-  background-color: #f2f2f2;
   top: 0;
-  background-color: inherit;
 }
 
 .table th::before {

@@ -609,6 +609,7 @@ export default {
   right: 0px;
   bottom: -1px;
   border: 2px solid #000;
+  z-index: 0;
 }
 
 @media (max-width: 991px) {
