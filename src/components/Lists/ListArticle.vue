@@ -75,7 +75,7 @@
             <button v-if="item.transfers <= 0 && item.insertions <= 0 && item.removals <= 0" @click="deleteArticle(item)" class="btn btn-danger">
               Eliminar
             </button>
-            <button v-else-if="item.status == 'active'" @click="toggleItemStatus(item)" class="btn btn-warning">
+            <button v-else-if="item.status === 'active'" @click="toggleItemStatus(item)" class="btn btn-warning">
               Desactivar
             </button>
             <button v-else-if="item.status === 'inactive'" @click="toggleItemStatus(item)" class="btn btn-warning">
