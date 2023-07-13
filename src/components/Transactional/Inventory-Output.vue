@@ -1,8 +1,8 @@
 <template>
   <input
-      type="checkbox"
       id="check"
       v-model="checked"
+      type="checkbox"
       @change="handleCheckboxChange"
   />
 
@@ -15,13 +15,13 @@
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
             <input
-                type="text"
                 id="searchInput"
                 v-model="searchQuery"
-                @keydown.enter="searchItem"
                 class="form-control"
+                type="text"
+                @keydown.enter="searchItem"
             />
-            <button @click="searchItem" class="btn btn-success">Buscar</button>
+            <button class="btn btn-success" @click="searchItem">Buscar</button>
           </div>
           <div class="table-container">
             <table class="table  table-hover">
@@ -42,11 +42,11 @@
                 <td>{{ item.name }}</td>
                 <td style="width: 10px">
                   <input
-                      type="checkbox"
                       :id="item.id"
-                      :value="item"
                       v-model="selectedItems"
+                      :value="item"
                       class="form-check-input"
+                      type="checkbox"
                       @change="handleItemCheckboxChange(item)"
                   />
                 </td>
@@ -54,8 +54,12 @@
               </tbody>
             </table>
           </div>
-          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
-          <button @click="addSelectedItems" class="btn btn-success">Agregar</button>
+          <div class="row">
+            <div class="btn-group">
+              <button class="btn btn-danger" @click="closeModal">Cerrar</button>
+              <button class="btn btn-success" @click="addSelectedItems">Agregar</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -65,7 +69,7 @@
         <div class=" ms-0">
           <p>Fecha: {{ getCurrentDate() }}</p>
           <p>Hora: {{ getCurrentTime() }}</p>
-          <p>Usuario: {{this.$store.state.user.name}}</p>
+          <p>Usuario: {{ this.$store.state.user.name }}</p>
           <div class="row mb-lg-5">
             <div class="col-1">
               <label for="warehouseSelect">Bodega:</label>
@@ -73,14 +77,14 @@
             <div class="col-11">
               <select
                   id="warehouseSelect"
-                  class="form-select ms-2"
                   v-model="selectedWarehouse"
+                  class="form-select ms-2"
               >
-                <option value="" disabled>Seleccionar</option>
+                <option disabled value="">Seleccionar</option>
                 <option
                     v-for="warehouse in warehouses"
-                    :value="warehouse"
                     :key="warehouse.id"
+                    :value="warehouse"
                 >
                   {{ warehouse.name }}
                 </option>
@@ -99,9 +103,9 @@
           <th class="text-center">Código del artículo</th>
           <th class="text-center">Nombre del artículo</th>
           <th class="text-center">Cantidad en unidades de inventario a remover</th>
-          <th>Unidades</th>
+          <th class="text-center">Unidades</th>
           <th class="text-center">Cantidad en unidades de venta a remover</th>
-          <th>Unidades</th>
+          <th class="text-center">Unidades</th>
           <th class="text-center">Acciones</th>
         </tr>
         </thead>
@@ -110,52 +114,52 @@
           <td>
             <input
                 :id="'ID' + index"
-                type="text"
                 v-model="item.item_id"
-                @keydown.tab="onCellInput(item, 'item_id', $event, index)"
                 class="form-control"
+                type="text"
+                @keydown.tab="onCellInput(item, 'item_id', $event, index)"
             />
           </td>
           <td>
             <input
-                type="text"
                 v-model="item.name"
                 class="form-control"
                 readonly
+                type="text"
             />
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               <input
-                  type="number"
                   :id="'SU' + index"
                   v-model="item.storing_format_units"
-                  @input="onCellInput(item, 'storing_format_units', $event)"
                   class="form-control"
+                  type="number"
+                  @input="onCellInput(item, 'storing_format_units', $event)"
               />
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               {{ item.storing_unit_format_name }}
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               <input
-                  type="number"
                   v-model="item.transferring_format_units"
-                  @input="onCellInput(item, 'transferring_format_units', $event)"
                   class="form-control"
+                  type="number"
+                  @input="onCellInput(item, 'transferring_format_units', $event)"
               />
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               {{ item.transferring_unit_format_name }}
             </div>
           </td>
-          <td>
+          <td class="text-center">
             <button
                 class="btn btn-danger"
                 @click="removeItem(index)"
@@ -170,7 +174,7 @@
 
     <div class="observations-section mt-4">
       <h4>Observaciones</h4>
-      <textarea class="form-control" v-model="notes"></textarea>
+      <textarea v-model="notes" class="form-control"></textarea>
     </div>
 
     <div class="form-footer text-center">
@@ -323,7 +327,7 @@ export default {
         this.closeModal();
       }
     },
-    checkcheckUnits(item) {
+    checkUnits(item) {
       return item.transferring_format_units !== "" || item.storing_format_units !== "";
     },
     removeItem(index) {
@@ -493,7 +497,7 @@ export default {
     },
     getCurrentTime() {
       const currentDate = new Date();
-      return currentDate.toLocaleTimeString('en-US', { timeStyle: 'medium' });
+      return currentDate.toLocaleTimeString('en-US', {timeStyle: 'medium'});
     },
     handleKeyDown(event) {
       if (event.shiftKey && event.key === "Tab") {
@@ -581,5 +585,18 @@ export default {
 
 .form-check-input {
   transform: scale(1.6);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table-container {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>

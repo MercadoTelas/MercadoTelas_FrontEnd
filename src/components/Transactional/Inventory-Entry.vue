@@ -33,8 +33,12 @@
               </tbody>
             </table>
           </div>
-          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
-          <button @click="addSelectedItems" class="btn btn-success">Agregar</button>
+          <div class="row">
+            <div class="btn-group">
+              <button class="btn btn-danger" @click="closeModal">Cerrar</button>
+              <button class="btn btn-success" @click="addSelectedItems">Agregar</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

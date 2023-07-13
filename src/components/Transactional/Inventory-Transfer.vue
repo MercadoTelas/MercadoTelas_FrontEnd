@@ -105,9 +105,9 @@
             <th class="text-center">Código del artículo</th>
             <th class="text-center">Nombre del artículo</th>
             <th class="text-center">Cantidad en unidades de inventario a transferir</th>
-            <th>Unidades</th>
+            <th class="text-center">Unidades</th>
             <th class="text-center">Cantidad en unidades de venta a transferir</th>
-            <th>Unidades</th>
+            <th class="text-center">Unidades</th>
             <th class="text-center">Acciones</th>
           </tr>
           </thead>
@@ -131,7 +131,7 @@
               />
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 <input
                     type="number"
                     :id="'SU' + index"
@@ -142,12 +142,12 @@
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 {{ item.storing_unit_format_name }}
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 <input
                     type="number"
                     v-model="item.transferring_format_units"
@@ -157,11 +157,11 @@
               </div>
             </td>
             <td>
-              <div class="align-items-center">
+              <div class="text-center">
                 {{ item.transferring_unit_format_name }}
               </div>
             </td>
-            <td>
+            <td class="text-center">
               <button
                   class="btn btn-danger"
                   @click="removeItem(index)"
@@ -639,5 +639,18 @@ export default {
 
 .form-check-input {
   transform: scale(1.6);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table-container {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>

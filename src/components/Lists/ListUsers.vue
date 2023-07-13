@@ -3,7 +3,8 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
-        <div class="mb-3">
+        <h3>Usuarios en el sistema</h3>
+        <div class="mb-3 mt-3">
           <label for="search" class="form-label">Buscar usuario:</label>
           <input type="text" id="search" class="form-control" v-model="searchQuery"
             placeholder="Buscar por nombre o cédula" />
@@ -207,6 +208,11 @@ export default {
 
 .table {
   margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1400px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .table th,
@@ -219,8 +225,12 @@ export default {
   background-color: #f2f2f2;
 }
 
-@media (max-width: 576px) {
-  .table-responsive {
+@media (max-width: 600px) {
+  #check:checked~.container {
+    padding-left: 100px;
+  }
+
+  .table {
     overflow-x: auto;
   }
 }
