@@ -138,7 +138,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #check:checked~.container {
   padding-left: 345px;
   max-width: 1500px;
@@ -171,5 +171,21 @@ table {
 
 .table th {
   background-color: #f2f2f2;
+}
+
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>

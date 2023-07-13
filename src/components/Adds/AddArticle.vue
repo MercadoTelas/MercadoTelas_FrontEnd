@@ -563,13 +563,15 @@ export default {
   #check:checked ~ .container {
     padding-left: 100px;
   }
-
   .container {
-    min-width: 400px;
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
   }
 
   .table {
-    min-width: 600px;
+    min-width: 1000px;
+    overflow-x: auto;
   }
 }
 </style>

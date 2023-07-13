@@ -587,14 +587,17 @@ export default {
   transform: scale(1.6);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
   .container {
     padding-left: 40px;
     overflow-x: auto;
     max-width: 600px;
   }
 
-  .table-container {
+  .table {
     min-width: 1000px;
     overflow-x: auto;
   }

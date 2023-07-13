@@ -266,23 +266,21 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @media (max-width: 1000px) {
   #check:checked ~ .container {
     padding-left: 100px;
   }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
 
   .table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #007bff;
-    min-width: 600px;
-  }
-
-  .container {
+    min-width: 1000px;
     overflow-x: auto;
   }
-
 }
 @media (min-width: 1001px) {
   #check:checked ~ .container {
@@ -319,5 +317,21 @@ export default {
 
 .container {
   padding: 20px;
+}
+
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>
