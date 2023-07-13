@@ -156,6 +156,125 @@ label #btn {
     }
   }
 }
+//Mobile
+@media (max-width: 860px) {
+  label #btn {
+    position: fixed;
+    cursor: pointer;
+    color: white;
+    border: 1px solid #15386e;
+    background: #15386e;
+    text-align: center;
+    line-height: 45px;
+  }
+
+  .navbar.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  .navbar {
+    background-color: #15386e;
+    color: white;
+    height: 110px;
+
+    .burger-container {
+      display: flexbox;
+      margin-left: 10px;
+      margin-right: 10px;
+      width: 40px;
+      height: 110px;
+
+      #btn {
+        font-size: 40px;
+        margin-top: 15px;
+      }
+    }
+
+    .logo-container {
+      margin-right: auto;
+
+      #logotelas {
+        width: 130px;
+        height: 80px;
+      }
+    }
+
+    .title-wrapper {
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .title-wrapper .navbar-title {
+      width: fit-content;
+      font-size: 34px;
+      font-weight: bold;
+      flex-grow: 1;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .warehouse-select-container {
+      position: relative;
+
+      .warehouse-select-button {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        background-color: #f2f2f2;
+        color: #15386e;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .warehouse-dropdown {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        width: 100%;
+        background-color: #2f18a4;
+        border-radius: 5px;
+        padding: 10px;
+        display: none;
+        z-index: 999;
+
+        ul {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        li {
+          padding: 5px 0;
+          cursor: pointer;
+        }
+      }
+
+      .warehouse-dropdown.show {
+        display: block;
+      }
+    }
+
+    .logo-usuario-container {
+      margin-left: auto;
+      margin-right: 15px;
+
+      #logousuario {
+        width: 90px;
+        height: 80px;
+        font-size: 70px;
+      }
+
+      #logousuario:hover {
+        cursor: pointer;
+      }
+    }
+  }
+}
 </style>
 
 <script>
