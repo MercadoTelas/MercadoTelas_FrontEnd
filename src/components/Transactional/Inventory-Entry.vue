@@ -50,7 +50,7 @@
               <label for="warehouseSelect" :hidden="selectDisabled">Bodega:</label>
             </div>
             <div class="col-11" :hidden="selectDisabled">
-              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse" >
+              <select id="warehouseSelect" class="form-select ms-2" v-model="selectedWarehouse">
                 <option value="" disabled>Seleccionar</option>
                 <option v-for="warehouse in warehouses" :value="warehouse" :key="warehouse.id">
                   {{ warehouse.name }}
@@ -72,9 +72,9 @@
           <th class="text-center">Código del artículo</th>
           <th class="text-center">Nombre del artículo</th>
           <th class="text-center">Cantidad en unidades de inventario a agregar</th>
-          <th>Unidades</th>
+          <th class="text-center">Unidades</th>
           <th class="text-center">Cantidad en unidades de venta a agregar</th>
-          <th>Unidades</th>
+          <th class="text-center">Unidades</th>
           <th class="text-center">Acciones</th>
         </tr>
         </thead>
@@ -88,28 +88,28 @@
             <input type="text" v-model="item.name" class="form-control" readonly/>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               <input type="number" :id="'SU' + index" v-model="item.storing_format_units"
                      @input="onCellInput(item, 'storing_format_units', $event)" class="form-control"/>
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               {{ item.storing_unit_format_name }}
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               <input type="number" v-model="item.transferring_format_units"
                      @input="onCellInput(item, 'transferring_format_units', $event)" class="form-control"/>
             </div>
           </td>
           <td>
-            <div class="align-items-center">
+            <div class="text-center">
               {{ item.transferring_unit_format_name }}
             </div>
           </td>
-          <td>
+          <td class="text-center">
             <button class="btn btn-danger" @click="removeItem(index)">
               Eliminar
             </button>
@@ -174,7 +174,7 @@ export default {
 
       // Iterar sobre los productos en el store.js
       let selectedArticles = this.$store.state.selectedItems;
-      
+
       for (let i = 0; i < selectedArticles.length; i++) {
         let article = {};
         article.item_id = selectedArticles[i];
@@ -295,6 +295,9 @@ export default {
         this.closeModal();
       }
     },
+    checkUnits(item) {
+      return item.transferring_format_units !== "" || item.storing_format_units !== "";
+    },
     removeItem(index) {
       if (index !== 0) {
         // Verificar si no es el primer elemento
@@ -375,56 +378,81 @@ export default {
             item.transferring_format_units !== ""
         );
       });
-
-      // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0) {
-        const url = `${API_URL}/inventories/insert_items`;
-        const data = {
-          inventory_items: this.inventory_items,
-          currentDate: this.getCurrentDate(),
-          warehouse_id: this.selectedWarehouse ? this.selectedWarehouse.id : null,
-          user: this.$store.state.user.id,
-          notes: this.notes,
-        };
-
-        axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-
-              this.tableData = [];
-              this.addItem();
-              this.notes = "";
-              this.selectedWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-            });
+      //Verificar si hay almacén seleccionado
+      if (this.selectedWarehouse === "") {
+        toast.info(`Debe seleccionar un almacén`, {
+          position: "top-right",
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+        });
       } else {
-        toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
-              position: "top-right",
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+        // Verificar las filas que tienen todos los campos llenos
+        this.inventory_items.forEach(
+            (item) => {
+              if (!this.checkUnits(item)) {
+                toast.info(`Debe ingresar las unidades de almacenamiento a todos los artículos agregados`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                return "";
+              }
             }
-        );
+        )
+        // Verificar si hay filas válidas
+        if (this.inventory_items.length > 0) {
+          const url = `${API_URL}/inventories/insert_items`;
+          const data = {
+            inventory_items: this.inventory_items,
+            currentDate: this.getCurrentDate(),
+            warehouse_id: this.selectedWarehouse ? this.selectedWarehouse.id : null,
+            user: this.$store.state.user.id,
+            notes: this.notes,
+          };
+
+          axios
+              .post(url, data)
+              .then((response) => {
+                // Lógica de respuesta exitosa
+                console.log(response);
+                toast.success(`Transacción guardada`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
+                this.tableData = [];
+                this.addItem();
+                this.notes = "";
+                this.selectedWarehouse = "";
+              })
+              .catch((error) => {
+                toast.error(`Error al guardar la transacción: ` + error.message, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              });
+        } else {
+          toast.info(
+              `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+              {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              }
+          );
+        }
       }
       this.inventory_items = [];
     },
@@ -465,7 +493,6 @@ export default {
 
 .table-container {
   overflow-x: auto;
-  max-width: 100%;
   max-height: 300px;
   overflow-y: auto;
 }
@@ -525,5 +552,18 @@ export default {
 
 .form-check-input {
   transform: scale(1.6);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding-left: 40px;
+    overflow-x: auto;
+    max-width: 600px;
+  }
+
+  .table-container {
+    min-width: 1000px;
+    overflow-x: auto;
+  }
 }
 </style>

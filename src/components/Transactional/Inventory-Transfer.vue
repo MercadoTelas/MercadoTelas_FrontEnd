@@ -215,6 +215,7 @@ export default {
       senderWarehouse: "",
       receiverWarehouse: "",
       notes: "",
+      inventory_items: []
     };
   },
   computed: {
@@ -350,6 +351,9 @@ export default {
         this.closeModal();
       }
     },
+    checkUnits(item) {
+      return item.transferring_format_units !== "" || item.storing_format_units !== "";
+    },
     removeItem(index) {
       if (index !== 0) {
         // Verificar si no es el primer elemento
@@ -422,7 +426,7 @@ export default {
     },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
-      const validRows = this.tableData.filter((item) => {
+      this.inventory_items = this.tableData.filter((item) => {
         return (
             item.item_id.trim() !== "" &&
             item.name.trim() !== "" &&
@@ -431,82 +435,112 @@ export default {
         );
       });
 
-      // Verificar si hay filas válidas
-      if (validRows.length > 0) {
-        const url = `${API_URL}/inventories/transfer_items`;
-        const currentDate = this.getCurrentDate();
-        const currentTime = this.getCurrentTime();
-        const userId = this.user.id;
-        const notes = this.notes;
-        const sourceWarehouseId = this.senderWarehouse.id;
-        const destinationWarehouseId = this.receiverWarehouse.id;
-
-        const inventoryItems = validRows.map((item) => ({
-          item_id: item.item_id,
-          name: item.name,
-          storing_format_units: item.storing_format_units,
-          storing_unit_format_name: item.storing_unit_format_name,
-          transferring_format_units: item.transferring_format_units,
-          transferring_unit_format_name: item.transferring_unit_format_name,
-        }));
-
-        const data = {
-          inventory_items: inventoryItems,
-          currentDate,
-          currentTime,
-          userId,
-          notes,
-          sourceWarehouse_Id: sourceWarehouseId,
-          destinationWarehouse_Id: destinationWarehouseId,
-        };
-
-        axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-
-              this.tableData = [
-                {
-                  item_id: "",
-                  name: "",
-                  storing_format_units: "",
-                  storing_unit_format_name: "",
-                  transferring_format_units: "",
-                  transferring_unit_format_name: "",
-                },
-              ];
-              this.notes = "";
-              this.receiverWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-            });
+      if (this.selectedWarehouse === "") {
+        toast.info(`Debe seleccionar un almacén`, {
+          position: "top-right",
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+        });
       } else {
-        toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
-              position: "top-right",
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+        // Verificar las filas que tienen todos los campos llenos
+        this.inventory_items.forEach(
+            (item) => {
+              if (!this.checkUnits(item)) {
+                toast.info(`Debe ingresar las unidades de almacenamiento a todos los artículos agregados`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                return "";
+              }
             }
-        );
+        )
+
+        // Verificar si hay filas válidas
+        if (this.inventory_items.length > 0) {
+          const url = `${API_URL}/inventories/transfer_items`;
+          const currentDate = this.getCurrentDate();
+          const currentTime = this.getCurrentTime();
+          const userId = this.user.id;
+          const notes = this.notes;
+          const sourceWarehouseId = this.senderWarehouse.id;
+          const destinationWarehouseId = this.receiverWarehouse.id;
+
+          const inventoryItems = this.inventory_items.map((item) => ({
+            item_id: item.item_id,
+            name: item.name,
+            storing_format_units: item.storing_format_units,
+            storing_unit_format_name: item.storing_unit_format_name,
+            transferring_format_units: item.transferring_format_units,
+            transferring_unit_format_name: item.transferring_unit_format_name,
+          }));
+
+          const data = {
+            inventory_items: inventoryItems,
+            currentDate,
+            currentTime,
+            userId,
+            notes,
+            sourceWarehouse_Id: sourceWarehouseId,
+            destinationWarehouse_Id: destinationWarehouseId,
+          };
+
+          axios
+              .post(url, data)
+              .then((response) => {
+                // Lógica de respuesta exitosa
+                console.log(response);
+                toast.success(`Transacción guardada`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
+                this.tableData = [
+                  {
+                    item_id: "",
+                    name: "",
+                    storing_format_units: "",
+                    storing_unit_format_name: "",
+                    transferring_format_units: "",
+                    transferring_unit_format_name: "",
+                  },
+                ];
+                this.tableData = [];
+                this.addItem();
+                this.notes = "";
+                this.receiverWarehouse = "";
+                this.senderWarehouse = "";
+              })
+              .catch((error) => {
+                toast.error(`Error al guardar la transacción: ` + error.message, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              });
+        } else {
+          toast.info(
+              `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+              {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              }
+          );
+        }
       }
+      this.inventory_items = [];
     },
     getCurrentDate() {
       const currentDate = new Date();

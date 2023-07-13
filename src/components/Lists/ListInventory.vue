@@ -5,7 +5,7 @@
       v-model="checked"
       @change="handleCheckboxChange"
   />
-  <div class="container-fluid">
+  <div class="container">
     <div class="row">
       <div id="contentDiv" class="col-lg-10 col-md-12">
         <div class="row mb-lg-5">
@@ -13,7 +13,7 @@
         </div>
         <div class="row border rounded-3 p-3 mb-lg-5">
           <h4 class="filter-title">Filtros</h4>
-          <div class="filters-container row">
+          <div class="filters-container">
             <div class="col-md-2">
               <div class="form-group code">
                 <label for="codigo">Código de Artículo:</label>
@@ -104,13 +104,12 @@
             </button>
           </div>
         </div>
-
         <div class="mt-lg-4">
           <div class="row">
             <h3>Tabla de Inventario de Artículos</h3>
           </div>
           <div class="row">
-            <div class="table-container" style="max-height: 600px !important;">
+            <div class="table-responsive-lg" style="max-height: 600px !important;">
               <table class="table table-bordered">
                 <thead>
                 <tr>
@@ -268,26 +267,32 @@ export default {
 </script>
 
 <style>
-#check:checked ~ .container-fluid {
-  padding-left: 345px;
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #007bff;
+    min-width: 600px;
+  }
+
+  .container {
+    overflow-x: auto;
+  }
+
+}
+@media (min-width: 1001px) {
+  #check:checked ~ .container {
+    padding-left: 345px;
+  }
 }
 
-#check:checked ~ #contentDiv {
-  height: auto;
-  display: block;
-}
-
-.container-fluid div {
+.container div {
   justify-content: center;
   align-items: center;
-}
-
-.filters-container {
-  margin-bottom: 10px;
-}
-
-.filters-container div {
-  margin-left: 0;
 }
 
 .table {
@@ -312,11 +317,7 @@ export default {
   color: #0a4481;
 }
 
-.container-fluid {
+.container {
   padding: 20px;
-}
-
-#contentDiv {
-  height: 100%;
 }
 </style>

@@ -1,9 +1,9 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
 
   <div class="add-item container">
@@ -12,21 +12,22 @@
         <div class="text-center mb-lg-2">
           <h2>Detalles del artículo</h2>
         </div>
-        <table class="table table-bordered table-secondary">
-          <tbody>
+        <div class="table-responsive-lg">
+          <table class="table table-bordered table-secondary">
+            <tbody>
             <tr>
               <td class="table-label">Código:</td>
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-123"></i
+                  ><i class="bi bi-123"></i
                   ></span>
                   <input
-                    type="text"
-                    id="id"
-                    class="form-control"
-                    :readonly="isReadOnly"
-                    v-model="id"
+                      type="text"
+                      id="id"
+                      class="form-control"
+                      :readonly="isReadOnly"
+                      v-model="id"
                   />
                 </div>
               </td>
@@ -36,14 +37,14 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-person-badge-fill"></i
+                  ><i class="bi bi-person-badge-fill"></i
                   ></span>
                   <input
-                    type="text"
-                    id="name"
-                    class="form-control"
-                    :readonly="isReadOnly"
-                    v-model="name"
+                      type="text"
+                      id="name"
+                      class="form-control"
+                      :readonly="isReadOnly"
+                      v-model="name"
                   />
                 </div>
               </td>
@@ -53,14 +54,14 @@
               <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-dash-square-fill"></i
+                  ><i class="bi bi-dash-square-fill"></i
                   ></span>
                   <input
-                    type="number"
-                    id="minimal_stock"
-                    class="form-control"
-                    v-model="minimal_stock"
-                    :readonly="isReadOnly"
+                      type="number"
+                      id="minimal_stock"
+                      class="form-control"
+                      v-model="minimal_stock"
+                      :readonly="isReadOnly"
                   />
                 </div>
               </td>
@@ -68,26 +69,26 @@
               <td class="table-input" colspan="2">
                 <div class="input-group">
                   <div
-                    class="item"
-                    style="margin-right: 8px; margin-top: 6px; height: 15px"
+                      class="item"
+                      style="margin-right: 8px; margin-top: 6px; height: 15px"
                   >
                     <i class="bi bi-info-circle" style="font-size: 15px"></i>
                     <div class="text-area">
                       <span class="text"
-                        >Factor de conversión corresponde a cuántas unidades de
+                      >Factor de conversión corresponde a cuántas unidades de
                         venta equivalen a 1 unidad de inventario</span
                       >
                     </div>
                   </div>
                   <span class="input-group-text"
-                    ><i class="bi bi-input-cursor"></i
+                  ><i class="bi bi-input-cursor"></i
                   ></span>
                   <input
-                    type="number"
-                    id="conversion_factor"
-                    class="form-control"
-                    v-model="conversion_factor"
-                    :readonly="isReadOnly"
+                      type="number"
+                      id="conversion_factor"
+                      class="form-control"
+                      v-model="conversion_factor"
+                      :readonly="isReadOnly"
                   />
                 </div>
               </td>
@@ -97,14 +98,14 @@
               <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-postcard"></i
+                  ><i class="bi bi-postcard"></i
                   ></span>
                   <input
-                    type="text"
-                    id="storing_format_units_name"
-                    class="form-control"
-                    v-model="storing_format_units_name"
-                    :readonly="isReadOnly"
+                      type="text"
+                      id="storing_format_units_name"
+                      class="form-control"
+                      v-model="storing_format_units_name"
+                      :readonly="isReadOnly"
                   />
                 </div>
               </td>
@@ -112,14 +113,14 @@
               <td class="table-input" colspan="2">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-postcard"></i
+                  ><i class="bi bi-postcard"></i
                   ></span>
                   <input
-                    type="text"
-                    id="transferring_format_units_name"
-                    class="form-control"
-                    v-model="transferring_format_units_name"
-                    :readonly="isReadOnly"
+                      type="text"
+                      id="transferring_format_units_name"
+                      class="form-control"
+                      v-model="transferring_format_units_name"
+                      :readonly="isReadOnly"
                   />
                 </div>
               </td>
@@ -129,20 +130,20 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-tag-fill"></i
+                  ><i class="bi bi-tag-fill"></i
                   ></span>
                   <select
-                    id="category"
-                    class="form-select"
-                    v-model="filter.category"
-                    @change="onCategoryChange"
-                    :disabled="isReadOnly"
+                      id="category"
+                      class="form-select"
+                      v-model="filter.category"
+                      @change="onCategoryChange"
+                      :disabled="isReadOnly"
                   >
                     <option value="" disabled>Seleccionar categoría</option>
                     <option
-                      v-for="category in categories"
-                      :value="category.name"
-                      :key="category.name"
+                        v-for="category in categories"
+                        :value="category.name"
+                        :key="category.name"
                     >
                       {{ category.name }}
                     </option>
@@ -155,21 +156,21 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-tags"></i
+                  ><i class="bi bi-tags"></i
                   ></span>
                   <select
-                    id="subcategory"
-                    class="form-select"
-                    v-model="subcategory_id"
-                    :disabled="isReadOnly"
+                      id="subcategory"
+                      class="form-select"
+                      v-model="subcategory_id"
+                      :disabled="isReadOnly"
                   >
                     <option value="" disabled selected>
                       Seleccionar subcategoría
                     </option>
                     <option
-                      v-for="subcategory in filteredSubcategories"
-                      :value="subcategory.id"
-                      :key="subcategory.name"
+                        v-for="subcategory in filteredSubcategories"
+                        :value="subcategory.id"
+                        :key="subcategory.name"
                     >
                       {{ subcategory.name }}
                     </option>
@@ -182,19 +183,19 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-x-diamond-fill"></i
+                  ><i class="bi bi-x-diamond-fill"></i
                   ></span>
                   <select
-                    id="design"
-                    class="form-select"
-                    v-model="design_id"
-                    :disabled="isReadOnly"
+                      id="design"
+                      class="form-select"
+                      v-model="design_id"
+                      :disabled="isReadOnly"
                   >
                     <option value="">No posee</option>
                     <option
-                      v-for="design in designs"
-                      :value="design.id"
-                      :key="design.id"
+                        v-for="design in designs"
+                        :value="design.id"
+                        :key="design.id"
                     >
                       {{ design.name }}
                     </option>
@@ -207,19 +208,19 @@
               <td class="table-input" colspan="5">
                 <div class="input-group">
                   <span class="input-group-text"
-                    ><i class="bi bi-medium"></i
+                  ><i class="bi bi-medium"></i
                   ></span>
                   <select
-                    id="brand"
-                    class="form-select"
-                    v-model="brand_id"
-                    :disabled="isReadOnly"
+                      id="brand"
+                      class="form-select"
+                      v-model="brand_id"
+                      :disabled="isReadOnly"
                   >
                     <option value="">No posee</option>
                     <option
-                      v-for="brand in brands"
-                      :value="brand.id"
-                      :key="brand.id"
+                        v-for="brand in brands"
+                        :value="brand.id"
+                        :key="brand.id"
                     >
                       {{ brand.name }}
                     </option>
@@ -227,41 +228,43 @@
                 </div>
               </td>
             </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="mt-lg-4 mb-lg-5" v-if="isReadOnly">
         <div class="row">
           <div class="text-center">
             <h4>Inventario en bodegas</h4>
           </div>
-          <div class="mt-lg-1">
+          <div class="mt-lg-1 table-responsive-lg">
             <table
-              class="table table-responsive-lg table-hover table-secondary table-striped"
+                class="table table-hover table-secondary table-striped"
+                :class="{ 'table-sm': isSmallScreen }"
             >
               <thead>
-                <tr>
-                  <th class="text-center">Bodega</th>
-                  <th class="text-center">Stock en bodega</th>
-                </tr>
+              <tr>
+                <th class="text-center">Bodega</th>
+                <th class="text-center">Stock en bodega</th>
+              </tr>
               </thead>
               <tbody>
-                <tr
+              <tr
                   v-for="inventory_item in inventory_items"
                   :key="inventory_item.id"
-                >
-                  <td class="text-center">{{ inventory_item.warehouse }}</td>
-                  <td class="text-center">
-                    {{ inventory_item.storing_format_units }}
-                    {{ storing_format_units_name }}
-                  </td>
-                </tr>
-                <tr>
-                  <td class="text-center fw-bold">Total</td>
-                  <td class="text-center fw-bold">
-                    {{ calculateStockUnits() }} {{ storing_format_units_name }}
-                  </td>
-                </tr>
+              >
+                <td class="text-center">{{ inventory_item.warehouse }}</td>
+                <td class="text-center">
+                  {{ inventory_item.storing_format_units }}
+                  {{ storing_format_units_name }}
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center fw-bold">Total</td>
+                <td class="text-center fw-bold">
+                  {{ calculateStockUnits() }} {{ storing_format_units_name }}
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -269,18 +272,19 @@
       </div>
       <div class="text-center mt-lg-4">
         <button
-          type="submit"
-          class="btn btn-primary btn-save"
-          v-if="!isReadOnly"
+            type="submit"
+            class="btn btn-primary btn-save"
+            v-if="!isReadOnly"
         >
           Guardar
         </button>
         <router-link
-          to="#"
-          @click="goToPreviousPage()"
-          type="button"
-          class="btn btn-danger btn-save"
-          >Volver
+            to="#"
+            @click="goToPreviousPage()"
+            type="button"
+            class="btn btn-danger btn-save"
+        >
+          Volver
         </router-link>
       </div>
     </form>
@@ -315,6 +319,7 @@ export default {
       inventory_items: [],
       isReadOnly: false,
       mode: "",
+      isSmallScreen: false,
     };
   },
   computed: {
@@ -326,7 +331,7 @@ export default {
     },
     filteredSubcategories() {
       const selectedCategory = this.categories.find(
-        (category) => category.name === this.filter.category
+          (category) => category.name === this.filter.category
       );
       if (selectedCategory) {
         return selectedCategory.subcategories;
@@ -341,11 +346,17 @@ export default {
     } else {
       this.fetchNewItemData();
     }
-    // Verificar si la URL contiene la palabra "details"
     if (window.location.href.includes("details")) {
-      this.isReadOnly = true; // Establecer isReadOnly en true
+      this.isReadOnly = true;
       this.$state.navbarTitle = "Detalles";
     }
+  },
+  mounted() {
+    this.checkScreenSize();
+    window.addEventListener("resize", this.checkScreenSize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.checkScreenSize);
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -369,56 +380,50 @@ export default {
       this.$state.navbarTitle = "Agregar Nuevo Artículo";
       this.mode = "new";
       axios
-        .get(`${API_URL}/new_item`)
-        .then((response) => {
-          this.categories = response.data.categories;
-          this.designs = response.data.designs;
-          this.brands = response.data.brands;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .get(`${API_URL}/new_item`)
+          .then((response) => {
+            this.categories = response.data.categories;
+            this.designs = response.data.designs;
+            this.brands = response.data.brands;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     fetchItemData(itemId) {
       this.mode = "edit";
       this.$state.navbarTitle = "Editar Artículo";
       axios
-        .get(`${API_URL}/new_item`)
-        .then((response) => {
-          this.categories = response.data.categories;
-          this.designs = response.data.designs;
-          this.brands = response.data.brands;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .get(`${API_URL}/new_item`)
+          .then((response) => {
+            this.categories = response.data.categories;
+            this.designs = response.data.designs;
+            this.brands = response.data.brands;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       axios
-        .get(`${API_URL}/items/${itemId}`)
-        .then((response) => {
-          const itemData = response.data;
-          this.id = itemData.item.id;
-          this.name = itemData.item.name;
-          this.minimal_stock = itemData.item.minimal_stock;
-          this.storing_format_units_name =
-            itemData.item.storing_format_units_name;
-          this.transferring_format_units_name =
-            itemData.item.transferring_format_units_name;
-          this.conversion_factor = itemData.item.conversion_factor;
-          this.filter.category = itemData.item.category_name;
-          this.subcategory_id = itemData.item.subcategory_id;
-
-          // Asignar valor predeterminado a design_id y brand_id
-          this.design_id = itemData.item.design_id || ""; // asignar cadena vacía si no hay design_id
-          this.brand_id = itemData.item.brand_id || ""; // asignar cadena vacía si no hay brand_id
-
-          this.inventory_items = itemData.inventory_items;
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          .get(`${API_URL}/items/${itemId}`)
+          .then((response) => {
+            const itemData = response.data;
+            this.id = itemData.item.id;
+            this.name = itemData.item.name;
+            this.minimal_stock = itemData.item.minimal_stock;
+            this.storing_format_units_name =
+                itemData.item.storing_format_units_name;
+            this.transferring_format_units_name =
+                itemData.item.transferring_format_units_name;
+            this.conversion_factor = itemData.item.conversion_factor;
+            this.filter.category = itemData.item.category_name;
+            this.subcategory_id = itemData.item.subcategory_id;
+            this.design_id = itemData.item.design_id || "";
+            this.brand_id = itemData.item.brand_id || "";
+            this.inventory_items = itemData.inventory_items;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     },
     onSubmit() {
       let item = {
@@ -434,7 +439,6 @@ export default {
         image: this.image,
       };
       item.user = this.$store.state.user.id;
-      console.log(item);
       if (this.mode === "edit") {
         this.updateItem(item);
       } else {
@@ -443,40 +447,37 @@ export default {
     },
     updateItem(item) {
       axios
-        .put(`${API_URL}/items/${item.id}`, item)
-        .then(async (response) => {
-          console.log(response);
-          toast.success("Artículo actualizado exitosamente", { timeout: 2000 });
-          // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          this.$router.push("/items");
-        })
-        .catch(async (error) => {
-          console.log(error);
-          // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          toast.error("Error al actualizar artículo", { closeOnClick: false });
-        });
+          .put(`${API_URL}/items/${item.id}`, item)
+          .then(async () => {
+            toast.success("Artículo actualizado exitosamente", { timeout: 2000 });
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            this.$router.push("/items");
+          })
+          .catch(async (error) => {
+            console.log(error);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            toast.error("Error al actualizar artículo", { closeOnClick: false });
+          });
     },
     goToPreviousPage() {
       this.$router.go(-1);
     },
     createItem(item) {
       axios
-        .post(`${API_URL}/items`, item)
-        .then(async (response) => {
-          console.log(response);
-          toast.success("Artículo creado exitosamente", { timeout: 2000 });
-          // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          this.$router.push("/items");
-        })
-        .catch(async (error) => {
-          console.log(error);
-          // Esperar 2 segundos antes de redirigir a "/brands"
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          toast.error("Error al crear artículo", { closeOnClick: false });
-        });
+          .post(`${API_URL}/items`, item)
+          .then(async () => {
+            toast.success("Artículo creado exitosamente", { timeout: 2000 });
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            this.$router.push("/items");
+          })
+          .catch(async (error) => {
+            console.log(error);
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+            toast.error("Error al crear artículo", { closeOnClick: false });
+          });
+    },
+    checkScreenSize() {
+      this.isSmallScreen = window.innerWidth < 1000;
     },
   },
 };
@@ -503,7 +504,7 @@ export default {
   width: 250px;
   height: 100px;
   background-color: #15386e;
-  border-radius: 10px; /* Adjust the value to control the roundness of corners */
+  border-radius: 10px;
   opacity: 0;
   transition: opacity 0.3s;
   display: flex;
@@ -546,6 +547,29 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+
+.table-responsive-lg {
+  overflow-x: auto;
+}
+
+.table-sm td,
+.table-sm th {
+  padding: 0.5rem;
+}
+
+@media (max-width: 1000px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+
+  .container {
+    min-width: 400px;
+  }
+
+  .table {
+    min-width: 600px;
   }
 }
 </style>

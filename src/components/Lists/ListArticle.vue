@@ -319,9 +319,8 @@ export default {
   position: absolute;
   top: -1px;
   left: -1px;
-  right: 0px;
+  right: 0;
   bottom: -1px;
   border: 2px solid #000;
 }
-
 </style>

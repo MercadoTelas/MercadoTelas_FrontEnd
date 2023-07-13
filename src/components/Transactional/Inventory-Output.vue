@@ -323,6 +323,9 @@ export default {
         this.closeModal();
       }
     },
+    checkcheckUnits(item) {
+      return item.transferring_format_units !== "" || item.storing_format_units !== "";
+    },
     removeItem(index) {
       if (index !== 0) {
         // Verificar si no es el primer elemento
@@ -403,56 +406,81 @@ export default {
             item.transferring_format_units !== ""
         );
       });
-
-      // Verificar si hay filas válidas
-      if (this.inventory_items.length > 0) {
-        const url = `${API_URL}/inventories/remove_items`;
-        const data = {
-          inventory_items: this.inventory_items,
-          currentDate: this.getCurrentDate(),
-          warehouse_id: this.selectedWarehouse ? this.selectedWarehouse.id : null,
-          user: this.$store.state.user.id,
-          notes: this.notes,
-        };
-
-        axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-
-              this.tableData = [];
-              this.addItem();
-              this.notes = "";
-              this.selectedWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
-            });
+      if (this.selectedWarehouse === "") {
+        toast.info(`Debe seleccionar un almacén`, {
+          position: "top-right",
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+        });
       } else {
-        toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
-              position: "top-right",
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
+        // Verificar las filas que tienen todos los campos llenos
+        this.inventory_items.forEach(
+            (item) => {
+              if (!this.checkUnits(item)) {
+                toast.info(`Debe ingresar las unidades de almacenamiento a todos los artículos agregados`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                return "";
+              }
             }
-        );
+        )
+
+        // Verificar si hay filas válidas
+        if (this.inventory_items.length > 0) {
+          const url = `${API_URL}/inventories/remove_items`;
+          const data = {
+            inventory_items: this.inventory_items,
+            currentDate: this.getCurrentDate(),
+            warehouse_id: this.selectedWarehouse ? this.selectedWarehouse.id : null,
+            user: this.$store.state.user.id,
+            notes: this.notes,
+          };
+
+          axios
+              .post(url, data)
+              .then((response) => {
+                // Lógica de respuesta exitosa
+                console.log(response);
+                toast.success(`Transacción guardada`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+
+                this.tableData = [];
+                this.addItem();
+                this.notes = "";
+                this.selectedWarehouse = "";
+              })
+              .catch((error) => {
+                toast.error(`Error al guardar la transacción: ` + error.message, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+              });
+        } else {
+          toast.info(
+              `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+              {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              }
+          );
+        }
       }
       this.inventory_items = [];
     },
