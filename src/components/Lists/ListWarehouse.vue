@@ -29,7 +29,7 @@
         </div>
 
         <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Bodega</th>
@@ -43,7 +43,7 @@
                   <router-link
                     :to="{
                       name: 'EditWarehouse',
-                      params: { id: warehouse.id },
+                      params: { id: warehouse.id }
                     }"
                     class="btn btn-secondary"
                     >Editar</router-link
@@ -156,12 +156,11 @@ export default {
   padding-bottom: 20px;
 }
 
-.text-primary {
-  color: #007bff;
-}
-
 .table {
   margin-top: 20px;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .table th,

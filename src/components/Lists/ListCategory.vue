@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Categoría</th>
@@ -137,10 +137,6 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.text-primary {
-  color: #007bff;
 }
 
 .table {

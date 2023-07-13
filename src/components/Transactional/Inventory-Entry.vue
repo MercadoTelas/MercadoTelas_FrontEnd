@@ -13,7 +13,7 @@
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
           <div class="table-container">
-            <table class="table table-responsive-lg text-center">
+            <table class="table">
               <thead>
               <tr>
                 <th class="text-center">Código del artículo</th>
@@ -66,7 +66,7 @@
     </div>
     <h4>Lista de Artículos</h4>
     <div class="table-container">
-      <table class="table table-responsive-lg text-center">
+      <table class="table">
         <thead>
         <tr>
           <th class="text-center">Código del artículo</th>

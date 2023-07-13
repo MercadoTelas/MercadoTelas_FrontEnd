@@ -1,9 +1,9 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
   <div class="container">
     <div class="row">
@@ -11,15 +11,15 @@
         <div class="col-md-10 me-2">
           <label for="search" class="form-label">Buscar artículo:</label>
           <input
-            type="text"
-            id="search"
-            class="form-control"
-            v-model="searchQuery"
-            placeholder="Buscar por cualquier característica"
+              type="text"
+              id="search"
+              class="form-control"
+              v-model="searchQuery"
+              placeholder="Buscar por cualquier característica"
           />
         </div>
         <div class="col-md-2 ms-2 align-self-center">
-          <br />
+          <br/>
           <button @click="addArticle" class="btn btn-success">
             Agregar artículo
           </button>
@@ -27,70 +27,70 @@
       </div>
     </div>
     <div class="row">
-      <div class="table-responsive-lg">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Código</th>
-              <th scope="col">Nombre</th>
-              <th scope="col">Categoría</th>
-              <th scope="col">Subcategoría</th>
-              <th scope="col">Inventario mínimo</th>
-              <th scope="col">Estado</th>
-              <th scope="col">Marca</th>
-              <th scope="col">Diseño</th>
-              <th scope="col">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="item in filteredArticles" :key="item.id">
-              <td class="text-center">{{ item.id }}</td>
-              <td class="text-center">{{ item.name }}</td>
-              <td class="text-center">{{ item.category_name }}</td>
-              <td class="text-center">{{ item.subcategory_name }}</td>
-              <td class="text-center">
-                {{ item.minimal_stock }} {{ item.storing_format_units_name }}
-              </td>
-              <td class="text-center">
-                {{ item.status === "active" ? "Activo" : "Inactivo" }}
-              </td>
-              <td class="text-center">
-                {{ item.brand_id !== null ? item.brand_name : "No posee" }}
-              </td>
-              <td class="text-center">
-                {{ item.design_id !== null ? item.design_name : "No posee" }}
-              </td>
-              <td class="text-center">
-                <router-link
-                  :to="{ name: 'ArticleDetails', params: { id: item.id } }"
-                  class="btn btn-primary"
-                  >Detalles</router-link
-                >
-                <router-link
-                  :to="{ name: 'EditArticle', params: { id: item.id } }"
-                  class="btn btn-secondary"
-                  >Editar</router-link
-                >
-                <button @click="deleteArticle(item)" class="btn btn-danger">
-                  Eliminar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th scope="col" class="text-center">Código</th>
+          <th scope="col" class="text-center">Nombre</th>
+          <th scope="col" class="text-center">Categoría</th>
+          <th scope="col" class="text-center">Subcategoría</th>
+          <th scope="col" class="text-center">Inventario mínimo</th>
+          <th scope="col" class="text-center">Estado</th>
+          <th scope="col" class="text-center">Marca</th>
+          <th scope="col" class="text-center">Diseño</th>
+          <th scope="col" class="text-center">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="item in filteredArticles" :key="item.id">
+          <td class="text-center">{{ item.id }}</td>
+          <td class="text-center">{{ item.name }}</td>
+          <td class="text-center">{{ item.category_name }}</td>
+          <td class="text-center">{{ item.subcategory_name }}</td>
+          <td class="text-center">
+            {{ item.minimal_stock }} {{ item.storing_format_units_name }}
+          </td>
+          <td class="text-center">
+            {{ item.status === "active" ? "Activo" : "Inactivo" }}
+          </td>
+          <td class="text-center">
+            {{ item.brand_id !== null ? item.brand_name : "No posee" }}
+          </td>
+          <td class="text-center">
+            {{ item.design_id !== null ? item.design_name : "No posee" }}
+          </td>
+          <td class="text-center">
+            <router-link
+                :to="{ name: 'ArticleDetails', params: { id: item.id } }"
+                class="btn btn-primary"
+            >Detalles
+            </router-link
+            >
+            <router-link
+                :to="{ name: 'EditArticle', params: { id: item.id } }"
+                class="btn btn-secondary"
+            >Editar
+            </router-link
+            >
+            <button @click="deleteArticle(item)" class="btn btn-danger">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 
 export default {
   name: "ArticleList",
@@ -111,17 +111,17 @@ export default {
       return this.items.filter((item) => {
         const search = this.searchQuery.toLowerCase();
         return (
-          item.name.toLowerCase().includes(search) ||
-          item.id.toLowerCase().includes(search) ||
-          item.conversion_factor.toLowerCase().includes(search) ||
-          item.minimal_stock.toLowerCase().includes(search) ||
-          item.status.toLowerCase().includes(search) ||
-          item.subcategory_name.toLowerCase().includes(search) ||
-          item.category_name.toLowerCase().includes(search) ||
-          (item.brand_name != null &&
-            item.brand_name.toLowerCase().includes(search)) ||
-          (item.design_name != null &&
-            item.design_name.toLowerCase().includes(search))
+            item.name.toLowerCase().includes(search) ||
+            item.id.toLowerCase().includes(search) ||
+            item.conversion_factor.toLowerCase().includes(search) ||
+            item.minimal_stock.toLowerCase().includes(search) ||
+            item.status.toLowerCase().includes(search) ||
+            item.subcategory_name.toLowerCase().includes(search) ||
+            item.category_name.toLowerCase().includes(search) ||
+            (item.brand_name != null &&
+                item.brand_name.toLowerCase().includes(search)) ||
+            (item.design_name != null &&
+                item.design_name.toLowerCase().includes(search))
         );
       });
     },
@@ -133,7 +133,7 @@ export default {
     },
     addArticle() {
       // Redireccionar a la vista de agregar artículo
-      this.$router.push({ name: "AddArticle" });
+      this.$router.push({name: "AddArticle"});
     },
     deleteArticle(article) {
       // Lógica para eliminar un artículo
@@ -149,22 +149,22 @@ export default {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(API_URL + "/items/" + article.id)
-            .then((response) => {
-              console.log(response);
-              toast.success(`Se ha eliminado el artículo correctamente`, {
-                position: 'top-right',
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
+              .delete(API_URL + "/items/" + article.id)
+              .then((response) => {
+                console.log(response);
+                toast.success(`Se ha eliminado el artículo correctamente`, {
+                  position: 'top-right',
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
+                // Eliminar el artículo de la lista
+                this.items = this.items.filter((item) => item.id !== article.id);
+              })
+              .catch((error) => {
+                console.log(error);
               });
-              // Eliminar el artículo de la lista
-              this.items = this.items.filter((item) => item.id !== article.id);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
         }
       });
     },
@@ -173,14 +173,14 @@ export default {
     this.$state.navbarTitle = "Lista de Artículos";
     // Obtener todos los artículos desde la API
     axios
-      .get(API_URL + "/items")
-      .then((response) => {
-        console.log(response);
-        this.items = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .get(API_URL + "/items")
+        .then((response) => {
+          console.log(response);
+          this.items = response.data;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   },
 };
 </script>
@@ -196,11 +196,6 @@ export default {
   padding-bottom: 20px;
   max-width: 90%;
   height: fit-content;
-}
-
-.table-responsive-lg {
-  height: 700px; /* Adjust the desired height */
-  overflow-y: auto;
 }
 
 .table-responsive-lg .table {
@@ -232,11 +227,5 @@ export default {
 
 .table th {
   background-color: #f2f2f2;
-}
-
-@media (max-width: 576px) {
-  .table-responsive {
-    overflow-x: auto;
-  }
 }
 </style>

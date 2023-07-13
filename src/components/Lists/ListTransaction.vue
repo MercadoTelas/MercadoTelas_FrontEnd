@@ -10,7 +10,7 @@
       <div class="mt-3 mb-4">
         <h3>Salidas</h3>
         <div class="table-container">
-          <table class="table table-striped">
+          <table class="table table-striped table-hover">
             <thead>
               <tr>
                 <th>Código</th>
@@ -48,7 +48,7 @@
       <div class="mt-3 mb-4">
         <h3>Entradas</h3>
         <div class="table-container">
-          <table class="table table-striped">
+          <table class="table table-hover table-striped">
             <thead>
               <tr>
                 <th>Código</th>
@@ -85,7 +85,7 @@
       <div class="mt-3 mb-4">
         <h3>Transferencias</h3>
         <div class="table-container">
-          <table class="table table-striped">
+          <table class="table">
             <thead>
               <tr>
                 <th>Código</th>

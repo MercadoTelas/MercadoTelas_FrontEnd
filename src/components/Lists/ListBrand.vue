@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="table-container">
-          <table class="table table-responsive table-bordered table-secondary">
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Marca</th>
@@ -143,22 +143,16 @@ export default {
 }
 
 .table-container {
-  height: 90vh; /* Establece la altura del contenedor al 90% del alto de la ventana */
-  overflow: auto; /* Agrega un scroll si el contenido excede la altura del contenedor */
+  height: 90vh;
+  overflow: auto;
 }
 
 table {
-  width: 100%; /* Opcional: ajusta el ancho de la tabla según tus necesidades */
-  table-layout: fixed; /* Fija el ancho de las columnas para evitar que se ajusten automáticamente */
+  width: 100%;
+  table-layout: fixed;
 }
 
 .table th {
   background-color: #f2f2f2;
-}
-
-@media (max-width: 576px) {
-  .table-responsive {
-    overflow-x: auto;
-  }
 }
 </style>

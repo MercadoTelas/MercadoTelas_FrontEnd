@@ -110,8 +110,8 @@
             <h3>Tabla de Inventario de Artículos</h3>
           </div>
           <div class="row">
-            <div class="table-responsive">
-              <table class="table table-responsive table-bordered table-secondary">
+            <div>
+              <table class="table">
                 <thead>
                 <tr>
                   <th class="text-center">Código</th>
@@ -288,12 +288,6 @@ export default {
 
 .filters-container div {
   margin-left: 0;
-}
-
-.table-responsive {
-  max-height: 400px;
-  overflow-x: auto;
-  overflow-y: auto;
 }
 
 .table {

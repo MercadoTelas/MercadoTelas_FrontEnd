@@ -17,7 +17,7 @@
         
 
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -204,10 +204,6 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
-}
-
-.text-primary {
-  color: #007bff;
 }
 
 .table {

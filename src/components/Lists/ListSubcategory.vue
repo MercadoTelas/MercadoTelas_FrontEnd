@@ -27,8 +27,8 @@
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table table-responsive table-bordered table-secondary">
+        <div>
+          <table class="table">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Subcategoría</th>
@@ -174,10 +174,6 @@ export default {
   padding-bottom: 20px;
 }
 
-.text-primary {
-  color: #007bff;
-}
-
 .table {
   margin-top: 20px;
 }
@@ -190,11 +186,5 @@ export default {
 
 .table th {
   background-color: #f2f2f2;
-}
-
-@media (max-width: 576px) {
-  .table-responsive {
-    overflow-x: auto;
-  }
 }
 </style>
