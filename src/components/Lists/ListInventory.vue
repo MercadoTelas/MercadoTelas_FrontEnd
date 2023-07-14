@@ -13,8 +13,11 @@
         </div>
         <div class="row border rounded-3 p-3 mb-lg-5">
           <h4 class="filter-title">Filtros</h4>
-          <div class="filters-container">
-            <div class="col-md-2">
+          <div
+            class="filters-container"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            <div class="col-md-2" style="margin: 10px">
               <div class="form-group code">
                 <label for="codigo">Código de Artículo:</label>
                 <input
@@ -26,7 +29,7 @@
                 />
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="margin: 10px">
               <div class="form-group">
                 <label for="category">Categoría:</label>
                 <select
@@ -46,7 +49,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="margin: 10px">
               <div class="form-group">
                 <label for="subcategory">Subcategoría:</label>
                 <select
@@ -65,7 +68,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="margin: 10px">
               <div class="form-group">
                 <label for="design">Diseño:</label>
                 <select
@@ -84,7 +87,7 @@
                 </select>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2" style="margin: 10px">
               <div class="form-group">
                 <label for="brand">Marca:</label>
                 <select id="brand" class="form-control" v-model="filter.brand">

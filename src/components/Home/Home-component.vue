@@ -7,7 +7,7 @@
       @change="handleCheckboxChange"
     />
     <div class="container-fluid">
-      <div class="button-container">
+      <div class="button-container" style="align-items: center; justify-content: center; margin-bottom: 20px;">
         <div class="filter-row">
           <label for="bodega">Bodega:</label>
           <select
