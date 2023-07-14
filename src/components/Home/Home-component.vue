@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6" >
+        <div class="col-lg-6">
           <div class="card" style="height: 450px !important">
             <div class="card-body">
               <h4 class="card-title text-success">
@@ -105,13 +105,16 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-lg-6" style="margin-top: 20px;">
+        <div class="col-lg-6" style="margin-top: 20px">
           <div class="card" style="height: 452px !important">
             <div class="card-body">
               <h4 class="card-title text-primary text-center">
                 Últimos movimientos realizados en el inventario
               </h4>
-              <div class="table-container" style="max-height: 450px !important; height: 390px !important;">
+              <div
+                class="table-container"
+                style="max-height: 450px !important; height: 390px !important"
+              >
                 <table class="table table-bordered kpi-table">
                   <thead>
                     <tr>
@@ -134,7 +137,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-6" style="margin-top: 20px;">
+        <div class="col-lg-6" style="margin-top: 20px">
           <div class="card" style="height: 452px !important">
             <div class="card-body">
               <h4 class="card-title text-danger">
@@ -520,8 +523,10 @@ export default {
 }
 
 .container-fluid {
-  margin-top: 5px;
-  margin-left: auto;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  max-width: 90%;
+  height: fit-content;
 }
 
 .table-container {
@@ -601,15 +606,20 @@ export default {
   cursor: not-allowed;
 }
 
-.table th::before {
+.table thead {
+  position: sticky;
+  top: 0;
+}
+
+.table thead::before {
   content: "";
   position: absolute;
   top: 0px;
   left: 0px;
   right: 0px;
   bottom: -1px;
-  border: 2px solid #000;
   z-index: 0;
+  border: 2px solid #000;
 }
 
 @media (max-width: 991px) {

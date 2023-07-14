@@ -5,7 +5,7 @@
       v-model="checked"
       @change="handleCheckboxChange"
   />
-  <div>
+  <div id="generalContainer">
     <div class="container">
       <h3>Filtros</h3>
       <div class="form-row">
@@ -232,8 +232,8 @@ export default {
 </script>
 
 <style scoped>
-#check:checked ~ .container {
-  padding-left: 345px;
+#check:checked ~ #generalContainer {
+  margin-left: 345px;
   max-width: 1500px;
 }
 
