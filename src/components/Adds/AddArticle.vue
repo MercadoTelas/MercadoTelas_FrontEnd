@@ -228,7 +228,7 @@
                 </div>
               </td>
             </tr>
-            <tr v-if="!isReadOnly">
+            <tr>
               <td class="table-label">Imagen:</td>
               <td class="table-input" colspan="5">
                 <!-- Mostrar la imagen si image_url está disponible -->
