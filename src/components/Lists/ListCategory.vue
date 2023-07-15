@@ -14,8 +14,8 @@
             </button>
           </div>
         </div>
-        <div class="table-responsive">
-          <table class="table">
+        <div class="table-container" style="max-height: 700px !important;">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Categoría</th>
@@ -152,35 +152,56 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+  max-width: 90%;
+  height: fit-content;
+}
+
+.table-container {
+  height: 700px;
+  overflow: auto;
+}
+
+.table-hover tbody tr:hover td {
+  justify-content: center;
+}
+
+.btn {
+  margin: 3px;
+}
+
+.table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .table {
   margin-top: 20px;
+  border-spacing: 0;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
 }
 
 .table th,
 .table td {
-  padding: 8px;
   vertical-align: middle;
+  padding-bottom: -10px;
 }
 
 .table th {
-  background-color: #f2f2f2;
+  top: 0;
+  background-color: #f2f2f2 !important;
 }
 
-@media (max-width: 1000px) {
-  #check:checked ~ .container {
-    padding-left: 100px;
-  }
-  .container {
-    padding-left: 40px;
-    overflow-x: auto;
-    max-width: 600px;
-  }
-
-  .table {
-    min-width: 1000px;
-    overflow-x: auto;
-  }
+.table th::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: 0;
+  bottom: -1px;
+  border: 2px solid #000;
 }
 </style>

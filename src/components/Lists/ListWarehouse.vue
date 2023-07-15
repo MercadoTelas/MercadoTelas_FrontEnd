@@ -28,8 +28,8 @@
           </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="table">
+        <div class="table-container" style="max-height: 700px !important">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Bodega</th>
@@ -43,7 +43,7 @@
                   <router-link
                     :to="{
                       name: 'EditWarehouse',
-                      params: { id: warehouse.id }
+                      params: { id: warehouse.id },
                     }"
                     class="btn btn-secondary"
                     >Editar</router-link
@@ -69,9 +69,8 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "WarehouseList",
@@ -127,7 +126,7 @@ export default {
                 (w) => w.id !== warehouse.id
               );
               toast.success(`Se ha eliminado la bodega correctamente`, {
-                position: 'top-right',
+                position: "top-right",
                 timeout: 2000,
                 closeOnClick: true,
                 pauseOnFocusLoss: true,
@@ -137,7 +136,7 @@ export default {
             .catch((error) => {
               console.log(error);
               toast.error(`Ha ocurrido un error al eliminar la bodega`, {
-                position: 'top-right',
+                position: "top-right",
                 timeout: 2000,
                 closeOnClick: true,
                 pauseOnFocusLoss: true,
@@ -172,23 +171,57 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+  max-width: 90%;
+  height: fit-content;
+}
+
+.table-container {
+  height: 700px;
+  overflow: auto;
+}
+
+.table-hover tbody tr:hover td {
+  justify-content: center;
+}
+
+.btn {
+  margin: 3px;
+}
+
+.table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .table {
   margin-top: 20px;
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
+  border-spacing: 0;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
 }
 
 .table th,
 .table td {
-  padding: 8px;
   vertical-align: middle;
+  padding-bottom: -10px;
 }
 
 .table th {
-  background-color: #f2f2f2;
+  top: 0;
+  background-color: #f2f2f2 !important;
+}
+
+.table th::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: 0;
+  bottom: -1px;
+  border: 2px solid #000;
 }
 
 @media (max-width: 1000px) {

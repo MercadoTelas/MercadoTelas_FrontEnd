@@ -1,11 +1,22 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
   <div class="container">
     <div class="row">
       <div class="col-md-8 offset-md-2">
         <div class="mb-3">
           <label for="search" class="form-label">Buscar marca:</label>
-          <input type="text" id="search" class="form-control" v-model="searchQuery" placeholder="Buscar por nombre" />
+          <input
+            type="text"
+            id="search"
+            class="form-control"
+            v-model="searchQuery"
+            placeholder="Buscar por nombre"
+          />
         </div>
         <div class="row">
           <div class="col-md-12">
@@ -14,8 +25,8 @@
             </button>
           </div>
         </div>
-        <div class="table-container">
-          <table class="table">
+        <div class="table-container" style="max-height: 700px !important">
+          <table class="table table-bordered">
             <thead>
               <tr>
                 <th class="text-center">Nombre de Marca</th>
@@ -26,8 +37,11 @@
               <tr v-for="brand in filteredBrands" :key="brand.name">
                 <td class="text-center">{{ brand.name }}</td>
                 <td class="text-center">
-                  <router-link :to="{ name: 'EditBrand', params: { id: brand.id } }"
-                    class="btn btn-secondary">Editar</router-link>
+                  <router-link
+                    :to="{ name: 'EditBrand', params: { id: brand.id } }"
+                    class="btn btn-secondary"
+                    >Editar</router-link
+                  >
                   <button @click="deleteBrand(brand)" class="btn btn-danger">
                     Eliminar
                   </button>
@@ -46,9 +60,8 @@ import { mapState, mapMutations } from "vuex";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "BrandList",
@@ -101,7 +114,7 @@ export default {
             .then((response) => {
               console.log(response);
               toast.success(`Se ha eliminado la marca correctamente`, {
-                position: 'top-right',
+                position: "top-right",
                 timeout: 2000,
                 closeOnClick: true,
                 pauseOnFocusLoss: true,
@@ -111,13 +124,16 @@ export default {
             })
             .catch((error) => {
               console.log(error);
-              toast.error(`No se pudo eliminar, ya que posee artículos relacionados`, {
-                position: 'top-right',
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
+              toast.error(
+                `No se pudo eliminar, ya que posee artículos relacionados`,
+                {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                }
+              );
             });
         }
       });
@@ -139,7 +155,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1500px;
 }
@@ -147,30 +163,57 @@ export default {
 .container {
   padding-top: 20px;
   padding-bottom: 20px;
+  max-width: 90%;
+  height: fit-content;
+}
+
+.table-container {
+  height: 700px;
+  overflow: auto;
+}
+
+.table-hover tbody tr:hover td {
+  justify-content: center;
+}
+
+.btn {
+  margin: 3px;
+}
+
+.table td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .table {
   margin-top: 20px;
+  border-spacing: 0;
+}
+
+.table thead {
+  position: sticky;
+  top: 0;
 }
 
 .table th,
 .table td {
-  padding: 8px;
   vertical-align: middle;
-}
-
-.table-container {
-  height: 90vh;
-  overflow: auto;
-}
-
-table {
-  width: 100%;
-  table-layout: fixed;
+  padding-bottom: -10px;
 }
 
 .table th {
-  background-color: #f2f2f2;
+  top: 0;
+  background-color: #f2f2f2 !important;
+}
+
+.table th::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: 0;
+  bottom: -1px;
+  border: 2px solid #000;
 }
 
 @media (max-width: 1000px) {
