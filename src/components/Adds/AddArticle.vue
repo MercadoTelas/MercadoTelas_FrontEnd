@@ -1,8 +1,8 @@
 <template>
   <input
-      type="checkbox"
       id="check"
       v-model="checked"
+      type="checkbox"
       @change="handleCheckboxChange"
   />
 
@@ -23,11 +23,11 @@
                   ><i class="bi bi-123"></i
                   ></span>
                   <input
-                      type="text"
                       id="id"
-                      class="form-control"
-                      :readonly="isReadOnly"
                       v-model="id"
+                      :readonly="isReadOnly"
+                      class="form-control"
+                      type="text"
                   />
                 </div>
               </td>
@@ -40,11 +40,11 @@
                   ><i class="bi bi-person-badge-fill"></i
                   ></span>
                   <input
-                      type="text"
                       id="name"
-                      class="form-control"
-                      :readonly="isReadOnly"
                       v-model="name"
+                      :readonly="isReadOnly"
+                      class="form-control"
+                      type="text"
                   />
                 </div>
               </td>
@@ -57,11 +57,11 @@
                   ><i class="bi bi-dash-square-fill"></i
                   ></span>
                   <input
-                      type="number"
                       id="minimal_stock"
-                      class="form-control"
                       v-model="minimal_stock"
                       :readonly="isReadOnly"
+                      class="form-control"
+                      type="number"
                   />
                 </div>
               </td>
@@ -84,11 +84,11 @@
                   ><i class="bi bi-input-cursor"></i
                   ></span>
                   <input
-                      type="number"
                       id="conversion_factor"
-                      class="form-control"
                       v-model="conversion_factor"
                       :readonly="isReadOnly"
+                      class="form-control"
+                      type="number"
                   />
                 </div>
               </td>
@@ -101,11 +101,11 @@
                   ><i class="bi bi-postcard"></i
                   ></span>
                   <input
-                      type="text"
                       id="storing_format_units_name"
-                      class="form-control"
                       v-model="storing_format_units_name"
                       :readonly="isReadOnly"
+                      class="form-control"
+                      type="text"
                   />
                 </div>
               </td>
@@ -116,11 +116,11 @@
                   ><i class="bi bi-postcard"></i
                   ></span>
                   <input
-                      type="text"
                       id="transferring_format_units_name"
-                      class="form-control"
                       v-model="transferring_format_units_name"
                       :readonly="isReadOnly"
+                      class="form-control"
+                      type="text"
                   />
                 </div>
               </td>
@@ -134,16 +134,16 @@
                   ></span>
                   <select
                       id="category"
-                      class="form-select"
                       v-model="filter.category"
-                      @change="onCategoryChange"
                       :disabled="isReadOnly"
+                      class="form-select"
+                      @change="onCategoryChange"
                   >
-                    <option value="" disabled>Seleccionar categoría</option>
+                    <option disabled value="">Seleccionar categoría</option>
                     <option
                         v-for="category in categories"
-                        :value="category.name"
                         :key="category.name"
+                        :value="category.name"
                     >
                       {{ category.name }}
                     </option>
@@ -160,17 +160,17 @@
                   ></span>
                   <select
                       id="subcategory"
-                      class="form-select"
                       v-model="subcategory_id"
                       :disabled="isReadOnly"
+                      class="form-select"
                   >
-                    <option value="" disabled selected>
+                    <option disabled selected value="">
                       Seleccionar subcategoría
                     </option>
                     <option
                         v-for="subcategory in filteredSubcategories"
-                        :value="subcategory.id"
                         :key="subcategory.name"
+                        :value="subcategory.id"
                     >
                       {{ subcategory.name }}
                     </option>
@@ -187,15 +187,15 @@
                   ></span>
                   <select
                       id="design"
-                      class="form-select"
                       v-model="design_id"
                       :disabled="isReadOnly"
+                      class="form-select"
                   >
                     <option value="">No posee</option>
                     <option
                         v-for="design in designs"
-                        :value="design.id"
                         :key="design.id"
+                        :value="design.id"
                     >
                       {{ design.name }}
                     </option>
@@ -212,15 +212,15 @@
                   ></span>
                   <select
                       id="brand"
-                      class="form-select"
                       v-model="brand_id"
                       :disabled="isReadOnly"
+                      class="form-select"
                   >
                     <option value="">No posee</option>
                     <option
                         v-for="brand in brands"
-                        :value="brand.id"
                         :key="brand.id"
+                        :value="brand.id"
                     >
                       {{ brand.name }}
                     </option>
@@ -228,19 +228,38 @@
                 </div>
               </td>
             </tr>
+            <tr>
+              <td class="table-label">Imagen:</td>
+              <td class="table-input" colspan="5">
+                <!-- Mostrar la imagen si image_url está disponible -->
+                <div v-if="image_url && isReadOnly">
+                  <img :src="image_url" alt="Imagen del artículo" style="max-width: 100px;">
+                </div>
+                <div v-else-if="!image_url && isReadOnly">
+                  <span>No hay imagen disponible</span>
+                </div>
+                <!-- Mostrar el input para subir la imagen si no está disponible -->
+                <div v-else>
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-card-image"></i></span>
+                    <input id="image" accept="image/*" class="form-control" type="file" @change="handleImageChange">
+                  </div>
+                </div>
+              </td>
+            </tr>
             </tbody>
           </table>
         </div>
       </div>
-      <div class="mt-lg-4 mb-lg-5" v-if="isReadOnly">
+      <div v-if="isReadOnly" class="mt-lg-4 mb-lg-5">
         <div class="row">
           <div class="text-center">
             <h4>Inventario en bodegas</h4>
           </div>
           <div class="mt-lg-1 table-responsive-lg">
             <table
-                class="table table-hover table-secondary table-striped"
                 :class="{ 'table-sm': isSmallScreen }"
+                class="table table-hover table-secondary table-striped"
             >
               <thead>
               <tr>
@@ -272,17 +291,17 @@
       </div>
       <div class="text-center mt-lg-4">
         <button
-            type="submit"
-            class="btn btn-primary btn-save"
             v-if="!isReadOnly"
+            class="btn btn-primary btn-save"
+            type="submit"
         >
           Guardar
         </button>
         <router-link
-            to="#"
-            @click="goToPreviousPage()"
-            type="button"
             class="btn btn-danger btn-save"
+            to="#"
+            type="button"
+            @click="goToPreviousPage()"
         >
           Volver
         </router-link>
@@ -292,11 +311,11 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import {mapState, mapMutations} from "vuex";
 import axios from "axios";
-import { toast } from "vue3-toastify";
+import {toast} from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
-import { API_URL } from "@/config";
+import {API_URL} from "@/config";
 
 export default {
   data() {
@@ -321,6 +340,7 @@ export default {
       isReadOnly: false,
       mode: "",
       isSmallScreen: false,
+      image_url: null,
     };
   },
   computed: {
@@ -363,6 +383,9 @@ export default {
     ...mapMutations(["toggleCheckboxValue"]),
     handleCheckboxChange() {
       this.toggleCheckboxValue();
+    },
+    handleImageChange(event) {
+      this.image = event.target.files[0];
     },
     onCategoryChange() {
       this.filter.subcategory = "";
@@ -422,6 +445,7 @@ export default {
             this.design_id = itemData.item.design_id || "";
             this.brand_id = itemData.item.brand_id || "";
             this.inventory_items = itemData.inventory_items;
+            this.image_url = response.data.image_url;
           })
           .catch((error) => {
             console.log(error);
@@ -448,34 +472,50 @@ export default {
       }
     },
     updateItem(item) {
+      let formData = new FormData();
+      for (let key in item) {
+        formData.append(key, item[key]);
+      }
       axios
-          .put(`${API_URL}/items/${this.complete_id}`, item)
+          .put(`${API_URL}/items/${this.complete_id}`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then(async () => {
-            toast.success("Artículo actualizado exitosamente", { timeout: 2000 });
+            toast.success("Artículo actualizado exitosamente", {timeout: 2000});
             await new Promise((resolve) => setTimeout(resolve, 2000));
             this.$router.push("/items");
           })
           .catch(async (error) => {
             console.log(error);
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            toast.error("Error al actualizar artículo", { closeOnClick: false });
+            toast.error("Error al actualizar artículo", {closeOnClick: false});
           });
     },
     goToPreviousPage() {
       this.$router.go(-1);
     },
     createItem(item) {
+      let formData = new FormData();
+      for (let key in item) {
+        formData.append(key, item[key]);
+      }
       axios
-          .post(`${API_URL}/items`, item)
+          .post(`${API_URL}/items`, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
           .then(async () => {
-            toast.success("Artículo creado exitosamente", { timeout: 2000 });
+            toast.success("Artículo creado exitosamente", {timeout: 2000});
             await new Promise((resolve) => setTimeout(resolve, 2000));
             this.$router.push("/items");
           })
           .catch(async (error) => {
             console.log(error);
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            toast.error("Error al crear artículo", { closeOnClick: false });
+            toast.error("Error al crear artículo", {closeOnClick: false});
           });
     },
     checkScreenSize() {
@@ -565,6 +605,7 @@ export default {
   #check:checked ~ .container {
     padding-left: 100px;
   }
+
   .container {
     padding-left: 40px;
     overflow-x: auto;
