@@ -32,6 +32,15 @@
             />
           </div>
           <div class="col-md-2" style="margin: 10px">
+            <label for="articleCode">Nombre del artículo</label>
+            <input
+                type="text"
+                class="form-control"
+                id="articleCode"
+                v-model="searchArticleName"
+            />
+          </div>
+          <div class="col-md-2" style="margin: 10px">
             <label for="fromDate">Fecha (desde)</label>
             <input
               type="date"
@@ -182,6 +191,7 @@ export default {
       transactions: [],
       searchIdentifier: "",
       searchArticleCode: "",
+      searchArticleName: "",
       searchFromDate: "",
       searchToDate: "",
     };
@@ -202,8 +212,8 @@ export default {
 
           const isMatchedArticleCode = transaction.movements.some(
             (movement) =>
-              movement.item.id === this.searchArticleCode ||
-              movement.item.name.includes(this.searchArticleCode)
+              movement.item.id.includes(this.searchArticleCode) ||
+              movement.item.name.includes(this.searchArticleName)
           );
 
           const isMatchedDate =

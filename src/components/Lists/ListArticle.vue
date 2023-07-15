@@ -43,7 +43,7 @@
         </thead>
         <tbody>
           <tr v-for="item in filteredArticles" :key="item.id">
-            <td class="text-center">{{ item.id }}</td>
+            <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
             <td class="text-center">{{ item.name }}</td>
             <td class="text-center">{{ item.category_name }}</td>
             <td class="text-center">{{ item.subcategory_name }}</td>

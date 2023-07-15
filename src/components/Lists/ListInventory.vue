@@ -149,7 +149,7 @@
                           color: black;
                           text-decoration: none;
                         "
-                        >{{ item.id }}
+                        >{{ item.id.substring(0, item.id.indexOf("_")) }}
                       </router-link>
                     </td>
                     <td class="text-center">{{ item.name }}</td>

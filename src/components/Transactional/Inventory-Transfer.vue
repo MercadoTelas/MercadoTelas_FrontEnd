@@ -41,9 +41,9 @@
                     :key="item.id"
                     :class="{ 'table-row-selected': item.isSelected }"
                   >
-                    <td>{{ item.id }}</td>
-                    <td>{{ item.name }}</td>
-                    <td style="width: 10px">
+                    <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
+                    <td class="text-center">{{ item.name }}</td>
+                    <td style="width: 10px" class="text-center">
                       <input
                         type="checkbox"
                         :id="item.id"

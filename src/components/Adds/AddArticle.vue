@@ -304,6 +304,7 @@ export default {
       filter: {
         category: "",
       },
+      complete_id: "",
       id: "",
       name: "",
       minimal_stock: "",
@@ -407,7 +408,8 @@ export default {
           .get(`${API_URL}/items/${itemId}`)
           .then((response) => {
             const itemData = response.data;
-            this.id = itemData.item.id;
+            this.complete_id = itemData.item.id;
+            this.id = itemData.item.id.substring(0, itemData.item.id.indexOf("_"));
             this.name = itemData.item.name;
             this.minimal_stock = itemData.item.minimal_stock;
             this.storing_format_units_name =
@@ -427,7 +429,7 @@ export default {
     },
     onSubmit() {
       let item = {
-        id: this.id,
+        id: this.$route.params.id !== undefined ? this.complete_id : this.id,
         name: this.name,
         minimal_stock: this.minimal_stock,
         storing_format_units_name: this.storing_format_units_name,
@@ -447,7 +449,7 @@ export default {
     },
     updateItem(item) {
       axios
-          .put(`${API_URL}/items/${item.id}`, item)
+          .put(`${API_URL}/items/${this.complete_id}`, item)
           .then(async () => {
             toast.success("Artículo actualizado exitosamente", { timeout: 2000 });
             await new Promise((resolve) => setTimeout(resolve, 2000));
