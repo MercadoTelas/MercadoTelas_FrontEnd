@@ -1,5 +1,5 @@
 import {createApp, reactive} from 'vue';
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 
 //-- Archivo JavaScript para guardar parámetros durante sesión
 import store from './store';
@@ -49,7 +49,7 @@ import './styles/custom-bootstrap.scss';
 
 
 const router = createRouter({
-    history: createWebHistory('/MercadoTelas_FrontEnd/'),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '',
