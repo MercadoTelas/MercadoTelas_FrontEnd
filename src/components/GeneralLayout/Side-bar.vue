@@ -470,7 +470,6 @@ label #cancelElements {
     transition: all 0.5s ease;
   }
 
-  #inventario,
   #usuarios,
   #movimientos,
   #administrarElementos {
