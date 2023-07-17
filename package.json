@@ -1,6 +1,7 @@
 {
   "name": "mercado_telas_front",
   "version": "0.1.0",
+  "homepage": "https://mercadotelas.github.io/MercadoTelas_FrontEnd/",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",

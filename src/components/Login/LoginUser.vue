@@ -34,7 +34,7 @@
 
             <div class="col">
               <!-- Simple link -->
-              <a href="" @click="forgotPass">¿Olvidaste tu contraseña?</a>
+              <router-link to="/sendEmail">¿Olvidaste tu contraseña?</router-link>
             </div>
           </div>
 
