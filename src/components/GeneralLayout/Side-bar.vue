@@ -263,10 +263,11 @@ export default {
             .catch((error) => {
               console.log(error);
             });
+
+          localStorage.removeItem("token");
+          this.$store.commit("setLoggedIn", false);
+          this.$router.push("/login");
         }
-        localStorage.removeItem("token");
-        this.$store.commit("setLoggedIn", false);
-        this.$router.push("/login");
       });
     },
 
