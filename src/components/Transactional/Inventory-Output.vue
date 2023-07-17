@@ -15,16 +15,16 @@
           <div class="search-container">
             <label for="searchInput">Buscar por Nombre o Código:</label>
             <input
+              type="text"
               id="searchInput"
               v-model="searchQuery"
-              class="form-control"
-              type="text"
               @keydown.enter="searchItem"
+              class="form-control"
             />
-            <button class="btn btn-success" @click="searchItem">Buscar</button>
+            <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
-          <div class="table-container">
-            <table class="table table-hover">
+          <div class="table-container" style="max-height: 500px !important">
+            <table class="table table-bordered">
               <thead>
                 <tr>
                   <th class="text-center">Código del artículo</th>
@@ -38,15 +38,17 @@
                   :key="item.id"
                   :class="{ 'table-row-selected': item.isSelected }"
                 >
-                  <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
+                  <td class="text-center">
+                    {{ item.id.substring(0, item.id.indexOf("_")) }}
+                  </td>
                   <td class="text-center">{{ item.name }}</td>
                   <td style="width: 10px" class="text-center">
                     <input
-                      :id="item.id"
-                      v-model="selectedItems"
-                      :value="item"
-                      class="form-check-input"
                       type="checkbox"
+                      :id="item.id"
+                      :value="item"
+                      v-model="selectedItems"
+                      class="form-check-input"
                       @change="handleItemCheckboxChange(item)"
                     />
                   </td>
@@ -54,14 +56,10 @@
               </tbody>
             </table>
           </div>
-          <div class="row">
-            <div class="btn-group">
-              <button class="btn btn-danger" @click="closeModal">Cerrar</button>
-              <button class="btn btn-success" @click="addSelectedItems">
-                Agregar
-              </button>
-            </div>
-          </div>
+          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
+          <button @click="addSelectedItems" class="btn btn-success">
+            Agregar
+          </button>
         </div>
       </div>
     </div>
@@ -72,11 +70,14 @@
           <p>Fecha: {{ getCurrentDate() }}</p>
           <p>Hora: {{ getCurrentTime() }}</p>
           <p>Usuario: {{ this.$store.state.user.name }}</p>
-          <div class="row mb-lg-5">
-            <div class="col-1">
+          <div
+            class="row mb-lg-5"
+            style="justify-content: center; align-items: center; display: flex"
+          >
+            <div class="col-2">
               <label for="warehouseSelect">Bodega:</label>
             </div>
-            <div class="col-11">
+            <div class="col-10">
               <select
                 id="warehouseSelect"
                 v-model="selectedWarehouse"
@@ -96,7 +97,15 @@
         </div>
       </div>
     </div>
-    <h4>Lista de Artículos</h4>
+
+    <h4 style="margin-top: 30px">Lista de Artículos</h4>
+    <button
+      @click="openSearchMenu()"
+      id="searchArticleButton"
+      class="btn btn-success"
+    >
+      Buscar
+    </button>
     <div class="table-container" style="max-height: 500px !important">
       <table class="table table-bordered">
         <thead>
@@ -361,6 +370,9 @@ export default {
           });
       }
     },
+    openSearchMenu() {
+      this.showModal();
+    },
     onCellInput(item, field, event, index) {
       event.stopPropagation();
       event.preventDefault();
@@ -622,6 +634,10 @@ export default {
   transform: scale(1.6);
 }
 
+#searchArticleButton {
+  display: none;
+}
+
 @media (max-width: 1000px) {
   #check:checked ~ .container {
     padding-left: 100px;
@@ -635,6 +651,10 @@ export default {
   .table {
     min-width: 1000px;
     overflow-x: auto;
+  }
+
+  #searchArticleButton {
+    display: block;
   }
 }
 </style>

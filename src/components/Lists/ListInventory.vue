@@ -15,100 +15,108 @@
           <h4 class="filter-title">Filtros</h4>
           <div
             class="filters-container"
-            style="display: flex; align-items: center; justify-content: center"
+            style="display: block; align-items: center; justify-content: center"
           >
-            <div class="col-md-2" style="margin: 10px">
-              <div class="form-group code">
-                <label for="codigo">Código de Artículo:</label>
-                <input
-                  type="text"
-                  id="codigo"
-                  class="form-control"
-                  v-model="filter.id"
-                  placeholder="Código"
-                />
+            <div class="row">
+              <div class="col-md-2" style="margin: 10px">
+                <div class="form-group code">
+                  <label for="codigo">Código de Artículo:</label>
+                  <input
+                    type="text"
+                    id="codigo"
+                    class="form-control"
+                    v-model="filter.id"
+                    placeholder="Código"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="col-md-2" style="margin: 10px">
-              <div class="form-group">
-                <label for="category">Categoría:</label>
-                <select
-                  id="category"
-                  class="form-control"
-                  v-model="filter.category"
-                  @change="resetSubcategory()"
-                >
-                  <option value="">Todas las categorías</option>
-                  <option
-                    v-for="category in categories"
-                    :value="category.name"
-                    :key="category.name"
+              <div class="col-md-2" style="margin: 10px">
+                <div class="form-group">
+                  <label for="category">Categoría:</label>
+                  <select
+                    id="category"
+                    class="form-control"
+                    v-model="filter.category"
+                    @change="resetSubcategory()"
                   >
-                    {{ category.name }}
-                  </option>
-                </select>
+                    <option value="">Todas las categorías</option>
+                    <option
+                      v-for="category in categories"
+                      :value="category.name"
+                      :key="category.name"
+                    >
+                      {{ category.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2" style="margin: 10px">
-              <div class="form-group">
-                <label for="subcategory">Subcategoría:</label>
-                <select
-                  id="subcategory"
-                  class="form-control"
-                  v-model="filter.subcategory"
-                >
-                  <option value="">Todas las subcategorías</option>
-                  <option
-                    v-for="subcategory in filteredSubcategories"
-                    :value="subcategory.name"
-                    :key="subcategory.name"
+              <div class="col-md-2" style="margin: 10px">
+                <div class="form-group">
+                  <label for="subcategory">Subcategoría:</label>
+                  <select
+                    id="subcategory"
+                    class="form-control"
+                    v-model="filter.subcategory"
                   >
-                    {{ subcategory.name }}
-                  </option>
-                </select>
+                    <option value="">Todas las subcategorías</option>
+                    <option
+                      v-for="subcategory in filteredSubcategories"
+                      :value="subcategory.name"
+                      :key="subcategory.name"
+                    >
+                      {{ subcategory.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2" style="margin: 10px">
-              <div class="form-group">
-                <label for="design">Diseño:</label>
-                <select
-                  id="design"
-                  class="form-control"
-                  v-model="filter.design"
-                >
-                  <option value="">Todos los diseños</option>
-                  <option
-                    v-for="design in designs"
-                    :value="design.name"
-                    :key="design.name"
+              <div class="col-md-2" style="margin: 10px">
+                <div class="form-group">
+                  <label for="design">Diseño:</label>
+                  <select
+                    id="design"
+                    class="form-control"
+                    v-model="filter.design"
                   >
-                    {{ design.name }}
-                  </option>
-                </select>
+                    <option value="">Todos los diseños</option>
+                    <option
+                      v-for="design in designs"
+                      :value="design.name"
+                      :key="design.name"
+                    >
+                      {{ design.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
-            </div>
-            <div class="col-md-2" style="margin: 10px">
-              <div class="form-group">
-                <label for="brand">Marca:</label>
-                <select id="brand" class="form-control" v-model="filter.brand">
-                  <option value="">Todas las marcas</option>
-                  <option
-                    v-for="brand in brands"
-                    :value="brand.name"
-                    :key="brand.name"
+              <div class="col-md-2" style="margin: 10px">
+                <div class="form-group">
+                  <label for="brand">Marca:</label>
+                  <select
+                    id="brand"
+                    class="form-control"
+                    v-model="filter.brand"
                   >
-                    {{ brand.name }}
-                  </option>
-                </select>
+                    <option value="">Todas las marcas</option>
+                    <option
+                      v-for="brand in brands"
+                      :value="brand.name"
+                      :key="brand.name"
+                    >
+                      {{ brand.name }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
-            <button
-              class="btn btn-secondary"
-              style="width: 200px; margin: 10px"
-              @click="resetFilter('all')"
-            >
-              Limpiar filtros
-            </button>
+            <div class="row">
+              <button
+                class="btn btn-secondary"
+                style="width: 200px; margin: 10px"
+                @click="resetFilter('all')"
+              >
+                Limpiar filtros
+              </button>
+            </div>
           </div>
         </div>
         <div class="mt-lg-4">

@@ -113,7 +113,8 @@
               </h4>
               <div
                 class="table-container"
-                style="max-height: 450px !important; height: 390px !important"
+                id="lastTransactions"
+                style="max-height: 450px !important;"
               >
                 <table class="table table-bordered kpi-table">
                   <thead>
@@ -522,6 +523,10 @@ export default {
   max-width: 1600px;
 }
 
+#lastTransactions {
+    height: 390px !important;
+  }
+
 .container-fluid {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -623,6 +628,19 @@ export default {
 }
 
 @media (max-width: 991px) {
+
+  #check:checked ~ .container-fluid {
+    padding-left: 100px;
+  }
+
+  #lastTransactions {
+    height: 330px !important;
+  }
+
+  .button-container {
+    display: block;
+  }
+  
   .col-lg-6 {
     margin-bottom: 20px;
   }

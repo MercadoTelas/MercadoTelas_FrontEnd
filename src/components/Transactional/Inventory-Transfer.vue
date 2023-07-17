@@ -41,7 +41,9 @@
                     :key="item.id"
                     :class="{ 'table-row-selected': item.isSelected }"
                   >
-                    <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
+                    <td class="text-center">
+                      {{ item.id.substring(0, item.id.indexOf("_")) }}
+                    </td>
                     <td class="text-center">{{ item.name }}</td>
                     <td style="width: 10px" class="text-center">
                       <input
@@ -66,12 +68,15 @@
       </div>
       <div class="document-header">
         <div class="header-row">
-          <h1 class="text-center mb-5">Transferencias</h1>
+          <h1 class="text-center mb-5">Transferencia</h1>
           <div class="ms-0">
             <p>Fecha: {{ getCurrentDate() }}</p>
             <p>Hora: {{ getCurrentTime() }}</p>
             <p>Usuario: {{ user.name }}</p>
-            <div class="row">
+            <div
+              class="row mb-lg-5"
+              style="justify-content: center; align-items: center"
+            >
               <div class="col-2">
                 <label for="senderWarehouse">Bodega de origen:</label>
               </div>
@@ -91,13 +96,11 @@
                   </option>
                 </select>
               </div>
-            </div>
 
-            <div class="row mt-1">
-              <div class="col-2">
+              <div class="col-2 mt-2">
                 <label for="receiverWarehouse">Bodega de destino:</label>
               </div>
-              <div class="col-10">
+              <div class="col-10 mt-2">
                 <select
                   id="receiverWarehouse"
                   class="form-select ms-2"
@@ -117,7 +120,15 @@
           </div>
         </div>
       </div>
-      <h4>Lista de Artículos</h4>
+
+      <h4 style="margin-top: 30px">Lista de Artículos</h4>
+      <button
+        @click="openSearchMenu()"
+        id="searchArticleButton"
+        class="btn btn-success"
+      >
+        Buscar
+      </button>
       <div class="table-container">
         <table class="table table-hover">
           <thead>
@@ -453,6 +464,9 @@ export default {
         item.transferring_format_units = saleUnits.toFixed(2);
       }
     },
+    openSearchMenu() {
+      this.showModal();
+    },
     saveTransaction() {
       // Filtrar las filas que tienen todos los campos llenos
       this.inventory_items = this.tableData.filter((item) => {
@@ -699,6 +713,10 @@ export default {
   transform: scale(1.6);
 }
 
+#searchArticleButton {
+  display: none;
+}
+
 @media (max-width: 1000px) {
   #check:checked ~ .container {
     padding-left: 100px;
@@ -712,6 +730,10 @@ export default {
   .table {
     min-width: 1000px;
     overflow-x: auto;
+  }
+
+  #searchArticleButton {
+    display: block;
   }
 }
 </style>

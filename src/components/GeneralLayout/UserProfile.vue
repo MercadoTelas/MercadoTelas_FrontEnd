@@ -1,5 +1,10 @@
 <template>
-  <input type="checkbox" id="check" v-model="checked" @change="handleCheckboxChange" />
+  <input
+    type="checkbox"
+    id="check"
+    v-model="checked"
+    @change="handleCheckboxChange"
+  />
 
   <div class="container">
     <div class="row justify-content-center">
@@ -7,26 +12,48 @@
         <div class="card" style="border-radius: 15px">
           <div class="card-body text-center">
             <div class="logo-container">
-              <img src="../../assets/usuario.png" alt="Logo" class="logo">
+              <img src="../../assets/usuario.png" alt="Logo" class="logo" />
             </div>
-            <h4 class="mb-3">Hola de nuevo, {{ user.name }} </h4>
+            <h4 class="mb-3">Hola de nuevo, {{ user.name }}</h4>
             <form @submit.prevent="changePassword">
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" id="email" class="form-control" :value="user.email" readonly />
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  :value="user.email"
+                  readonly
+                />
               </div>
               <div class="form-group mt-4">
                 <label for="currentPassword">Contraseña actual:</label>
-                <input type="password" id="currentPassword" class="form-control" v-model="current_password" />
+                <input
+                  type="password"
+                  id="currentPassword"
+                  class="form-control"
+                  v-model="current_password"
+                />
               </div>
               <div class="form-group mt-4">
                 <label for="newPassword">Nueva contraseña:</label>
-                <input type="password" id="newPassword" class="form-control" v-model="new_password" />
+                <input
+                  type="password"
+                  id="newPassword"
+                  class="form-control"
+                  v-model="new_password"
+                />
               </div>
               <div class="form-group mt-4">
-                <label for="passwordConfirmation">Confirmar nueva contraseña:</label>
-                <input type="password" id="passwordConfirmation" class="form-control"
-                  v-model="new_password_confirmation" />
+                <label for="passwordConfirmation"
+                  >Confirmar nueva contraseña:</label
+                >
+                <input
+                  type="password"
+                  id="passwordConfirmation"
+                  class="form-control"
+                  v-model="new_password_confirmation"
+                />
               </div>
               <div class="mt-4">
                 <button type="submit" class="btn btn-primary btn-block">
@@ -45,9 +72,8 @@
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import { API_URL } from "@/config";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 export default {
   name: "MyComponent",
@@ -87,7 +113,7 @@ export default {
           .put(`${API_URL}/users/password`, data, config)
           .then((response) => {
             toast.success(`Contraseña actualizada`, {
-              position: 'top-right',
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
@@ -98,7 +124,7 @@ export default {
           })
           .catch((error) => {
             toast.error(`No se pudo actualizar la contraseña`, {
-              position: 'top-right',
+              position: "top-right",
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
@@ -109,7 +135,7 @@ export default {
           });
       } else {
         toast.error(`Las contraseñas no coinciden`, {
-          position: 'top-right',
+          position: "top-right",
           timeout: 2000,
           closeOnClick: true,
           pauseOnFocusLoss: true,
@@ -128,7 +154,7 @@ export default {
 </script>
 
 <style scoped>
-#check:checked~.container {
+#check:checked ~ .container {
   padding-left: 345px;
   max-width: 1800px;
 }
@@ -183,5 +209,15 @@ export default {
 
 .mt-4 {
   margin-top: 20px;
+}
+
+@media (max-width: 991px) {
+  #check:checked ~ .container {
+    padding-left: 100px;
+  }
+
+  .container {
+    margin-top: 0px;
+  }
 }
 </style>
