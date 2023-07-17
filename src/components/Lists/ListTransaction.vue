@@ -11,53 +11,68 @@
         <h4 class="filter-title">Filtros</h4>
         <div
           class="filters-container"
-          style="display: flex; align-items: center; justify-content: center"
+          style="
+            display: inline-block;
+            align-items: center;
+            justify-content: center;
+          "
         >
-          <div class="col-md-2" style="margin: 10px">
-            <label for="code">Código</label>
-            <input
-              type="text"
-              class="form-control"
-              id="code"
-              v-model="searchIdentifier"
-            />
-          </div>
-          <div class="col-md-2" style="margin: 10px">
-            <label for="articleCode">Código del artículo</label>
-            <input
-              type="text"
-              class="form-control"
-              id="articleCode"
-              v-model="searchArticleCode"
-            />
-          </div>
-          <div class="col-md-2" style="margin: 10px">
-            <label for="articleCode">Nombre del artículo</label>
-            <input
+          <div class="row" style="justify-content: center; align-items: center">
+            <div class="col-md-2" style="margin: 10px">
+              <label for="code">Código</label>
+              <input
+                type="text"
+                class="form-control"
+                id="code"
+                v-model="searchIdentifier"
+              />
+            </div>
+            <div class="col-md-2" style="margin: 10px">
+              <label for="articleCode">Código del artículo</label>
+              <input
+                type="text"
+                class="form-control"
+                id="articleCode"
+                v-model="searchArticleCode"
+              />
+            </div>
+            <div class="col-md-2" style="margin: 10px">
+              <label for="articleCode">Nombre del artículo</label>
+              <input
                 type="text"
                 class="form-control"
                 id="articleCode"
                 v-model="searchArticleName"
-            />
+              />
+            </div>
+            <div class="col-md-2" style="margin: 10px">
+              <label for="fromDate">Fecha (desde)</label>
+              <input
+                type="date"
+                class="form-control"
+                id="fromDate"
+                v-model="searchFromDate"
+              />
+            </div>
+            <div class="col-md-2" style="margin: 10px">
+              <label for="toDate">Fecha (hasta)</label>
+              <input
+                type="date"
+                class="form-control"
+                id="toDate"
+                v-model="searchToDate"
+              />
+            </div>
           </div>
-          <div class="col-md-2" style="margin: 10px">
-            <label for="fromDate">Fecha (desde)</label>
-            <input
-              type="date"
-              class="form-control"
-              id="fromDate"
-              v-model="searchFromDate"
-            />
-          </div>
-          <div class="col-md-2" style="margin: 10px">
-            <label for="toDate">Fecha (hasta)</label>
-            <input
-              type="date"
-              class="form-control"
-              id="toDate"
-              v-model="searchToDate"
-            />
-          </div>
+        </div>
+        <div class="row" style="justify-content: center; align-items: center">
+          <button
+            class="btn btn-secondary"
+            style="width: 200px; margin: 10px"
+            @click="resetFilter('all')"
+          >
+            Limpiar filtros
+          </button>
         </div>
       </div>
       <div class="mt-3 mb-4">
@@ -258,6 +273,19 @@ export default {
         year: "2-digit",
       });
     },
+    resetFilter(filterName) {
+      switch (filterName) {
+        case "all":
+          this.searchIdentifier = "";
+          this.searchArticleCode = "";
+          this.searchArticleName = "";
+          this.searchFromDate = "";
+          this.searchToDate = "";
+          break;
+        default:
+          break;
+      }
+    },
   },
   mounted() {
     this.fetchTransactions();
@@ -298,6 +326,7 @@ export default {
   #check:checked ~ .container {
     padding-left: 100px;
   }
+
   .container {
     padding-left: 40px;
     overflow-x: auto;

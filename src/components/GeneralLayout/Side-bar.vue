@@ -160,6 +160,17 @@ export default {
         },
         {
           link: {
+            id: "administrarUsuario",
+            text: "Adiministrar usuario",
+            title: "administrar usuario",
+            linkTo: "userProfile",
+            bootstrapIcon: {
+              class: "bi bi-person-circle",
+            },
+          },
+        },
+        {
+          link: {
             id: "exit-item",
             text: "Cerrar sesión",
             title: "Salir",
@@ -354,6 +365,10 @@ a:active {
   display: none;
 }
 
+#administrarUsuario {
+  display: none;
+}
+
 #exit-item {
   background-color: #ae0214;
 }
@@ -460,6 +475,10 @@ label #cancelElements {
   #movimientos,
   #administrarElementos {
     display: none;
+  }
+
+  #administrarUsuario {
+    display: block;
   }
 
   .sidebar {

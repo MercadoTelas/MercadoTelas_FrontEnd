@@ -23,8 +23,8 @@
             />
             <button @click="searchItem" class="btn btn-success">Buscar</button>
           </div>
-          <div class="table-container">
-            <table class="table">
+          <div class="table-container" style="max-height: 500px !important">
+            <table class="table table-bordered">
               <thead>
                 <tr>
                   <th class="text-center">Código del artículo</th>
@@ -38,7 +38,9 @@
                   :key="item.id"
                   :class="{ 'table-row-selected': item.isSelected }"
                 >
-                  <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
+                  <td class="text-center">
+                    {{ item.id.substring(0, item.id.indexOf("_")) }}
+                  </td>
                   <td class="text-center">{{ item.name }}</td>
                   <td style="width: 10px" class="text-center">
                     <input
@@ -54,14 +56,10 @@
               </tbody>
             </table>
           </div>
-          <div class="row">
-            <div class="btn-group">
-              <button class="btn btn-danger" @click="closeModal">Cerrar</button>
-              <button class="btn btn-success" @click="addSelectedItems">
-                Agregar
-              </button>
-            </div>
-          </div>
+          <button @click="closeModal" class="btn btn-danger">Cerrar</button>
+          <button @click="addSelectedItems" class="btn btn-success">
+            Agregar
+          </button>
         </div>
       </div>
     </div>
@@ -72,13 +70,16 @@
           <p>Fecha: {{ getCurrentDate() }}</p>
           <p>Hora: {{ getCurrentTime() }}</p>
           <p>Usuario: {{ this.$store.state.user.name }}</p>
-          <div class="row mb-lg-5">
-            <div class="col-1">
+          <div
+            class="row mb-lg-5"
+            style="justify-content: center; align-items: center; display: flex"
+          >
+            <div class="col-2">
               <label for="warehouseSelect" :hidden="selectDisabled"
                 >Bodega:</label
               >
             </div>
-            <div class="col-11" :hidden="selectDisabled">
+            <div class="col-10" :hidden="selectDisabled">
               <select
                 id="warehouseSelect"
                 class="form-select ms-2"
@@ -94,16 +95,24 @@
                 </option>
               </select>
             </div>
-            <div>
-              <label :hidden="!selectDisabled"
-                >Bodega seleccionada: {{ selectedWarehouse.name }}</label
-              >
-            </div>
+          </div>
+
+          <div>
+            <label :hidden="!selectDisabled"
+              >Bodega seleccionada: {{ selectedWarehouse.name }}</label
+            >
           </div>
         </div>
       </div>
     </div>
-    <h4>Lista de Artículos</h4>
+    <h4 style="margin-top: 30px">Lista de Artículos</h4>
+    <button
+      @click="openSearchMenu()"
+      id="searchArticleButton"
+      class="btn btn-success"
+    >
+      Buscar
+    </button>
     <div class="table-container" style="max-height: 500px !important">
       <table class="table table-bordered">
         <thead>
@@ -194,6 +203,14 @@
       <button class="btn btn-success" type="submit" @click="saveTransaction">
         Guardar
       </button>
+      <router-link
+          class="btn btn-danger btn-save"
+          to="#"
+          type="button"
+          @click="goToPreviousPage()"
+      >
+        Volver
+      </router-link>
     </div>
   </div>
 </template>
@@ -537,6 +554,12 @@ export default {
         this.showModal();
       }
     },
+    openSearchMenu() {
+      this.showModal();
+    },
+    goToPreviousPage() {
+      this.$router.go(-1);
+    },
   },
 };
 </script>
@@ -648,6 +671,10 @@ export default {
   transform: scale(1.6);
 }
 
+#searchArticleButton {
+  display: none;
+}
+
 @media (max-width: 1000px) {
   #check:checked ~ .container {
     padding-left: 100px;
@@ -661,6 +688,10 @@ export default {
   .table {
     min-width: 1000px;
     overflow-x: auto;
+  }
+
+  #searchArticleButton {
+    display: block;
   }
 }
 </style>

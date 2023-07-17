@@ -17,6 +17,11 @@
           @click="NavigateToAnotherPage('home')"
           alt="logo"
         />
+        <div id="titleForMobile-container">
+          <h1 class="navbar-title" id="titleForMobile">
+            {{ $state.navbarTitle }}
+          </h1>
+        </div>
       </div>
 
       <div class="title-wrapper">
@@ -77,6 +82,10 @@ label #btn {
     #logotelas {
       width: 130px;
       height: 80px;
+    }
+
+    #titleForMobile-container {
+      display: none !important;
     }
 
     #logotelas:hover {
@@ -157,7 +166,7 @@ label #btn {
   }
 }
 //Mobile
-@media (max-width: 860px) {
+@media (max-width: 991px) {
   label #btn {
     position: fixed;
     cursor: pointer;
@@ -194,28 +203,29 @@ label #btn {
     }
 
     .logo-container {
-      margin-right: auto;
+      width: 130px;
+      display: flex !important;
 
       #logotelas {
         width: 130px;
         height: 80px;
       }
+
+      #titleForMobile-container {
+        display: flex !important;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        min-width: 170px;
+        min-height: 70px;
+        max-width: 170px;
+        max-height: 70px;
+        margin-left: 10px;
+      }
     }
 
     .title-wrapper {
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-    }
-
-    .title-wrapper .navbar-title {
-      width: fit-content;
-      font-size: 34px;
-      font-weight: bold;
-      flex-grow: 1;
-      margin-left: auto;
-      margin-right: auto;
+      display: none;
     }
 
     .warehouse-select-container {
@@ -260,6 +270,7 @@ label #btn {
     }
 
     .logo-usuario-container {
+      display: none;
       margin-left: auto;
       margin-right: 15px;
 
