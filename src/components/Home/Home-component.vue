@@ -7,14 +7,17 @@
       @change="handleCheckboxChange"
     />
     <div class="container-fluid">
-      <div class="button-container" style="align-items: center; justify-content: center; margin-bottom: 20px;">
+      <div
+        class="button-container"
+        style="
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 20px;
+        "
+      >
         <div class="filter-row">
           <label for="bodega">Bodega:</label>
-          <select
-            id="bodega"
-            v-model="selectedBodega"
-            @change="filterItems"
-          >
+          <select id="bodega" v-model="selectedBodega" @change="filterItems">
             <option value="">Todas las bodegas</option>
             <option
               v-for="warehouse in bodegas"
@@ -37,11 +40,11 @@
         <div class="filter-row">
           <label for="search">Buscar artículo:</label>
           <input
-              type="text"
-              id="search"
-              v-model="searchQuery"
-              @input="filterItems"
-              placeholder="Escriba el nombre del artículo"
+            type="text"
+            id="search"
+            v-model="searchQuery"
+            @input="filterItems"
+            placeholder="Escriba el nombre del artículo"
           />
         </div>
       </div>
@@ -64,7 +67,11 @@
               <h4 class="card-title text-danger">
                 Artículos por debajo de la cantidad mínima de stock
               </h4>
-              <div class="table-container" style="max-height: 350px; overflow-y: auto;">
+              <div
+                class="table-container"
+                id="underStockTable"
+                style="max-height: 350px; overflow-y: auto"
+              >
                 <table class="table table-bordered kpi-table">
                   <thead>
                     <tr>
@@ -124,7 +131,7 @@
               <div
                 class="table-container"
                 id="lastTransactions"
-                style="max-height: 450px !important;"
+                style="max-height: 450px !important"
               >
                 <table class="table table-bordered kpi-table">
                   <thead>
@@ -450,9 +457,9 @@ export default {
         );
       }
 
-      if (this.searchQuery != '') {
-        productosFiltrados = productosFiltrados.filter(
-          (producto) => producto.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      if (this.searchQuery != "") {
+        productosFiltrados = productosFiltrados.filter((producto) =>
+          producto.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       }
 
@@ -541,8 +548,8 @@ export default {
 }
 
 #lastTransactions {
-    height: 390px !important;
-  }
+  height: 390px !important;
+}
 
 .container-fluid {
   padding-top: 20px;
@@ -554,6 +561,10 @@ export default {
 .table-container {
   height: 700px;
   overflow: auto;
+}
+
+#underStockTable {
+  height: 330px !important;
 }
 
 .button-container {
@@ -645,7 +656,6 @@ export default {
 }
 
 @media (max-width: 991px) {
-
   #check:checked ~ .container-fluid {
     padding-left: 100px;
   }
@@ -654,10 +664,14 @@ export default {
     height: 330px !important;
   }
 
+  #underStockTable {
+    height: 300px !important;
+  }
+
   .button-container {
     display: block;
   }
-  
+
   .col-lg-6 {
     margin-bottom: 20px;
   }
