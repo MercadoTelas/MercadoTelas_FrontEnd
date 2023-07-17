@@ -13,7 +13,7 @@
           <select
             id="bodega"
             v-model="selectedBodega"
-            @change="filterProductos"
+            @change="filterItems"
           >
             <option value="">Todas las bodegas</option>
             <option
@@ -27,12 +27,22 @@
         </div>
         <div class="filter-row">
           <label for="tipo">Tipo de artículo:</label>
-          <select id="tipo" v-model="selectedTipo" @change="filterProductos">
+          <select id="tipo" v-model="selectedTipo" @change="filterItems">
             <option value="">Todos los tipos</option>
             <option v-for="category in tipos" :key="category" :value="category">
               {{ category }}
             </option>
           </select>
+        </div>
+        <div class="filter-row">
+          <label for="search">Buscar artículo:</label>
+          <input
+              type="text"
+              id="search"
+              v-model="searchQuery"
+              @input="filterItems"
+              placeholder="Escriba el nombre del artículo"
+          />
         </div>
       </div>
       <div class="row">
@@ -54,7 +64,7 @@
               <h4 class="card-title text-danger">
                 Artículos por debajo de la cantidad mínima de stock
               </h4>
-              <div class="table-container">
+              <div class="table-container" style="max-height: 350px; overflow-y: auto;">
                 <table class="table table-bordered kpi-table">
                   <thead>
                     <tr>
@@ -182,6 +192,7 @@ export default {
       tipos: [], // Valores posibles para el dropdown de tipo de artículo
       chartTop10: null,
       chartLow: null,
+      searchQuery: "",
     };
   },
   computed: {
@@ -264,7 +275,7 @@ export default {
         this.productosClone = this.productos;
 
         this.createChartTop10();
-        this.filterProductos();
+        this.filterItems();
       })
       .catch((error) => {
         console.log(error);
@@ -288,7 +299,7 @@ export default {
         this.productosLowClone = this.productosLow;
 
         this.createChartLow();
-        this.filterProductos();
+        this.filterItems();
       })
       .catch((error) => {
         console.log(error);
@@ -415,7 +426,7 @@ export default {
         })
       );
     },
-    filterProductos() {
+    filterItems() {
       this.productos = this.productosClone;
       this.productosLow = this.productosLowClone;
       let productosFiltrados = [...this.productos];
@@ -436,6 +447,12 @@ export default {
       if (this.selectedTipo) {
         productosLowFiltrados = productosLowFiltrados.filter(
           (producto) => producto.category === this.selectedTipo
+        );
+      }
+
+      if (this.searchQuery != '') {
+        productosFiltrados = productosFiltrados.filter(
+          (producto) => producto.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       }
 

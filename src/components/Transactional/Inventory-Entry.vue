@@ -203,6 +203,14 @@
       <button class="btn btn-success" type="submit" @click="saveTransaction">
         Guardar
       </button>
+      <router-link
+          class="btn btn-danger btn-save"
+          to="#"
+          type="button"
+          @click="goToPreviousPage()"
+      >
+        Volver
+      </router-link>
     </div>
   </div>
 </template>
@@ -548,6 +556,9 @@ export default {
     },
     openSearchMenu() {
       this.showModal();
+    },
+    goToPreviousPage() {
+      this.$router.go(-1);
     },
   },
 };
