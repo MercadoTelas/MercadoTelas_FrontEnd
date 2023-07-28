@@ -305,6 +305,7 @@ export default {
         let name = item.name == null ? item.name : item.name.trim();
         name = encodeURIComponent(name);
         itemId = encodeURIComponent(itemId);
+
         if (itemId !== "") {
           let url = `${API_URL}/find_inventory_item?`;
           if (itemId !== "") {
