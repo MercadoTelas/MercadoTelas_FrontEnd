@@ -336,8 +336,10 @@ export default {
     },
     addItem(index, item) {
       if (item) {
-        const itemId = item.general_code == null ? item.id : item.general_code.trim();
-        const name = item.name == null ? item.name : item.name.trim();
+        let itemId = item.general_code == null ? item.id : item.general_code.trim();
+        let name = item.name == null ? item.name : item.name.trim();
+        itemId = encodeURIComponent(itemId);
+        name = encodeURIComponent(name);
         if (itemId !== "") {
           let url = `${API_URL}/find_inventory_item?`;
           if (itemId !== "") {
@@ -431,8 +433,8 @@ export default {
       }
     },
     searchItem() {
-      const query =
-          this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      let query = this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      query = encodeURIComponent(query);
       if (query !== "") {
         const url = `${API_URL}/search_inventory_items/?data=${query}&warehouse=${this.senderWarehouse.id}`;
         axios

@@ -263,7 +263,6 @@ export default {
         let article = {};
         article.general_code = selectedArticles[i].item_id;
         article.name = selectedArticles[i].name;
-        console.log(article);
         this.addItem(0, article);
       }
       this.$store.commit("setSelectedItems", {});
@@ -307,8 +306,9 @@ export default {
     addItem(index, item) {
       if (item) {
         let itemId = item.general_code == null ? item.id : item.general_code.trim();
-        console.log("item: ", item);
-        const name = item.name == null ? item.name : item.name.trim();
+        let name = item.name == null ? item.name : item.name.trim();
+        itemId = encodeURIComponent(itemId);
+        name = encodeURIComponent(name);
         if (itemId !== "") {
           let url = `${API_URL}/find_inventory_item?`;
           if (itemId !== "") {
@@ -402,8 +402,8 @@ export default {
       }
     },
     searchItem() {
-      const query =
-          this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      let query = this.searchQuery === undefined ? "" : this.searchQuery.trim();
+      query = encodeURIComponent(query)
       if (query !== "") {
         const url = `${API_URL}/search_inventory_items/?data=${query}&warehouse=${this.selectedWarehouse.id}`;
         axios
