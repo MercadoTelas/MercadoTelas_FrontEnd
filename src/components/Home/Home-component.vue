@@ -126,7 +126,7 @@
           <div class="card" style="height: 452px !important">
             <div class="card-body">
               <h4 class="card-title text-primary text-center">
-                Últimos movimientos realizados en el inventory
+                Últimos movimientos realizados en el inventario
               </h4>
               <div
                 class="table-container"
@@ -404,14 +404,14 @@ export default {
               labels: itemTypes,
               datasets: [
                 {
-                  label: "Nivel actual de stock (" + this.items[0].storing_format_units_name + ")",
+                  label: "Nivel actual de stock",
                   data: inventory,
                   backgroundColor: "rgba(250, 10, 10, 0.5)",
                   borderColor: "rgba(70, 70, 70, 1)",
                   borderWidth: 1,
                 },
                 {
-                  label: "Nivel deseado(" + this.items[0].storing_format_units_name + ")",
+                  label: "Nivel deseado de stock",
                   data: nivelDeseado,
                   backgroundColor: "rgba(10, 10, 255, 0.5)",
                   borderColor: "rgba(70, 70, 70, 1)",
