@@ -227,7 +227,7 @@ export default {
 
           const isMatchedArticleCode = transaction.movements.some(
             (movement) =>
-              movement.item.id.includes(this.searchArticleCode) ||
+              movement.item.general_code.includes(this.searchArticleCode) ||
               movement.item.name.includes(this.searchArticleName)
           );
 

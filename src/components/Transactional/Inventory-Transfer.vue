@@ -16,53 +16,53 @@
             <div class="search-container">
               <label for="searchInput">Buscar por Nombre o Código:</label>
               <input
-                type="text"
-                id="searchInput"
-                v-model="searchQuery"
-                @keydown.enter="searchItem"
-                class="form-control"
+                  id="searchInput"
+                  v-model="searchQuery"
+                  class="form-control"
+                  type="text"
+                  @keydown.enter="searchItem"
               />
-              <button @click="searchItem" class="btn btn-success">
-                Buscar
-              </button>
+              <button class="btn btn-success" @click="searchItem">Buscar</button>
             </div>
             <div class="table-container" style="max-height: 500px !important">
               <table class="table table-bordered">
                 <thead>
-                  <tr>
-                    <th class="text-center">Código del artículo</th>
-                    <th class="text-center">Nombre del artículo</th>
-                    <th class="text-center"></th>
-                  </tr>
+                <tr>
+                  <th class="text-center">Código del artículo</th>
+                  <th class="text-center">Nombre del artículo</th>
+                  <th class="text-center"></th>
+                </tr>
                 </thead>
                 <tbody>
-                  <tr
+                <tr
                     v-for="item in filteredItems"
                     :key="item.id"
                     :class="{ 'table-row-selected': item.isSelected }"
-                  >
-                    <td class="text-center">
-                      {{ item.id.substring(0, item.id.indexOf("_")) }}
-                    </td>
-                    <td class="text-center">{{ item.name }}</td>
-                    <td style="width: 10px" class="text-center">
-                      <input
-                        type="checkbox"
+                >
+                  <td class="text-center">
+                    {{ item.general_code }}
+                  </td>
+                  <td class="text-center">{{ item.name }}</td>
+                  <td class="text-center" style="width: 10px">
+                    <input
                         :id="item.id"
-                        :value="item"
                         v-model="selectedItems"
+                        :value="item"
                         class="form-check-input"
+                        type="checkbox"
                         @change="handleItemCheckboxChange(item)"
-                      />
-                    </td>
-                  </tr>
+                    />
+                  </td>
+                </tr>
                 </tbody>
               </table>
             </div>
-            <button @click="closeModal" class="btn btn-danger">Cerrar</button>
-            <button @click="addSelectedItems" class="btn btn-success">
-              Agregar
-            </button>
+            <div class="d-flex justify-content-center btn-group">
+              <button class="btn btn-danger" @click="closeModal">Cerrar</button>
+              <button class="btn btn-success" @click="addSelectedItems">
+                Agregar
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -133,6 +133,7 @@
         <table class="table table-hover">
           <thead>
             <tr>
+              <th class="text-center"></th>
               <th class="text-center">Código del artículo</th>
               <th class="text-center">Nombre del artículo</th>
               <th class="text-center">
@@ -153,20 +154,24 @@
               :class="{ 'table-row-selected': item.selected }"
             >
               <td>
+                {{ index + 1 }}
+              </td>
+              <td>
                 <input
                   :id="'ID' + index"
                   type="text"
-                  v-model="item.item_id"
-                  @keydown.tab="onCellInput(item, 'item_id', $event, index)"
+                  v-model="item.general_code"
+                  @keydown.tab="onCellInput(item, 'general_code', $event, index)"
                   class="form-control"
                 />
               </td>
               <td>
                 <input
-                  type="text"
-                  v-model="item.name"
-                  class="form-control"
-                  readonly
+                    :id="'NA' + index"
+                    v-model="item.name"
+                    class="form-control"
+                    type="text"
+                    @keydown.tab="onCellInput(item, 'name', $event, index)"
                 />
               </td>
               <td>
@@ -244,25 +249,43 @@ import "vue3-toastify/dist/index.css";
 export default {
   data() {
     return {
-      tableData: [
-        {
-          item_id: "",
-          name: "",
-          storing_format_units: "",
-          storing_unit_format_name: "",
-          transferring_format_units: "",
-          transferring_unit_format_name: "",
-        },
-      ],
+      tableData: [],
       filteredItems: [],
-      selectedItems: [],
+      inventory_items: [],
       warehouses: [],
       modalVisible: false,
       senderWarehouse: "",
       receiverWarehouse: "",
+      selectedItems: [],
       notes: "",
-      inventory_items: [],
     };
+  },
+  mounted() {
+    this.$state.navbarTitle = "Transferencia de inventario";
+    document.addEventListener("keydown", this.handleKeyDown);
+    axios
+        .get(`${API_URL}/warehouses/`)
+        .then((response) => {
+          this.warehouses = response.data;
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    this.addItem();
+  },
+  beforeUnmount() {
+    document.removeEventListener("keydown", this.handleKeyDown);
+  },
+  watch: {
+    // Observar los cambios en la selección de almacén para actualizar los datos de stock
+    senderWarehouse: {
+      handler(newWarehouse) {
+        if (newWarehouse) {
+          this.updateStockValuesForWarehouse();
+        }
+      },
+      deep: true,
+    },
   },
   computed: {
     ...mapState(["checkboxValue", "user"]),
@@ -277,21 +300,6 @@ export default {
     filteredReceiverWarehouses() {
       return this.filterWarehouses("receiver");
     },
-  },
-  mounted() {
-    this.$state.navbarTitle = "Transferencia de inventario";
-    document.addEventListener("keydown", this.handleKeyDown);
-    axios
-      .get(`${API_URL}/warehouses/`)
-      .then((response) => {
-        this.warehouses = response.data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  },
-  beforeUnmount() {
-    document.removeEventListener("keydown", this.handleKeyDown);
   },
   methods: {
     ...mapMutations(["toggleCheckboxValue"]),
@@ -328,68 +336,77 @@ export default {
     },
     addItem(index, item) {
       if (item) {
-        const itemId = item.item_id == null ? item.id : item.item_id.trim();
+        const itemId = item.general_code == null ? item.id : item.general_code.trim();
+        const name = item.name == null ? item.name : item.name.trim();
         if (itemId !== "") {
-          let url = `${API_URL}/search_inventory_item?`;
+          let url = `${API_URL}/find_inventory_item?`;
           if (itemId !== "") {
-            url += `item_id=${itemId}`;
+            url += `general_code=${itemId}&name=${name}&warehouse_id=${this.senderWarehouse.id}`;
           }
           axios
-            .get(url)
-            .then((response) => {
-              const data = response.data;
+              .get(url)
+              .then((response) => {
+                const data = response.data;
 
-              // Actualizar los valores de la fila con los datos obtenidos de la API
-              item.item_id = data.item_id || "";
-              item.name = data.name || "";
-              item.storing_unit_format_name =
-                data.storing_unit_format_name || "";
-              item.conversion_factor = data.conversion_factor || "";
-              item.transferring_unit_format_name =
-                data.transferring_unit_format_name || "";
+                // Actualizar los valores de la fila con los datos obtenidos de la API
+                item.item_id = data.item_id || "";
+                item.general_code = data.general_code || "";
+                item.name = data.name || "";
+                item.storing_unit_format_name =
+                    data.storing_unit_format_name || "";
+                item.conversion_factor = data.conversion_factor || "";
+                item.transferring_unit_format_name =
+                    data.transferring_unit_format_name || "";
+                item.storing_format_units = "";
+                item.transferring_format_units = "";
+                item.id = data.id || "";
+                item.current_stock_storing_units = data.storing_format_units;
+                item.current_stock_transferring_units = data.transferring_format_units;
 
-              // Realizar el cálculo de la cantidad de venta
-              this.calculateSaleUnits(item);
+                // Realizar el cálculo de la cantidad de venta
+                this.calculateSaleUnits(item);
 
-              // Insertar el elemento en la tabla
-              this.tableData.splice(1, 0, item);
+                // Insertar el elemento en la tabla
+                this.tableData.splice(1, 0, item);
 
-              // Limpiar los campos de la primera fila
-              this.tableData.splice(0, 1, {
-                item_id: "",
-                name: "",
-                storing_format_units: "",
-                storing_unit_format_name: "",
-                transferring_format_units: "",
-                transferring_unit_format_name: "",
-              });
+                // Limpiar los campos de la primera fila
+                this.tableData.splice(0, 1, {
+                  item_id: "",
+                  general_code: "",
+                  name: "",
+                  storing_format_units: "",
+                  storing_unit_format_name: "",
+                  transferring_format_units: "",
+                  transferring_unit_format_name: "",
+                });
 
-              // Focus en el campo de la cantidad de unidades de almacenamiento del elemento agregado
-              this.$nextTick(() => {
-                const input = document.getElementById(`SU${index + 1}`);
-                if (input) {
-                  input.focus();
+                // Focus en el campo de la cantidad de unidades de almacenamiento del elemento agregado
+                this.$nextTick(() => {
+                  const input = document.getElementById(`SU${index + 1}`);
+                  if (input) {
+                    input.focus();
+                  }
+                });
+              })
+              .catch((error) => {
+                const errorMessage = error.response.data.error;
+                if (error.response.status !== 500 && errorMessage) {
+                  toast.error(errorMessage, {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  });
+                } else {
+                  console.error(error);
                 }
               });
-            })
-            .catch((error) => {
-              const errorMessage = error.response.data.error;
-              if (error.response.status !== 500 && errorMessage) {
-                toast.error(errorMessage, {
-                  position: "top-right",
-                  timeout: 2000,
-                  closeOnClick: true,
-                  pauseOnFocusLoss: true,
-                  pauseOnHover: true,
-                });
-              } else {
-                console.error(error);
-              }
-            });
         }
       } else {
         this.tableData.unshift({
           item_id: "",
+          general_code: "",
           name: "",
           storing_format_units: "",
           storing_unit_format_name: "",
@@ -415,18 +432,17 @@ export default {
     },
     searchItem() {
       const query =
-        this.searchQuery === undefined ? "" : this.searchQuery.trim();
+          this.searchQuery === undefined ? "" : this.searchQuery.trim();
       if (query !== "") {
-        const url = `${API_URL}/search_items/?data=${query}`;
+        const url = `${API_URL}/search_inventory_items/?data=${query}&warehouse=${this.senderWarehouse.id}`;
         axios
-          .get(url)
-          .then((response) => {
-            console.log(response);
-            this.filteredItems = response.data;
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+            .get(url)
+            .then((response) => {
+              this.filteredItems = response.data;
+            })
+            .catch((error) => {
+              console.error(error);
+            });
       }
     },
     onCellInput(item, field, event, index) {
@@ -436,18 +452,26 @@ export default {
       item[field] = event.target.value;
 
       // Verificar si se presionó la tecla Tab en las celda de código
-      if (event.key === "Tab" && field === "item_id") {
+      if (event.key === "Tab" && (field === "general_code" || field === "name")) {
         // Verificar si se está editando la última fila
-        if (item === this.tableData[0] && field === "item_id") {
+        if (item === this.tableData[0] && (field === "general_code" || field === "name")) {
           // Verificar si el campo del código está lleno en la última fila
-          if (item.item_id.trim() !== "") {
+          if (item.general_code.trim() !== "" && item.name.trim() !== "") {
             // Agregar una nueva fila vacía
             this.addItem(index, item);
+          } else {
+            toast.info(`Debe llenarse el campo del código y del nombre del artículo`, {
+              position: "top-right",
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
           }
         }
       } else if (
-        field === "storing_format_units" ||
-        field === "conversion_factor"
+          field === "storing_format_units" ||
+          field === "conversion_factor"
       ) {
         // Realizar el cálculo de la cantidad de venta al cambiar la cantidad de almacenamiento o el factor de conversión
         this.calculateSaleUnits(item);
@@ -462,6 +486,9 @@ export default {
       } else if (event.key === "Enter") {
         // Realizar transacción
         this.saveTransaction();
+      } else if (event.key === "Escape") {
+        // Cerrar modal
+        this.closeModal();
       }
     },
     calculateSaleUnits(item) {
@@ -479,15 +506,15 @@ export default {
       // Filtrar las filas que tienen todos los campos llenos
       this.inventory_items = this.tableData.filter((item) => {
         return (
-          item.item_id.trim() !== "" &&
-          item.name.trim() !== "" &&
-          item.storing_format_units !== "" &&
-          item.transferring_format_units !== ""
+            item.general_code.trim() !== "" &&
+            item.name.trim() !== "" &&
+            item.storing_format_units !== "" &&
+            item.transferring_format_units !== ""
         );
       });
 
-      if (this.selectedWarehouse === "") {
-        toast.info(`Debe seleccionar un almacén`, {
+      if (this.senderWarehouse === "" || this.receiverWarehouse === "") {
+        toast.info(`Debe seleccionar los almacenes de origen y de destino`, {
           position: "top-right",
           timeout: 2000,
           closeOnClick: true,
@@ -495,25 +522,91 @@ export default {
           pauseOnHover: true,
         });
       } else {
-        // Verificar las filas que tienen todos los campos llenos
-        this.inventory_items.forEach((item) => {
-          if (!this.checkUnits(item)) {
-            toast.info(
-              `Debe ingresar las unidades de almacenamiento a todos los artículos agregados`,
-              {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              }
-            );
-            return "";
-          }
-        });
-
-        // Verificar si hay filas válidas
         if (this.inventory_items.length > 0) {
+          const articleQuantities = {};
+          for (const item of this.inventory_items) {
+            // Verificar si no se ingresaron las unidades de almacenamiento y venta
+            if (!this.checkUnits(item)) {
+              toast.info(
+                  `Debe ingresar las unidades de almacenamiento y venta para todos los artículos agregados`,
+                  {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  }
+              );
+              return;
+            }
+
+            // Obtener las cantidades a remover como números
+            const requestedStoringUnits = parseFloat(item.storing_format_units);
+            const requestedTransferringUnits = parseFloat(item.transferring_format_units);
+
+            // Verificar si la cantidad de unidades de almacenamiento a remover supera el stock actual
+            const currentStoringUnits = item.current_stock_storing_units;
+            if (requestedStoringUnits > currentStoringUnits) {
+              toast.info(
+                  `La cantidad de unidades de almacenamiento a remover para el artículo "${item.name}" con código "${item.general_code}" supera el stock actual`,
+                  {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  }
+              );
+              return;
+            }
+
+            // Verificar si la cantidad de unidades de venta a remover supera el stock actual
+            const currentTransferringUnits = item.current_stock_transferring_units;
+            if (requestedTransferringUnits > currentTransferringUnits) {
+              toast.info(
+                  `La cantidad de unidades de venta a remover para el artículo "${item.name}" con código "${item.general_code}" supera el stock actual`,
+                  {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  }
+              );
+              return;
+            }
+
+            // Actualizar las cantidades del artículo en el objeto articleQuantities
+            const itemId = item.item_id;
+            if (articleQuantities[itemId]) {
+              articleQuantities[itemId].storing += requestedStoringUnits;
+              articleQuantities[itemId].transferring += requestedTransferringUnits;
+            } else {
+              articleQuantities[itemId] = {
+                storing: requestedStoringUnits,
+                transferring: requestedTransferringUnits,
+              };
+            }
+
+            // Verificar si las cantidades a remover superan el stock total del artículo
+            if (
+                articleQuantities[itemId].storing > currentStoringUnits ||
+                articleQuantities[itemId].transferring > currentTransferringUnits
+            ) {
+              toast.info(
+                  `La cantidad total de unidades a remover para el artículo "${item.name}" con código "${item.general_code}" supera el stock actual`,
+                  {
+                    position: "top-right",
+                    timeout: 2000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                  }
+              );
+              return;
+            }
+          }
+
           const url = `${API_URL}/inventories/transfer_items`;
           const currentDate = this.getCurrentDate();
           const currentTime = this.getCurrentTime();
@@ -542,57 +635,82 @@ export default {
           };
 
           axios
-            .post(url, data)
-            .then((response) => {
-              // Lógica de respuesta exitosa
-              console.log(response);
-              toast.success(`Transacción guardada`, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-              });
+              .post(url, data)
+              .then((response) => {
+                // Lógica de respuesta exitosa
+                console.log(response);
+                toast.success(`Transacción guardada`, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
 
-              this.tableData = [
-                {
-                  item_id: "",
-                  name: "",
-                  storing_format_units: "",
-                  storing_unit_format_name: "",
-                  transferring_format_units: "",
-                  transferring_unit_format_name: "",
-                },
-              ];
-              this.tableData = [];
-              this.addItem();
-              this.notes = "";
-              this.receiverWarehouse = "";
-              this.senderWarehouse = "";
-            })
-            .catch((error) => {
-              toast.error(`Error al guardar la transacción: ` + error.message, {
-                position: "top-right",
-                timeout: 2000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
+                this.tableData = [
+                  {
+                    item_id: "",
+                    name: "",
+                    storing_format_units: "",
+                    storing_unit_format_name: "",
+                    transferring_format_units: "",
+                    transferring_unit_format_name: "",
+                  },
+                ];
+                this.tableData = [];
+                this.addItem();
+                this.notes = "";
+                this.receiverWarehouse = "";
+                this.senderWarehouse = "";
+              })
+              .catch((error) => {
+                toast.error(`Error al guardar la transacción: ` + error.message, {
+                  position: "top-right",
+                  timeout: 2000,
+                  closeOnClick: true,
+                  pauseOnFocusLoss: true,
+                  pauseOnHover: true,
+                });
               });
-            });
         } else {
           toast.info(
-            `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
-            {
-              position: "top-right",
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
-            }
+              `Debe llenar todos los campos en al menos una fila antes de guardar la transacción`,
+              {
+                position: "top-right",
+                timeout: 2000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+              }
           );
         }
       }
       this.inventory_items = [];
+    },
+    updateStockValuesForWarehouse() {
+      if (!this.senderWarehouse || this.tableData.length === 0) return;
+
+      // Obtener los IDs de los artículos en la tabla
+      const itemIds = this.tableData.map((item) => item.item_id);
+
+      // Obtener los datos de stock actualizados para los artículos en la bodega seleccionada
+      const url = `${API_URL}/inventories/get_stock_by_warehouse/${this.senderWarehouse.id}`;
+      axios
+          .get(url, { itemIds })
+          .then((response) => {
+            const stockData = response.data;
+            // Actualizar los datos de stock en la tabla con la información recibida de la API
+            this.tableData.forEach((item) => {
+              const stockInfo = stockData.find((stockItem) => stockItem.item_id === item.id);
+              if (stockInfo) {
+                item.current_stock_storing_units = stockInfo.storing_format_units;
+                item.current_stock_transferring_units = stockInfo.transferring_format_units;
+              }
+            });
+          })
+          .catch((error) => {
+            console.error("Error al obtener los datos de stock: ", error);
+          });
     },
     getCurrentDate() {
       const currentDate = new Date();
@@ -606,8 +724,20 @@ export default {
       return currentDate.toLocaleTimeString("en-US", { timeStyle: "medium" });
     },
     handleKeyDown(event) {
-      if (event.shiftKey && event.key === "Tab") {
+      if (event.shiftKey && event.key === "Tab" && this.senderWarehouse !== "" && this.receiverWarehouse !== "") {
         this.showModal();
+      } else if (event.key === "Escape") {
+        this.closeModal();
+      } else if (event.key === "Enter" && this.senderWarehouse !== ""  && this.receiverWarehouse !== "" && !this.modalVisible) {
+        this.saveTransaction();
+      } else if (event.shiftKey && event.key === "Tab" && (this.senderWarehouse === "" || this.receiverWarehouse === "")) {
+        toast.info(`Debe seleccionar un almacén`, {
+          position: "top-right",
+          timeout: 2000,
+          closeOnClick: true,
+          pauseOnFocusLoss: true,
+          pauseOnHover: true,
+        });
       }
     },
     goToPreviousPage() {

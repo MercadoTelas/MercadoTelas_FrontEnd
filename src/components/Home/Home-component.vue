@@ -17,7 +17,7 @@
       >
         <div class="filter-row">
           <label for="bodega">Bodega:</label>
-          <select id="bodega" v-model="selectedBodega" @change="filterItems">
+          <select id="bodega" v-model="selectedWarehouse" @change="filterItems">
             <option value="">Todas las bodegas</option>
             <option
               v-for="warehouse in bodegas"
@@ -30,9 +30,9 @@
         </div>
         <div class="filter-row">
           <label for="tipo">Tipo de artículo:</label>
-          <select id="tipo" v-model="selectedTipo" @change="filterItems">
-            <option value="">Todos los tipos</option>
-            <option v-for="category in tipos" :key="category" :value="category">
+          <select id="tipo" v-model="selectedType" @change="filterItems">
+            <option value="">Todos los types</option>
+            <option v-for="category in types" :key="category" :value="category">
               {{ category }}
             </option>
           </select>
@@ -53,7 +53,7 @@
           <div class="card" style="height: 450px !important">
             <div class="card-body">
               <h4 class="card-title text-success">
-                Top 10 artículos con más envíos a tienda
+                Los 10 artículos más sacados de las bodegas
               </h4>
               <div class="chart-container">
                 <canvas ref="chartCanvas"></canvas>
@@ -75,7 +75,7 @@
                 <table class="table table-bordered kpi-table">
                   <thead>
                     <tr>
-                      <th>Código de producto</th>
+                      <th>Código de item</th>
                       <th>Nombre</th>
                       <th>Cantidad de stock</th>
                       <th>Bodega</th>
@@ -83,16 +83,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(producto, index) in productosLow" :key="index">
-                      <td>{{ producto.item_id }}</td>
-                      <td>{{ producto.name }}</td>
-                      <td>{{ producto.storing_format_units }}</td>
-                      <td>{{ producto.warehouse }}</td>
+                    <tr v-for="(item, index) in low_stock_items" :key="index">
+                      <td>{{ item.general_code }}</td>
+                      <td>{{ item.name }}</td>
+                      <td>{{ item.storing_format_units }}</td>
+                      <td>{{ item.warehouse }}</td>
                       <td>
                         <input
                           type="checkbox"
-                          :value="producto"
-                          v-model="selectedProductos"
+                          :value="item"
+                          v-model="selectedItems"
                         />
                       </td>
                     </tr>
@@ -100,11 +100,11 @@
                 </table>
               </div>
               <button
-                @click="hacerEntrada"
+                @click="createEntryTransaction"
                 class="btn btn-success"
                 :disabled="
-                  selectedProductos.length === 0 ||
-                  !mismaBodega(selectedProductos)
+                  selectedItems.length === 0 ||
+                  !sameWarehouse(selectedItems)
                 "
                 style="
                   position: absolute;
@@ -126,7 +126,7 @@
           <div class="card" style="height: 452px !important">
             <div class="card-body">
               <h4 class="card-title text-primary text-center">
-                Últimos movimientos realizados en el inventario
+                Últimos movimientos realizados en el inventory
               </h4>
               <div
                 class="table-container"
@@ -187,16 +187,16 @@ export default {
   data() {
     return {
       sortedMovements: [],
-      productosLow: [],
-      productos: [],
-      productosLowClone: [],
-      productosClone: [],
+      low_stock_items: [],
+      items: [],
+      low_stock_items_cloned: [],
+      items_cloned: [],
       movementsData: [],
-      selectedBodega: "", // Valor seleccionado en el dropdown de bodega
-      selectedTipo: "", // Valor seleccionado en el dropdown de tipo de artículo
-      selectedProductos: [], //Articulos seleccionados en la tabla de stock minimo
+      selectedWarehouse: "", // Valor seleccionado en el dropdown de bodega
+      selectedType: "", // Valor seleccionado en el dropdown de tipo de artículo
+      selectedItems: [], //Articulos seleccionados en la tabla de stock minimo
       bodegas: [], // Valores posibles para el dropdown de bodega
-      tipos: [], // Valores posibles para el dropdown de tipo de artículo
+      types: [], // Valores posibles para el dropdown de tipo de artículo
       chartTop10: null,
       chartLow: null,
       searchQuery: "",
@@ -216,7 +216,7 @@ export default {
     const user = store.state.user;
     if (!store.state.LogAttempts) {
       toast.success(
-        `Hola ${user.name}, bienvenido al sistema de inventario del Mercado de las Telas`,
+        `Hola ${user.name}, bienvenido al sistema de inventory del Mercado de las Telas`,
         {
           position: "top-right",
           timeout: 2500,
@@ -232,10 +232,10 @@ export default {
     axios
       .get(API_URL + "/categories")
       .then((response) => {
-        this.tipos = response.data.map((category) => category.name);
+        this.types = response.data.map((category) => category.name);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
 
     // Obtener todas las bodegas desde la API
@@ -245,7 +245,7 @@ export default {
         this.bodegas = response.data.map((warehouse) => warehouse.name);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
 
     // Obtener el registro de movimientos más removidos
@@ -264,52 +264,56 @@ export default {
         this.sortedMovements = this.sortMovements();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
-    // Obtener los artículos más removidos o con más salidas de inventario desde la API
+    // Obtener los artículos más removidos o con más salidas de inventory desde la API
     axios
       .get(API_URL + "/most_removed_items")
       .then((response) => {
-        console.log(response.data);
-        this.productos = response.data.map((item) => {
+        this.items = response.data.map((item) => {
           return {
             item_id: item.id,
             name: item.name,
             removals: item.quantity_removed,
             category: item.category_name,
+            storing_format_units_name: item.storing_format_units_name,
+            transferring_format_units_name: item.transferring_format_units_name,
+            general_code: item.general_code,
           };
         });
-        this.productosClone = this.productos;
+        this.items_cloned = this.items;
 
         this.createChartTop10();
         this.filterItems();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
 
     // Obtener los artículos con la cantidad de stock por debajo del mínimo desde la API
     axios
       .get(API_URL + "/low_stock_items")
       .then((response) => {
-        this.productosLow = response.data.map((item) => {
+        this.low_stock_items = response.data.map((item) => {
           return {
             item_id: item.item_id,
             name: item.name,
             storing_format_units: item.storing_format_units,
+            storing_format_units_name: item.storing_format_units_name,
             warehouse: item.warehouse.name,
             warehouseComplete: item.warehouse,
             minimal_stock: item.minimal_stock,
             category: item.category,
+            general_code: item.general_code,
           };
         });
-        this.productosLowClone = this.productosLow;
+        this.low_stock_items_cloned = this.low_stock_items;
 
         this.createChartLow();
         this.filterItems();
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   },
   methods: {
@@ -323,180 +327,187 @@ export default {
       const canvas = this.$refs.chartCanvas;
       const ctx = canvas.getContext("2d");
 
-      let sortedProductos = [...this.productos].sort(
+      let sortedItems = [...this.items].sort(
         (a, b) => b.removals - a.removals
       );
-      let tiposTelas = sortedProductos.map((producto) => producto.name);
-      let inventario = sortedProductos.map((producto) => producto.removals);
+      let itemTypes = sortedItems.map((item) => item.name);
+      let inventory = sortedItems.map((item) => item.removals);
 
       this.chartTop10 = shallowRef(
-        new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: tiposTelas,
-            datasets: [
-              {
-                label: "Salidas de inventario",
-                data: inventario,
-                backgroundColor: "rgba(37, 168, 150, 0.5)",
-                borderColor: "rgba(54, 162, 235, 1)",
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            indexAxis: "y", // Rotate the chart by 90 degrees
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
-            },
-            scales: {
-              x: {
-                beginAtZero: true,
-                ticks: {
-                  precision: 0,
+          new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: itemTypes,
+              datasets: [
+                {
+                  label: "Salidas de inventory (" + this.items[0].transferring_format_units_name + ")",
+                  data: inventory,
+                  backgroundColor: "rgba(37, 168, 150, 0.5)",
+                  borderColor: "rgba(54, 162, 235, 1)",
+                  borderWidth: 1,
                 },
-              },
-              y: {
-                grid: {
+              ],
+            },
+            options: {
+              indexAxis: "y", // Rotate the chart by 90 degrees
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
                   display: false,
                 },
               },
+              scales: {
+                x: {
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0,
+                  },
+                  title: {
+                    display: true,
+                    text: "Unidades removidas",
+                  },
+                },
+                y: {
+                  grid: {
+                    display: false,
+                  },
+                  title: {
+                    display: true,
+                    text: "Artículos",
+                  },
+                },
+              },
             },
-          },
-        })
+          })
       );
     },
-
     createChartLow() {
       const canvas = this.$refs.chartLow;
       const ctx = canvas.getContext("2d");
 
-      const sortedProductosLow = [...this.productosLow].sort(
+      const sortedProductosLow = [...this.low_stock_items].sort(
         (a, b) => a.storing_format_units - b.storing_format_units
       );
-      const tiposTelas = sortedProductosLow.map((producto) => producto.name);
-      const inventario = sortedProductosLow.map(
-        (producto) => producto.storing_format_units
+      const itemTypes = sortedProductosLow.map((item) => item.name);
+      const inventory = sortedProductosLow.map(
+        (item) => item.storing_format_units
       );
       const nivelDeseado = sortedProductosLow.map(
-        (producto) => producto.minimal_stock
+        (item) => item.minimal_stock
       );
 
       this.chartLow = shallowRef(
-        new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: tiposTelas,
-            datasets: [
-              {
-                label: "Nivel actual de stock",
-                data: inventario,
-                backgroundColor: "rgba(250, 10, 10, 0.5)",
-                borderColor: "rgba(70, 70, 70, 1)",
-                borderWidth: 1,
-              },
-              {
-                label: "Nivel deseado",
-                data: nivelDeseado,
-                backgroundColor: "rgba(10, 10, 255, 0.5)",
-                borderColor: "rgba(70, 70, 70, 1)",
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: false,
-              },
+          new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: itemTypes,
+              datasets: [
+                {
+                  label: "Nivel actual de stock (" + this.items[0].storing_format_units_name + ")",
+                  data: inventory,
+                  backgroundColor: "rgba(250, 10, 10, 0.5)",
+                  borderColor: "rgba(70, 70, 70, 1)",
+                  borderWidth: 1,
+                },
+                {
+                  label: "Nivel deseado(" + this.items[0].storing_format_units_name + ")",
+                  data: nivelDeseado,
+                  backgroundColor: "rgba(10, 10, 255, 0.5)",
+                  borderColor: "rgba(70, 70, 70, 1)",
+                  borderWidth: 1,
+                },
+              ],
             },
-            scales: {
-              x: {
-                grid: {
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
                   display: false,
                 },
               },
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  precision: 0,
+              scales: {
+                x: {
+                  grid: {
+                    display: false,
+                  },
+                  title: {
+                    display: true,
+                    text: "Artículos",
+                  },
+                },
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    precision: 0,
+                  },
+                  title: {
+                    display: true,
+                    text: "Cantidad de stock",
+                  },
                 },
               },
             },
-          },
-        })
+          })
       );
     },
     filterItems() {
-      this.productos = this.productosClone;
-      this.productosLow = this.productosLowClone;
-      let productosFiltrados = [...this.productos];
-      let productosLowFiltrados = [...this.productosLow];
+      this.items = this.items_cloned;
+      this.low_stock_items = this.low_stock_items_cloned;
+      let productosFiltrados = [...this.items];
+      let productosLowFiltrados = [...this.low_stock_items];
 
-      if (this.selectedTipo) {
+      if (this.selectedType) {
         productosFiltrados = productosFiltrados.filter(
-          (producto) => producto.category === this.selectedTipo
+          (item) => item.category === this.selectedType
         );
       }
 
-      if (this.selectedBodega) {
+      if (this.selectedWarehouse) {
         productosLowFiltrados = productosLowFiltrados.filter(
-          (producto) => producto.warehouse === this.selectedBodega
+          (item) => item.warehouse === this.selectedWarehouse
         );
       }
 
-      if (this.selectedTipo) {
+      if (this.selectedType) {
         productosLowFiltrados = productosLowFiltrados.filter(
-          (producto) => producto.category === this.selectedTipo
+          (item) => item.category === this.selectedType
         );
       }
 
       if (this.searchQuery != "") {
-        productosFiltrados = productosFiltrados.filter((producto) =>
-          producto.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+        productosFiltrados = productosFiltrados.filter((item) =>
+          item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       }
 
-      this.productos = productosFiltrados;
-      this.productosLow = productosLowFiltrados;
+      this.items = productosFiltrados;
+      this.low_stock_items = productosLowFiltrados;
 
       this.updateChartLow();
       this.updateChartTop10();
     },
-    mismaBodega(productos) {
-      if (productos.length === 0) {
-        return false; // Si no hay productos seleccionados, no están en la misma bodega
+    sameWarehouse(items) {
+      if (items.length === 0) {
+        return false; // Si no hay items seleccionados, no están en la misma bodega
       }
 
-      const primeraBodega = productos[0].warehouse; // Suponiendo que la bodega está almacenada en la propiedad "bodega" del producto
+      const firstWarehouse = items[0].warehouse; // Suponiendo que la bodega está almacenada en la propiedad "bodega" del item
 
-      for (let i = 1; i < productos.length; i++) {
-        if (productos[i].warehouse !== primeraBodega) {
-          return false; // Si encuentra un producto con una bodega diferente, no están en la misma bodega
+      for (let i = 1; i < items.length; i++) {
+        if (items[i].warehouse !== firstWarehouse) {
+          return false; // Si encuentra un item con una bodega diferente, no están en la misma bodega
         }
       }
-      return true; // Si no se encontraron productos con bodegas diferentes, están en la misma bodega
+      return true; // Si no se encontraron items con bodegas diferentes, están en la misma bodega
     },
-    hacerEntrada() {
-      const selectedItems = this.selectedProductos.map(
-        (producto) => producto.item_id
-      );
-      this.$store.commit("setSelectedItems", selectedItems);
-      this.$store.commit(
-        "setWarehouse",
-        this.selectedProductos[0].warehouseComplete
-      );
-
-      console.log(selectedItems);
-
-      //Enrrutar con la bodega de hacer entrada
-      const warehouse = this.selectedProductos[0].warehouse;
+    createEntryTransaction() {
+      const selectedItemsToAdd = this.selectedItems.map(item => ({ item_id: item.general_code, name: item.name }));
+      this.$store.commit("setSelectedItems", selectedItemsToAdd);
+      this.$store.commit("setWarehouse", this.selectedItems[0].warehouseComplete);
+      // Enrutar con la bodega de hacer entrada
+      const warehouse = this.selectedItems[0].warehouse;
       this.$router.push({
         name: "Entry-from-home",
         params: {
@@ -506,33 +517,33 @@ export default {
     },
     updateChartTop10() {
       if (this.chartTop10) {
-        const sortedProductos = [...this.productos].sort(
+        const sortedItems = [...this.items].sort(
           (a, b) => b.removals - a.removals
         );
-        const tiposTelas = sortedProductos.map((producto) => producto.name);
-        const inventario = sortedProductos.map((producto) => producto.removals);
+        const itemTypes = sortedItems.map((item) => item.name);
+        const inventory = sortedItems.map((item) => item.removals);
 
-        this.chartTop10.data.labels = tiposTelas;
-        this.chartTop10.data.datasets[0].data = inventario;
+        this.chartTop10.data.labels = itemTypes;
+        this.chartTop10.data.datasets[0].data = inventory;
         this.chartTop10.update();
       }
     },
 
     updateChartLow() {
       if (this.chartLow) {
-        const sortedProductosLow = [...this.productosLow].sort(
+        const sortedProductosLow = [...this.low_stock_items].sort(
           (a, b) => a.storing_format_units - b.storing_format_units
         );
-        const tiposTelas = sortedProductosLow.map((producto) => producto.name);
-        const inventario = sortedProductosLow.map(
-          (producto) => producto.storing_format_units
+        const itemTypes = sortedProductosLow.map((item) => item.name);
+        const inventory = sortedProductosLow.map(
+          (item) => item.storing_format_units
         );
         const nivelDeseado = sortedProductosLow.map(
-          (producto) => producto.minimal_stock
+          (item) => item.minimal_stock
         );
 
-        this.chartLow.data.labels = tiposTelas;
-        this.chartLow.data.datasets[0].data = inventario;
+        this.chartLow.data.labels = itemTypes;
+        this.chartLow.data.datasets[0].data = inventory;
         this.chartLow.data.datasets[1].data = nivelDeseado;
         this.chartLow.update();
       }

@@ -131,6 +131,7 @@
                     <th class="text-center">Código</th>
                     <th class="text-center">Nombre</th>
                     <th class="text-center">Stock Total</th>
+                    <th class="text-center">Unidades</th>
                     <th
                       v-for="warehouse in warehouses"
                       :key="warehouse.name"
@@ -157,7 +158,7 @@
                           color: black;
                           text-decoration: none;
                         "
-                        >{{ item.id.substring(0, item.id.indexOf("_")) }}
+                        >{{ item.general_code }}
                       </router-link>
                     </td>
                     <td class="text-center">{{ item.name }}</td>
@@ -168,7 +169,15 @@
                       }"
                       class="text-center"
                     >
-                      {{ calculateStockUnits(item) }}
+                      {{ calculateStockUnits(item).toFixed(1) }}
+                    </td>
+                    <td
+                        :class="{
+                        'text-danger':
+                          calculateStockUnits(item) < item.minimal_stock,
+                      }"
+                        class="text-center"
+                    >
                       {{ item.storing_format_units_name }}
                     </td>
                     <td
@@ -177,7 +186,6 @@
                       class="text-center"
                     >
                       {{ inventory_item.storing_format_units }}
-                      {{ item.storing_format_units_name }}
                     </td>
                   </tr>
                 </tbody>
@@ -235,7 +243,7 @@ export default {
       return this.items
         .filter((item) => {
           return (
-            item.id.toUpperCase().includes(this.filter.id.toUpperCase()) &&
+            item.general_code.toUpperCase().includes(this.filter.id.toUpperCase()) &&
             (this.filter.category === "" ||
               item.category === this.filter.category) &&
             (this.filter.subcategory === "" ||

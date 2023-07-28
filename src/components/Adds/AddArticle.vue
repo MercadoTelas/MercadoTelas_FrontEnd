@@ -23,8 +23,8 @@
                   ><i class="bi bi-123"></i
                   ></span>
                   <input
-                      id="id"
-                      v-model="id"
+                      id="general_code"
+                      v-model="general_code"
                       :readonly="isReadOnly"
                       class="form-control"
                       type="text"
@@ -264,7 +264,10 @@
               <thead>
               <tr>
                 <th class="text-center">Bodega</th>
-                <th class="text-center">Stock en bodega</th>
+                <th class="text-center">Stock en bodega en unidades de almacenamiento</th>
+                <th class="text-center">Unidades</th>
+                <th class="text-center">Stock en bodega en unidades de salida</th>
+                <th class="text-center">Unidades</th>
               </tr>
               </thead>
               <tbody>
@@ -275,13 +278,30 @@
                 <td class="text-center">{{ inventory_item.warehouse }}</td>
                 <td class="text-center">
                   {{ inventory_item.storing_format_units }}
+                </td>
+                <td class="text-center">
                   {{ storing_format_units_name }}
+                </td>
+                <td class="text-center">
+                  {{ inventory_item.transferring_format_units }}
+                </td>
+                <td class="text-center">
+                  {{ transferring_format_units_name }}
                 </td>
               </tr>
               <tr>
                 <td class="text-center fw-bold">Total</td>
                 <td class="text-center fw-bold">
-                  {{ calculateStockUnits() }} {{ storing_format_units_name }}
+                  {{ calculateStockUnits() }}
+                </td>
+                <td class="text-center">
+                  {{ storing_format_units_name }}
+                </td>
+                <td class="text-center fw-bold">
+                  {{ calculateTransferringUnits() }}
+                </td>
+                <td class="text-center">
+                  {{ transferring_format_units_name }}
                 </td>
               </tr>
               </tbody>
@@ -323,8 +343,8 @@ export default {
       filter: {
         category: "",
       },
-      complete_id: "",
       id: "",
+      general_code: "",
       name: "",
       minimal_stock: "",
       storing_format_units_name: "",
@@ -398,7 +418,17 @@ export default {
           totalUnits += units;
         }
       });
-      return totalUnits;
+      return totalUnits.toFixed(1);
+    },
+    calculateTransferringUnits() {
+      let totalUnits = 0;
+      this.inventory_items.forEach((inventoryItem) => {
+        const units = parseFloat(inventoryItem.transferring_format_units);
+        if (!isNaN(units)) {
+          totalUnits += units;
+        }
+      });
+      return totalUnits.toFixed(1);
     },
     fetchNewItemData() {
       this.$state.navbarTitle = "Agregar Nuevo Artículo";
@@ -431,8 +461,8 @@ export default {
           .get(`${API_URL}/items/${itemId}`)
           .then((response) => {
             const itemData = response.data;
-            this.complete_id = itemData.item.id;
-            this.id = itemData.item.id.substring(0, itemData.item.id.indexOf("_"));
+            this.id = itemData.item.id;
+            this.general_code = itemData.item.general_code;
             this.name = itemData.item.name;
             this.minimal_stock = itemData.item.minimal_stock;
             this.storing_format_units_name =
@@ -453,7 +483,7 @@ export default {
     },
     onSubmit() {
       let item = {
-        id: this.$route.params.id !== undefined ? this.complete_id : this.id,
+        id: this.$route.params.id !== undefined ? null : this.id,
         name: this.name,
         minimal_stock: this.minimal_stock,
         storing_format_units_name: this.storing_format_units_name,
@@ -462,7 +492,7 @@ export default {
         subcategory_id: this.subcategory_id,
         design_id: this.design_id,
         brand_id: this.brand_id,
-        image: this.image,
+        general_code: this.general_code,
       };
       item.user = this.$store.state.user.id;
       if (this.mode === "edit") {
@@ -477,7 +507,7 @@ export default {
         formData.append(key, item[key]);
       }
       axios
-          .put(`${API_URL}/items/${this.complete_id}`, formData, {
+          .put(`${API_URL}/items/${this.id}`, formData, {
             headers: {
               "Content-Type": "multipart/form-data",
             },
@@ -497,6 +527,7 @@ export default {
       this.$router.go(-1);
     },
     createItem(item) {
+      console.log(item)
       let formData = new FormData();
       for (let key in item) {
         formData.append(key, item[key]);

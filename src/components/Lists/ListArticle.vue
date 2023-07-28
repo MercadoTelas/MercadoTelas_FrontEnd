@@ -35,6 +35,7 @@
             <th scope="col" class="text-center">Categoría</th>
             <th scope="col" class="text-center">Subcategoría</th>
             <th scope="col" class="text-center">Inventario mínimo</th>
+            <th scope="col" class="text-center">Unidades</th>
             <th scope="col" class="text-center">Estado</th>
             <th scope="col" class="text-center">Marca</th>
             <th scope="col" class="text-center">Diseño</th>
@@ -43,12 +44,15 @@
         </thead>
         <tbody>
           <tr v-for="item in filteredArticles" :key="item.id">
-            <td class="text-center">{{ item.id.substring(0, item.id.indexOf("_")) }}</td>
+            <td class="text-center">{{ item.general_code }}</td>
             <td class="text-center">{{ item.name }}</td>
             <td class="text-center">{{ item.category_name }}</td>
             <td class="text-center">{{ item.subcategory_name }}</td>
             <td class="text-center">
-              {{ item.minimal_stock }} {{ item.storing_format_units_name }}
+              {{ item.minimal_stock }}
+            </td>
+            <td class="text-center">
+              {{ item.storing_format_units_name }}
             </td>
             <td class="text-center">
               {{ item.status === "active" ? "Activo" : "Inactivo" }}
@@ -132,7 +136,7 @@ export default {
         const search = this.searchQuery.toLowerCase();
         return (
           item.name.toLowerCase().includes(search) ||
-          item.id.toLowerCase().includes(search) ||
+          item.general_code.toLowerCase().includes(search) ||
           item.conversion_factor.toLowerCase().includes(search) ||
           item.minimal_stock.toLowerCase().includes(search) ||
           item.status.toLowerCase().includes(search) ||
