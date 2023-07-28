@@ -476,7 +476,7 @@ export default {
         );
       }
 
-      if (this.searchQuery != "") {
+      if (this.searchQuery !== "") {
         productosFiltrados = productosFiltrados.filter((item) =>
           item.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
@@ -583,13 +583,6 @@ export default {
   gap: 10px;
 }
 
-.centered-div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-}
-
 .chart-container {
   width: 100%;
   height: 290px;
@@ -627,10 +620,6 @@ export default {
   outline: none;
 }
 
-.filter-container {
-  margin-bottom: 20px;
-}
-
 .filter-row {
   display: flex;
   align-items: center;
@@ -658,9 +647,9 @@ export default {
 .table thead::before {
   content: "";
   position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
+  top: 0;
+  left: 0;
+  right: 0;
   bottom: -1px;
   z-index: 0;
   border: 2px solid #000;
