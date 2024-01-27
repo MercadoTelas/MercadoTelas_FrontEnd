@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="background-image">
     <div class="d-flex justify-content-center align-items-center vh-100">
       <div class="overlay">
