@@ -1,9 +1,9 @@
 <template>
   <input
-    type="checkbox"
-    id="check"
-    v-model="checked"
-    @change="handleCheckboxChange"
+      type="checkbox"
+      id="check"
+      v-model="checked"
+      @change="handleCheckboxChange"
   />
 
   <div class="container">
@@ -12,34 +12,34 @@
         <form @submit.prevent="OnCreateUser">
           <table class="table table-bordered table-secondary">
             <tbody>
-              <tr>
-                <td class="table-label">Nombre Completo:</td>
-                <td class="table-input">
-                  <input type="text" class="form-control" v-model="name" required>
-                </td>
-              </tr>
-              <tr>
-                <td class="table-label">Cédula:</td>
-                <td class="table-input">
-                  <input type="text" class="form-control" v-model="idCard" required>
-                </td>
-              </tr>
-              <tr>
-                <td class="table-label">Correo Electrónico:</td>
-                <td class="table-input">
-                  <input type="email" class="form-control" v-model="email" required>
-                </td>
-              </tr>
-              <tr>
-                <td class="table-label">Rol:</td>
-                <td class="table-input">
-                  <select class="form-control" v-model="role" required>
-                    <option value="" disabled selected>Seleccionar rol</option>
-                    <option value="admin">Administrador</option>
-                    <option value="user">Usuario Regular</option>
-                  </select>
-                </td>
-              </tr>
+            <tr>
+              <td class="table-label">Nombre Completo:</td>
+              <td class="table-input">
+                <input type="text" class="form-control" v-model="name" required>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-label">Cédula:</td>
+              <td class="table-input">
+                <input type="text" class="form-control" v-model="idCard" required>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-label">Correo Electrónico:</td>
+              <td class="table-input">
+                <input type="email" class="form-control" v-model="email" required>
+              </td>
+            </tr>
+            <tr>
+              <td class="table-label">Rol:</td>
+              <td class="table-input">
+                <select class="form-control" v-model="role" required>
+                  <option value="" disabled selected>Seleccionar rol</option>
+                  <option value="admin">Administrador</option>
+                  <option value="user">Usuario Regular</option>
+                </select>
+              </td>
+            </tr>
             </tbody>
           </table>
           <div class="text-center">
@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
-import { API_URL } from '@/config';
+import {mapState, mapMutations} from "vuex";
+import {API_URL} from '@/config';
 import axios from 'axios';
-import { toast } from 'vue3-toastify';
+import {toast} from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
@@ -90,30 +90,32 @@ export default {
         role: this.role
       };
       axios.post(`${API_URL}/users`, {user, creator_user_id: this.current_user_id})
-        .then(() => {
-          toast.success(`El usuario ha sido registrado exitosamente`, {
-              position: 'bottom-right',
-              timeout: 2000,
-              closeOnClick: true,
-              pauseOnFocusLoss: true,
-              pauseOnHover: true,
-            }).then(() => {
-            this.name = '';
-            this.idCard = '';
-            this.email ='';
-            this.role = '';
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error(`Error al registrar el usuario`, {
+          .then(() => {
+            toast.success(`El usuario ha sido registrado exitosamente`, {
               position: 'bottom-right',
               timeout: 2000,
               closeOnClick: true,
               pauseOnFocusLoss: true,
               pauseOnHover: true,
             });
-        });
+            // Clear form fields after a delay to allow the toast to show
+            setTimeout(() => {
+              this.name = '';
+              this.idCard = '';
+              this.email = '';
+              this.role = '';
+            }, 2000);
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error(`Error al registrar el usuario`, {
+              position: 'bottom-right',
+              timeout: 2000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+            });
+          });
     },
   },
   mounted() {
